@@ -20,9 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <UIProvider>
-        <body className={inter.className}>{children}</body>
-      </UIProvider>
+      <body className={inter.className}>
+        <UIProvider>{children}</UIProvider>
+      </body>
     </html>
   );
 }
