@@ -11,6 +11,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        bg: '#EFEFEF',
+        text_default: '#070707',
+        text_danger: '#D1345B',
+        theme_color: '#3454D1',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
