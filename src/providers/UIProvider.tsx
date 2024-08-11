@@ -5,7 +5,7 @@ import { NextUIProvider } from '@nextui-org/react';
 const UIProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <NextUIProvider>
-      <main className=" bg-bg">{children}</main>
+      <main className="w-screen h-screen flex-box bg-bg">{children}</main>
     </NextUIProvider>
   );
 };

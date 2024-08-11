@@ -3,4 +3,10 @@
 @tailwind utilities;
 
 @layer {
+  .flexCol {
+    @apply flex flex-col;
+  }
+  .flex-box {
+    @apply flex justify-center items-center;
+  }
 }
