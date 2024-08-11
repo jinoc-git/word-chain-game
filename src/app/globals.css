@@ -9,4 +9,7 @@
   .flex-box {
     @apply flex justify-center items-center;
   }
+  .main-layout {
+    @apply sm:w-2/3 md:w-1/2 lg:w-[400px];
+  }
 }

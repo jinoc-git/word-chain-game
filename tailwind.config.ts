@@ -15,6 +15,13 @@ const config: Config = {
       md: '768px',
       lg: '1080px',
     },
+    fontSize: {
+      xs: '12px',
+      sm: '14px',
+      normal: '16px',
+      lg: '18px',
+      xlg: '24px',
+    },
     extend: {
       colors: {
         bg: '#EFEFEF',
