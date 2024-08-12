@@ -4,8 +4,8 @@ import ThemeSwitcher from '../themeSwitcher/ThemeSwitcher';
 
 const Header = () => {
   return (
-    <header className=" flex-box h-[70px]">
-      <div className="main-layout">
+    <header className="flex-box">
+      <div className="main-layout flex justify-end">
         <ThemeSwitcher />
       </div>
     </header>
