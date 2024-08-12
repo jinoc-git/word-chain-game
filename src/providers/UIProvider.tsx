@@ -1,11 +1,20 @@
+'use client';
+
 import React from 'react';
 
 import { NextUIProvider } from '@nextui-org/react';
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
 
-const UIProvider = ({ children }: { children: React.ReactNode }) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+const UIProvider = ({ children }: Props) => {
   return (
     <NextUIProvider>
-      <main className=" bg-bg">{children}</main>
+      <NextThemesProvider attribute="class" defaultTheme="dark">
+        {children}
+      </NextThemesProvider>
     </NextUIProvider>
   );
 };

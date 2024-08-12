@@ -10,20 +10,28 @@ const config: Config = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    screens: {
+      sm: '320px',
+      md: '768px',
+      lg: '1080px',
+    },
     extend: {
       colors: {
         bg: '#EFEFEF',
-        text_default: '#070707',
+        text_default_color: '#070707',
         text_danger: '#D1345B',
         theme_color: '#3454D1',
-      },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
   },
   darkMode: 'class',
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      prefix: 'nextui',
+      addCommonColors: false,
+      defaultTheme: 'light',
+      defaultExtendTheme: 'light',
+    }),
+  ],
 };
 export default config;
