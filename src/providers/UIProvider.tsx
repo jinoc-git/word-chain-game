@@ -5,7 +5,11 @@ import React from 'react';
 import { NextUIProvider } from '@nextui-org/react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 
-const UIProvider = ({ children }: { children: React.ReactNode }) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+const UIProvider = ({ children }: Props) => {
   return (
     <NextUIProvider>
       <NextThemesProvider attribute="class" defaultTheme="dark">

@@ -1,3 +1,4 @@
+import Header from '@/component/header/Header';
 import UIProvider from '@/providers/UIProvider';
 
 import type { Metadata } from 'next';
@@ -15,10 +16,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" className="dark">
       <body>
         <UIProvider>
-          <main className=" dark w-screen h-screen flex-box">{children}</main>
+          <Header />
+          <main>{children}</main>
         </UIProvider>
       </body>
     </html>
