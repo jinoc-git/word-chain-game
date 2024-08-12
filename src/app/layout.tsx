@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <UIProvider>
-          <main className=" w-screen h-screen flex-box  bg-bg">{children}</main>
+          <main className=" dark w-screen h-screen flex-box">{children}</main>
         </UIProvider>
       </body>
     </html>
