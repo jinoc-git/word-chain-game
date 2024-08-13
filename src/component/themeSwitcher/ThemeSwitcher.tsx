@@ -11,8 +11,7 @@ const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
 
   const handleSwitchTheme = React.useCallback(() => {
-    if (theme === 'light') setTheme('dark');
-    if (theme === 'dark') setTheme('light');
+    setTheme(theme === 'light' ? 'dark' : 'light');
   }, [theme]);
 
   React.useEffect(() => {
