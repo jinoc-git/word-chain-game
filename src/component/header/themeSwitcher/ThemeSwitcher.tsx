@@ -18,11 +18,9 @@ const ThemeSwitcher = () => {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
-
   return (
     <Button isIconOnly onClick={handleSwitchTheme} variant="faded">
-      {theme === 'light' ? <Moon /> : <Sun />}
+      {mounted ? theme === 'light' ? <Moon /> : <Sun /> : <Moon />}
     </Button>
   );
 };
