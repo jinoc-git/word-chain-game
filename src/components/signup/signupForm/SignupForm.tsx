@@ -38,21 +38,21 @@ const SignupForm = () => {
             {...register('email')}
             type="email"
             label="이메일"
-            placeholder="example@gamil.com"
+            placeholder="이메일을 입력해 주세요"
             size="md"
           />
           <Input
             {...register('password')}
             type="password"
             label="비밀번호"
-            placeholder="비밀번호를 입력해주세요"
+            placeholder="비밀번호를 입력해 주세요"
             size="md"
           />
           <Input
             {...register('confirmPassword')}
             type="password"
             label="비밀번호 확인"
-            placeholder="비밀번호를 다시 입력해주세요"
+            placeholder="비밀번호를 다시 입력해 주세요"
             size="md"
           />
           <Button type="submit" color="primary" isDisabled={!isValid} className="w-full">
