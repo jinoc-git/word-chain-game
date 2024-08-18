@@ -1,10 +1,12 @@
 import React from 'react';
 
+import SignupForm from '@/components/signup/signupForm/SignupForm';
+
 const Signup = () => {
   return (
-    <>
-      <div>Signup</div>
-    </>
+    <section className=" w-screen h-screen flex-box">
+      <SignupForm />
+    </section>
   );
 };
 

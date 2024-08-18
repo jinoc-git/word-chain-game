@@ -1,4 +1,4 @@
-import Header from '@/component/header/Header';
+import Header from '@/components/header/Header';
 import UIProvider from '@/providers/UIProvider';
 
 import type { Metadata } from 'next';
