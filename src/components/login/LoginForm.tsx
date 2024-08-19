@@ -30,7 +30,7 @@ const LoginForm = () => {
   return (
     <Card className="main-layout">
       <CardHeader>
-        <h1 className=" font-semibold">닉네임 입력</h1>
+        <h2 className=" font-semibold">닉네임 입력</h2>
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)} className=" space-y-3">

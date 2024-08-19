@@ -1,16 +1,10 @@
 import React from 'react';
 
-import GoToHome from './goToHome/GoToHome';
-import PlayBGM from './playBGM/PlayBGM';
-import ThemeSwitcher from './themeSwitcher/ThemeSwitcher';
-
 const Header = () => {
   return (
     <header className="flex-box">
-      <div className="main-layout flex justify-between py-2">
-        <ThemeSwitcher />
-        <GoToHome />
-        <PlayBGM />
+      <div className="main-layout flex-box py-3">
+        <h1 className=" text-large font-bold">WORD CHAIN GAME</h1>
       </div>
     </header>
   );
