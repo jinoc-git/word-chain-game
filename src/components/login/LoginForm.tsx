@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react';
+import { useRouter } from 'next/navigation';
 
 import { loginFormSchema } from '@/schema/loginFormSchema';
 
@@ -14,6 +15,8 @@ import type { z } from 'zod';
 type LoginFormInput = z.infer<typeof loginFormSchema>;
 
 const LoginForm = () => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -25,6 +28,7 @@ const LoginForm = () => {
 
   const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
     console.log(data);
+    router.push('/loby');
   };
 
   return (
