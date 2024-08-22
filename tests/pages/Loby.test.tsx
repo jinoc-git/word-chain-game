@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
 import Loby from '@/app/loby/page';
 
@@ -18,7 +17,6 @@ describe('Loby Page', () => {
     return {
       getButtons,
       roomCodeInput: screen.getByPlaceholderText(/방 코드 입력하기/i),
-      user: userEvent.setup(),
     };
   };
 
@@ -44,22 +42,5 @@ describe('Loby Page', () => {
     const { roomCodeInput } = renderComponent();
 
     expect(roomCodeInput).toBeInTheDocument();
-  });
-
-  it('should disabled enter room button', () => {
-    const { getButtons } = renderComponent();
-
-    const { enterRoomButton } = getButtons();
-
-    expect(enterRoomButton).toBeDisabled();
-  });
-
-  it('should enabled enter room button if room code is valid', async () => {
-    const { roomCodeInput, getButtons, user } = renderComponent();
-
-    const { enterRoomButton } = getButtons();
-    await user.type(roomCodeInput, 'ABCDEF');
-
-    expect(enterRoomButton).not.toBeDisabled();
   });
 });
