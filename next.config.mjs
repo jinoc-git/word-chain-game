@@ -7,7 +7,7 @@ const nextConfig = {
         loader: 'file-loader',
         options: {
           publicPath: '/_next/static/sounds',
-          outputPath: 'static/sounds',
+          // outputPath: 'static/sounds',
           outputPath: `${options.isServer ? '../' : ''}static/sounds/`,
           // esModule: false,
         },
