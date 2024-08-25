@@ -1,10 +1,14 @@
 import React from 'react';
 
+import Players from '@/components/game/players/Players';
+import PlayZone from '@/components/game/playZone/PlayZone';
+
 const Game = () => {
   return (
-    <>
-      <div>Game</div>
-    </>
+    <div className="main-layout h-full pt-[72px] flexCol">
+      <Players />
+      <PlayZone />
+    </div>
   );
 };
 

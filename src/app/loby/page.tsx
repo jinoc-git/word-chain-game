@@ -8,7 +8,7 @@ import PlaySolo from '@/components/loby/playSolo/PlaySolo';
 
 const Loby = () => {
   return (
-    <section className=" w-screen h-screen flex-box">
+    <section>
       <Card className="main-layout">
         <CardHeader className=" justify-center">
           <h2 className=" text-2xl font-semibold">끝말잇기</h2>
