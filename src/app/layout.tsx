@@ -4,7 +4,7 @@ import UIProvider from '@/providers/UIProvider';
 
 import type { Metadata } from 'next';
 
-import './globals.css';
+import '../style/globals.css';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -21,7 +21,7 @@ export default function RootLayout({
       <body>
         <UIProvider>
           <Header />
-          <main>{children}</main>
+          <main className=" w-screen h-screen flex-box">{children}</main>
           <Footer />
         </UIProvider>
       </body>
