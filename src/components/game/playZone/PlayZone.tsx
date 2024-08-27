@@ -1,9 +1,16 @@
+'use client';
+
 import React from 'react';
+
+import { Input } from '@nextui-org/react';
+
+import WordList from './wordList/WordList';
 
 const PlayZone = () => {
   return (
-    <section>
-      <div>PlayZone</div>
+    <section className=" space-y-3">
+      <WordList />
+      <Input />
     </section>
   );
 };
