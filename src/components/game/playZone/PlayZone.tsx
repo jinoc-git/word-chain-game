@@ -1,9 +1,15 @@
+'use client';
+
 import React from 'react';
+
+import EnterWord from './enterWord/EnterWord';
+import WordList from './wordList/WordList';
 
 const PlayZone = () => {
   return (
-    <section>
-      <div>PlayZone</div>
+    <section className=" space-y-3">
+      <WordList />
+      <EnterWord />
     </section>
   );
 };

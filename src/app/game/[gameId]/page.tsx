@@ -5,7 +5,7 @@ import PlayZone from '@/components/game/playZone/PlayZone';
 
 const Game = () => {
   return (
-    <div className="main-layout h-full pt-[72px] flexCol">
+    <div className="main-layout h-full pt-[72px] flexCol gap-4">
       <Players />
       <PlayZone />
     </div>
