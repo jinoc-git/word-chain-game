@@ -20,7 +20,7 @@ const EnterWord = () => {
     formState: { errors, isValid },
   } = useForm<EnterWordInput>({
     resolver: zodResolver(enterWordSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
   });
 
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
@@ -30,7 +30,11 @@ const EnterWord = () => {
   return (
     <div className="flexCol gap-2 items-center">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-        <Input {...register('enterWord')} variant="bordered" />
+        <Input
+          {...register('enterWord')}
+          variant="bordered"
+          className={` ${errors.enterWord?.message ? 'animate-shake' : ''}`}
+        />
         <button type="submit" className="hidden">
           제출
         </button>
