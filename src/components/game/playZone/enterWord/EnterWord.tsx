@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@nextui-org/react';
 
+import useCheckValidWord from '@/hooks/useCheckValidWord';
 import { enterWordSchema } from '@/schema/enterWordSchema';
 
 import type { z } from 'zod';
@@ -14,6 +15,8 @@ import type { z } from 'zod';
 type EnterWordInput = z.infer<typeof enterWordSchema>;
 
 const EnterWord = () => {
+  const { checkFirstCharacter } = useCheckValidWord();
+
   const {
     register,
     handleSubmit,
@@ -25,6 +28,7 @@ const EnterWord = () => {
 
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
     console.log('in', enterWord);
+    const isValidFirstCharacter = checkFirstCharacter(enterWord, enterWord);
   };
 
   return (
