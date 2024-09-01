@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@nextui-org/react';
 
 import useCheckValidWord from '@/hooks/useCheckValidWord';
+import useShakeAnimate from '@/hooks/useShakeAnimate';
 import { enterWordSchema } from '@/schema/enterWordSchema';
 
 import type { z } from 'zod';
@@ -15,12 +16,14 @@ import type { z } from 'zod';
 type EnterWordInput = z.infer<typeof enterWordSchema>;
 
 const EnterWord = () => {
+  const { isShake, handleShake } = useShakeAnimate();
+
   const { checkFirstCharacter } = useCheckValidWord();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<EnterWordInput>({
     resolver: zodResolver(enterWordSchema),
     mode: 'onSubmit',
@@ -29,6 +32,10 @@ const EnterWord = () => {
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
     console.log('in', enterWord);
     const isValidFirstCharacter = checkFirstCharacter(enterWord, enterWord);
+    if (!isValidFirstCharacter) {
+      handleShake();
+      return;
+    }
   };
 
   return (
@@ -37,7 +44,7 @@ const EnterWord = () => {
         <Input
           {...register('enterWord')}
           variant="bordered"
-          className={` ${errors.enterWord?.message ? 'animate-shake' : ''}`}
+          className={`${isShake ? 'animate-shake' : ''}`}
         />
         <button type="submit" className="hidden">
           제출
