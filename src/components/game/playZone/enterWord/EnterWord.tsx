@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@nextui-org/react';
 
+import useCheckValidWord from '@/hooks/useCheckValidWord';
+import useShakeAnimate from '@/hooks/useShakeAnimate';
 import { enterWordSchema } from '@/schema/enterWordSchema';
 
 import type { z } from 'zod';
@@ -14,23 +16,36 @@ import type { z } from 'zod';
 type EnterWordInput = z.infer<typeof enterWordSchema>;
 
 const EnterWord = () => {
+  const { isShake, handleShake } = useShakeAnimate();
+
+  const { checkFirstCharacter } = useCheckValidWord();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<EnterWordInput>({
     resolver: zodResolver(enterWordSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
   });
 
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
     console.log('in', enterWord);
+    const isValidFirstCharacter = checkFirstCharacter(enterWord, enterWord);
+    if (!isValidFirstCharacter) {
+      handleShake();
+      return;
+    }
   };
 
   return (
     <div className="flexCol gap-2 items-center">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-        <Input {...register('enterWord')} variant="bordered" />
+        <Input
+          {...register('enterWord')}
+          variant="bordered"
+          className={`${isShake ? 'animate-shake' : ''}`}
+        />
         <button type="submit" className="hidden">
           제출
         </button>
