@@ -2,14 +2,16 @@
 
 import React from 'react';
 
+import ControlGame from './controlGame/ControlGame';
 import EnterWord from './enterWord/EnterWord';
 import WordList from './wordList/WordList';
 
 const PlayZone = () => {
   return (
-    <section className=" space-y-3">
+    <section className="">
       <WordList />
       <EnterWord />
+      <ControlGame />
     </section>
   );
 };
