@@ -39,7 +39,7 @@ const EnterWord = () => {
   };
 
   return (
-    <div className="flexCol gap-2 items-center">
+    <div className="flexCol gap-2 items-center mt-3">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <Input
           {...register('enterWord')}
