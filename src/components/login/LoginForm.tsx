@@ -1,20 +1,27 @@
 'use client';
 
-import React from 'react';
+import React, { useContext } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
+import { uuid } from 'short-uuid';
 
+import { AuthContext } from '@/context/authContext';
 import { loginFormSchema } from '@/schema/loginFormSchema';
 
+import type { UserType } from '@/types/auth.type';
 import type { z } from 'zod';
 
 type LoginFormInput = z.infer<typeof loginFormSchema>;
 
 const LoginForm = () => {
+  const auth = useContext(AuthContext);
+
+  if (auth === null) throw new Error('need AuthProviders');
+
   const router = useRouter();
 
   const {
@@ -26,8 +33,14 @@ const LoginForm = () => {
     mode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<LoginFormInput> = async ({ nickname }) => {
+    const user: UserType = {
+      nickname,
+      id: uuid(),
+    };
+
+    auth.login(user);
+
     router.push('/loby');
   };
 
