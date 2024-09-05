@@ -6,18 +6,18 @@ import { Button } from '@nextui-org/react';
 import { House } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-const GoToHome = () => {
+const GoToLoby = () => {
   const router = useRouter();
 
-  const handleGoToHome = () => {
-    router.push('/');
+  const handleGoToLoby = () => {
+    router.push('/loby');
   };
 
   return (
-    <Button isIconOnly onClick={handleGoToHome} variant="faded">
+    <Button isIconOnly onClick={handleGoToLoby} variant="faded">
       <House />
     </Button>
   );
 };
 
-export default GoToHome;
+export default GoToLoby;
