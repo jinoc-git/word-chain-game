@@ -1,16 +1,21 @@
 'use client';
 
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { Button } from '@nextui-org/react';
 import { House } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
+import { AuthContext } from '@/context/authContext';
+
 const GoToLoby = () => {
   const router = useRouter();
+  const auth = useContext(AuthContext);
+
+  if (auth === null) throw new Error('need AuthProviders');
 
   const handleGoToLoby = () => {
-    router.push('/loby');
+    if (auth.checkLogin()) router.push('/loby');
   };
 
   return (
