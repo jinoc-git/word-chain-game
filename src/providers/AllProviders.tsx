@@ -2,15 +2,10 @@
 
 import React from 'react';
 
-import AuthProvider from './authProvider/AuthProvider';
 import UIProvider from './uiProvider/UIProvider';
 
 const AllProviders = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <AuthProvider>
-      <UIProvider>{children}</UIProvider>
-    </AuthProvider>
-  );
+  return <UIProvider>{children}</UIProvider>;
 };
 
 export default AllProviders;
