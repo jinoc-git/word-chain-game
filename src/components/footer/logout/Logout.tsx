@@ -1,22 +1,20 @@
 'use client';
 
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { Button } from '@nextui-org/button';
 import { LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-import { AuthContext } from '@/context/authContext';
+import { useAuthActions } from '@/store/authStore';
 
 const Logout = () => {
-  const auth = useContext(AuthContext);
-
-  if (auth === null) throw new Error('need AuthProviders');
+  const { logout } = useAuthActions();
 
   const router = useRouter();
 
   const handleLogout = () => {
-    auth.logout();
+    logout();
 
     router.push('/');
   };

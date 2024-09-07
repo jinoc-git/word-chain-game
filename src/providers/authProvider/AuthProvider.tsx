@@ -2,8 +2,6 @@ import React from 'react';
 
 import { usePathname, useRouter } from 'next/navigation';
 
-import { AuthContext } from '@/context/authContext';
-
 import type { UserType } from '@/types/auth.type';
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -35,7 +33,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const checkLogin = () => {
     return !!user;
   };
-  console.log('유저', user);
+
   React.useEffect(() => {
     const data = sessionStorage.getItem('word-chain');
     if (user) {
@@ -55,11 +53,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [pathname]);
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout, checkLogin }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <>{children}</>;
 };
 
 export default AuthProvider;
