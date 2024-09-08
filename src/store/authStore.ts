@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+import { isUserType } from '@/utils/isUser';
+
 import type { UserType } from '@/types/auth.type';
 
 interface Actions {
@@ -25,12 +27,28 @@ export const authStore = create<Store>((set, get) => ({
       sessionStorage.removeItem('word-chain');
       set({ user: null });
     },
-    checkLogin: () => !!get().user,
+    checkLogin: () => {
+      const data = sessionStorage.getItem('word-chain');
+      if (!data) return false;
+
+      const parsedData = JSON.parse(data);
+      if (isUserType(parsedData)) {
+        set({ user: parsedData });
+        return true;
+      } else {
+        if (get().user) {
+          sessionStorage.setItem('word-chain', JSON.stringify(get().user));
+          return true;
+        }
+        return false;
+      }
+    },
     syncAuth: () => {
       const data = sessionStorage.getItem('word-chain');
       if (data) {
         const user = JSON.parse(data);
-        set({ user });
+        if (isUserType(user)) set({ user });
+        else set({ user: null });
       } else {
         set({ user: null });
       }
