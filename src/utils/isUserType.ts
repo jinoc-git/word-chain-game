@@ -6,8 +6,8 @@ export const isUserType = (obj: any): obj is UserType => {
     obj !== null &&
     Object.keys(obj).length === 2 &&
     'nickname' in obj &&
-    typeof obj.name === 'string' &&
+    typeof obj.nickname === 'string' &&
     'id' in obj &&
-    typeof obj.age === 'string'
+    typeof obj.id === 'string'
   );
 };
