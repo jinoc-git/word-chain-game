@@ -35,13 +35,14 @@ export const authStore = create<Store>((set, get) => ({
       if (isUserType(parsedData)) {
         set({ user: parsedData });
         return true;
-      } else {
-        if (get().user) {
-          sessionStorage.setItem('word-chain', JSON.stringify(get().user));
-          return true;
-        }
-        return false;
       }
+
+      if (get().user) {
+        sessionStorage.setItem('word-chain', JSON.stringify(get().user));
+        return true;
+      }
+
+      return false;
     },
     syncAuth: () => {
       const data = sessionStorage.getItem('word-chain');
