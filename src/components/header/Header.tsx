@@ -6,8 +6,9 @@ import { useRouter } from 'next/navigation';
 
 const Header = () => {
   const router = useRouter();
+
   const onClickLogo = () => {
-    router.push('/');
+    router.push('/loby');
   };
 
   return (

@@ -6,11 +6,14 @@ import { Button } from '@nextui-org/react';
 import { House } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
+import { useAuthActions } from '@/store/authStore';
+
 const GoToLoby = () => {
   const router = useRouter();
+  const { checkLogin } = useAuthActions();
 
   const handleGoToLoby = () => {
-    router.push('/loby');
+    if (checkLogin()) router.push('/loby');
   };
 
   return (

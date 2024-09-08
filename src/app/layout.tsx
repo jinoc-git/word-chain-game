@@ -1,4 +1,5 @@
-import UIProvider from '@/providers/UIProvider';
+import AuthObserver from '@/components/authObserver/AuthObserver';
+import AllProviders from '@/providers/AllProviders';
 
 import type { Metadata } from 'next';
 
@@ -17,9 +18,10 @@ export default function RootLayout({
   return (
     <html lang="ko" className="dark" suppressHydrationWarning>
       <body>
-        <UIProvider>
+        <AuthObserver />
+        <AllProviders>
           <main className=" w-screen h-screen flex-box">{children}</main>
-        </UIProvider>
+        </AllProviders>
       </body>
     </html>
   );

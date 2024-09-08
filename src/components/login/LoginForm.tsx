@@ -7,14 +7,19 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
+import { uuid } from 'short-uuid';
 
 import { loginFormSchema } from '@/schema/loginFormSchema';
+import { useAuthActions } from '@/store/authStore';
 
+import type { UserType } from '@/types/auth.type';
 import type { z } from 'zod';
 
 type LoginFormInput = z.infer<typeof loginFormSchema>;
 
 const LoginForm = () => {
+  const { login } = useAuthActions();
+
   const router = useRouter();
 
   const {
@@ -26,8 +31,14 @@ const LoginForm = () => {
     mode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<LoginFormInput> = async ({ nickname }) => {
+    const user: UserType = {
+      nickname,
+      id: uuid(),
+    };
+
+    login(user);
+
     router.push('/loby');
   };
 
