@@ -32,10 +32,8 @@ export const authStore = create<Store>((set, get) => ({
       if (!data) return false;
 
       const parsedData = JSON.parse(data);
-      console.log(isUserType(parsedData));
       if (isUserType(parsedData)) {
         set({ user: parsedData });
-        console.log('in');
         return true;
       }
 
