@@ -44,6 +44,7 @@ const EnterWord = () => {
         <Input
           {...register('enterWord')}
           variant="bordered"
+          placeholder="단어를 입력하세요."
           className={`${isShake ? 'animate-shake' : ''}`}
         />
         <button type="submit" className="hidden">

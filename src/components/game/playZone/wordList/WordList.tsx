@@ -5,7 +5,7 @@ import React from 'react';
 import { Card, CardHeader, Chip } from '@nextui-org/react';
 import { uuid } from 'short-uuid';
 
-const mockWords = ['인사동', '동생', '생필품'];
+export const mockWords = ['인사동', '동생', '생필품'];
 
 const WordList = () => {
   return (
@@ -19,6 +19,7 @@ const WordList = () => {
               key={uuid()}
               size={isLast ? 'lg' : 'md'}
               color={isLast ? 'secondary' : 'default'}
+              role="listitem"
               className={`${isLast ? 'text-lg font-semibold' : ''}`}
             >
               {word}
