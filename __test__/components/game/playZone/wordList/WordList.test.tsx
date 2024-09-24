@@ -9,10 +9,12 @@ describe('WordList', () => {
     expect(screen.getByText(word)).toBeInTheDocument();
   });
 
-  it('should render purple background color 3rd word', () => {
+  it('should render purple background color last word', () => {
     render(<WordList />);
 
-    const thirdWord = screen.getAllByRole('listitem')[2];
-    expect(thirdWord).toHaveClass('bg-secondary');
+    const words = screen.getAllByRole('listitem');
+    const lastWord = words[words.length - 1];
+
+    expect(lastWord).toHaveClass('bg-secondary');
   });
 });
