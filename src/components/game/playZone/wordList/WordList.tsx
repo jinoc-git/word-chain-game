@@ -11,12 +11,12 @@ export const mockWords = ['인사동', '동생', '생필품'];
 
 const WordList = () => {
   const words = useWordState();
-  console.log('output', words);
+
   return (
     <Card isBlurred>
       <CardHeader className="flex items-center gap-2 h-[50px]">
         {words.map((word, idx) => {
-          const isLast = mockWords.length === idx + 1;
+          const isLast = words.length === idx + 1;
 
           return (
             <Chip

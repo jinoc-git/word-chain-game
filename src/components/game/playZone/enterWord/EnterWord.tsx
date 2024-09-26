@@ -23,6 +23,7 @@ const EnterWord = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<EnterWordInput>({
     resolver: zodResolver(enterWordSchema),
@@ -35,6 +36,8 @@ const EnterWord = () => {
       handleShake();
       return;
     }
+
+    reset();
   };
 
   return (
