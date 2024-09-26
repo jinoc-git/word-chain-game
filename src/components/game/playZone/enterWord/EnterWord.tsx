@@ -7,8 +7,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@nextui-org/react';
 
-import useCheckValidWord from '@/hooks/useCheckValidWord';
 import useShakeAnimate from '@/hooks/useShakeAnimate';
+import useWords from '@/hooks/useWords';
 import { enterWordSchema } from '@/schema/enterWordSchema';
 
 import type { z } from 'zod';
@@ -18,12 +18,12 @@ type EnterWordInput = z.infer<typeof enterWordSchema>;
 const EnterWord = () => {
   const { isShake, handleShake } = useShakeAnimate();
 
-  const { checkFirstCharacter } = useCheckValidWord();
+  const { isValidWord, enterWordAndCheck } = useWords();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<EnterWordInput>({
     resolver: zodResolver(enterWordSchema),
     mode: 'onSubmit',
@@ -31,7 +31,7 @@ const EnterWord = () => {
 
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
     console.log('in', enterWord);
-    const isValidFirstCharacter = checkFirstCharacter(enterWord, enterWord);
+    const isValidFirstCharacter = enterWordAndCheck(enterWord);
     if (!isValidFirstCharacter) {
       handleShake();
       return;
@@ -47,7 +47,7 @@ const EnterWord = () => {
           placeholder="단어를 입력하세요."
           className={`${isShake ? 'animate-shake' : ''}`}
         />
-        <button type="submit" className="hidden">
+        <button type="submit" className="hidden" disabled={isSubmitting}>
           제출
         </button>
       </form>
