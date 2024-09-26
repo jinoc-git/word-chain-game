@@ -5,13 +5,17 @@ import React from 'react';
 import { Card, CardHeader, Chip } from '@nextui-org/react';
 import { uuid } from 'short-uuid';
 
+import { useWordState } from '@/store/wordStore';
+
 export const mockWords = ['인사동', '동생', '생필품'];
 
 const WordList = () => {
+  const words = useWordState();
+  console.log('output', words);
   return (
     <Card isBlurred>
       <CardHeader className="flex items-center gap-2 h-[50px]">
-        {mockWords.map((word, idx) => {
+        {words.map((word, idx) => {
           const isLast = mockWords.length === idx + 1;
 
           return (

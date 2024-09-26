@@ -30,9 +30,8 @@ const EnterWord = () => {
   });
 
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
-    console.log('in', enterWord);
-    const isValidFirstCharacter = enterWordAndCheck(enterWord);
-    if (!isValidFirstCharacter) {
+    const isValid = await enterWordAndCheck(enterWord);
+    if (!isValid) {
       handleShake();
       return;
     }
