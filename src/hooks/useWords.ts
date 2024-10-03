@@ -1,16 +1,12 @@
 import React from 'react';
 
+import { checkValidWord } from '@/api/word';
 import { useWordActions } from '@/store/wordStore';
 import { checkFirstCharacter } from '@/utils/checkFirstCharacter';
 
 const useWords = () => {
   const [isValidWord, setIsValidWord] = React.useState(false);
   const { getWordsCount, getLastWord, pushNewWord } = useWordActions();
-
-  const checkValidWord = async (enterWord: string) => {
-    // 백과사전 api를 통해 있는 단어인지 확인
-    return true;
-  };
 
   const enterWordAndCheck = async (enterWord: string) => {
     if (getWordsCount() >= 1) {
