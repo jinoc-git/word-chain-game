@@ -16,7 +16,7 @@ app.prepare().then(() => {
   const io = new Server(httpServer);
 
   io.on('connection', (socket) => {
-    console.log('soket io connect');
+    console.log('socket io connect');
   });
 
   httpServer

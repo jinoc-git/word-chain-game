@@ -13,7 +13,7 @@ const MakeRoom = () => {
     const originCode = short.generate();
     const shortCode = originCode.slice(0, 6).toUpperCase();
 
-    router.push(`/game`);
+    router.push(`/game/multi/${shortCode}`);
   };
 
   return (

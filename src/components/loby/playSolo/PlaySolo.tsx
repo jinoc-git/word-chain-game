@@ -13,7 +13,7 @@ const PlaySolo = () => {
     const originCode = short.generate();
     const shortCode = originCode.slice(0, 6).toUpperCase();
 
-    router.push(`/game/123?solo`);
+    router.push(`/game/solo/${shortCode}`);
   };
 
   return (
