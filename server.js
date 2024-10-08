@@ -10,6 +10,8 @@ const port = 3000;
 const app = next({ dev, hostname, port });
 const handler = app.getRequestHandler();
 
+const rooms = {};
+
 app.prepare().then(() => {
   const httpServer = createServer(handler);
 
@@ -17,6 +19,18 @@ app.prepare().then(() => {
 
   io.on('connection', (socket) => {
     console.log('socket io connect');
+
+    socket.on('makeRoom', ({ roomId, userId }) => {
+      socket.join(roomId);
+      rooms[roomId] = rooms[roomId] || [];
+      rooms[roomId].push({ socketId: socket.id, userId });
+    });
+
+    socket.on('joinRoom', (roomId) => {
+      socket.join(roomId);
+    });
+
+    // socket.on('wordChecked', (roomId, isValid) => {});
   });
 
   httpServer

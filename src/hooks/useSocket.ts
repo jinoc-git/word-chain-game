@@ -2,9 +2,13 @@ import React from 'react';
 
 import { socket } from '@/socket/socket';
 
-const useScoket = () => {
+const useSocket = () => {
   const [isConnected, setIsConnected] = React.useState(false);
   const [transport, setTransport] = React.useState('N/A');
+
+  const createSocketRoom = (roomId: string, userId: string) => {
+    socket.emit('makeRoom', { roomId, userId });
+  };
 
   React.useEffect(() => {
     const onConnect = () => {
@@ -29,7 +33,7 @@ const useScoket = () => {
     };
   }, []);
 
-  return { isConnected, transport };
+  return { isConnected, transport, createSocketRoom };
 };
 
-export default useScoket;
+export default useSocket;
