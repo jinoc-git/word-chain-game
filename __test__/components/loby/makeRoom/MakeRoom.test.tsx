@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/navigation';
 
-import MakeRoom from '@/components/loby/makeRoom/MakeRoom';
+import MakeRoom from '@/components/loby/createRoom/CreateRoom';
 
 describe('MakeRoom', () => {
   it('should change pathname when make room button is clicked', async () => {

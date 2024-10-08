@@ -20,14 +20,29 @@ app.prepare().then(() => {
   io.on('connection', (socket) => {
     console.log('socket io connect');
 
-    socket.on('makeRoom', ({ roomId, userId }) => {
+    socket.on('createRoom', ({ roomId, userId }) => {
       socket.join(roomId);
-      rooms[roomId] = rooms[roomId] || [];
+      const isValidRoom = rooms[roomId] == undefined;
+
+      if (isValidRoom) {
+        socket.emit('createRoomSuccess', `success join ${roomId}`);
+        rooms[roomId] = [{ socketId: socket.id, userId }];
+      } else {
+        socket.emit('createRoomFail', `fail join ${roomId}`);
+      }
+
       rooms[roomId].push({ socketId: socket.id, userId });
     });
 
-    socket.on('joinRoom', (roomId) => {
+    socket.on('joinRoom', ({ roomId, userId }) => {
       socket.join(roomId);
+      const isValidRoom = rooms[roomId] != undefined;
+      if (isValidRoom) {
+        socket.emit('joinRoomSuccess', `success join ${roomId}`);
+        rooms[roomId].push({ socketId: socket.id, userId });
+      } else {
+        socket.emit('joinRoomFail', `fail join ${roomId}`);
+      }
     });
 
     // socket.on('wordChecked', (roomId, isValid) => {});
