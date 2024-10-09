@@ -5,30 +5,63 @@ import { socket } from '@/socket/socket';
 export interface CreateOrJoinSocketRoomArgs {
   roomId: string;
   userId: string;
+  userName: string;
 }
 
 const useSocket = () => {
   const [isConnected, setIsConnected] = React.useState(false);
   const [transport, setTransport] = React.useState('N/A');
 
-  const createSocketRoom = ({ roomId, userId }: CreateOrJoinSocketRoomArgs) => {
-    let isValidRoomCode = false;
-    socket.emit('createRoom', { roomId, userId });
+  const createSocketRoom = async ({ roomId, userId, userName }: CreateOrJoinSocketRoomArgs) => {
+    let isValidRoomId = false;
+    try {
+      const res = await new Promise((resolve, reject) => {
+        socket.emit('createRoom', { roomId, userId, userName });
 
-    socket.on('createRoomSuccess', () => (isValidRoomCode = true));
-    socket.on('createRoomFail', () => (isValidRoomCode = false));
+        socket.on('createRoomSuccess', (data) => {
+          console.log(data);
+          resolve(true);
+        });
+        socket.on('createRoomFail', (data) => {
+          console.log(data);
+          reject(false);
+        });
 
-    return isValidRoomCode;
+        setTimeout(() => reject(new Error('time out')), 5000);
+      });
+
+      isValidRoomId = res as boolean;
+    } catch (error) {
+      isValidRoomId = false;
+    }
+
+    return isValidRoomId;
   };
 
-  const joinSocketRoom = ({ roomId, userId }: CreateOrJoinSocketRoomArgs) => {
-    let isValidRoomCode = false;
-    socket.emit('joinRoom', { roomId, userId });
+  const joinSocketRoom = async ({ roomId, userId, userName }: CreateOrJoinSocketRoomArgs) => {
+    let isValidRoomId = false;
+    try {
+      const res = await new Promise((resolve, reject) => {
+        socket.emit('joinRoom', { roomId, userId, userName });
 
-    socket.on('joinRoomSuccess', () => (isValidRoomCode = true));
-    socket.on('joinRoomFail', () => (isValidRoomCode = false));
+        socket.on('joinRoomSuccess', (data) => {
+          console.log(data);
+          resolve(true);
+        });
+        socket.on('joinRoomFail', (data) => {
+          console.log(data);
+          reject(false);
+        });
 
-    return isValidRoomCode;
+        setTimeout(() => reject(new Error('time out')), 5000);
+      });
+
+      isValidRoomId = res as boolean;
+    } catch (error) {
+      isValidRoomId = false;
+    }
+
+    return isValidRoomId;
   };
 
   React.useEffect(() => {

@@ -20,32 +20,30 @@ app.prepare().then(() => {
   io.on('connection', (socket) => {
     console.log('socket io connect');
 
-    socket.on('createRoom', ({ roomId, userId }) => {
+    socket.on('createRoom', ({ roomId, userId, userName }) => {
       socket.join(roomId);
-      const isValidRoom = rooms[roomId] == undefined;
 
+      const isValidRoom = rooms[roomId] == undefined;
       if (isValidRoom) {
         socket.emit('createRoomSuccess', `success join ${roomId}`);
-        rooms[roomId] = [{ socketId: socket.id, userId }];
+        rooms[roomId] = [{ socketId: socket.id, userId, userName }];
+        socket.to(roomId).emit('newUser', { users: rooms[roomId] });
       } else {
         socket.emit('createRoomFail', `fail join ${roomId}`);
       }
-
-      rooms[roomId].push({ socketId: socket.id, userId });
     });
 
-    socket.on('joinRoom', ({ roomId, userId }) => {
-      socket.join(roomId);
+    socket.on('joinRoom', ({ roomId, userId, userName }) => {
       const isValidRoom = rooms[roomId] != undefined;
       if (isValidRoom) {
-        socket.emit('joinRoomSuccess', `success join ${roomId}`);
-        rooms[roomId].push({ socketId: socket.id, userId });
+        socket.join(roomId);
+        rooms[roomId].push({ socketId: socket.id, userId, userName });
+        socket.emit('joinRoomSuccess', { users: rooms[roomId] });
+        socket.to(roomId).emit('newUser', { users: rooms[roomId] });
       } else {
         socket.emit('joinRoomFail', `fail join ${roomId}`);
       }
     });
-
-    // socket.on('wordChecked', (roomId, isValid) => {});
   });
 
   httpServer

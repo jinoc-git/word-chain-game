@@ -4,16 +4,16 @@ import React from 'react';
 
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
-import short from 'short-uuid';
+
+import { createRoomId } from '@/utils/createRoomId';
 
 const PlaySolo = () => {
   const router = useRouter();
 
   const handlePlaySolo = async () => {
-    const originCode = short.generate();
-    const shortCode = originCode.slice(0, 6).toUpperCase();
+    const roomId = createRoomId();
 
-    router.push(`/game/solo/${shortCode}`);
+    router.push(`/game/solo/${roomId}`);
   };
 
   return (

@@ -4,24 +4,32 @@ import React from 'react';
 
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
-import short from 'short-uuid';
+
+import { createRoomId } from '@/utils/createRoomId';
 
 import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
 import type { UserType } from '@/types/auth.type';
 
 interface Props {
   user: UserType | null;
-  createSocketRoom: (args: CreateOrJoinSocketRoomArgs) => boolean;
+  createSocketRoom: (args: CreateOrJoinSocketRoomArgs) => Promise<boolean>;
 }
 
 const CreateRoom = ({ user, createSocketRoom }: Props) => {
   const router = useRouter();
 
   const handleCreateRoom = async () => {
-    const originCode = short.generate();
-    const shortCode = originCode.slice(0, 6).toUpperCase();
+    if (!user) return;
+    const roomId = createRoomId();
 
-    router.push(`/game/multi/${shortCode}`);
+    const isValidRoomId = await createSocketRoom({
+      roomId,
+      userId: user.id,
+      userName: user.nickname,
+    });
+
+    if (isValidRoomId) router.push(`/game/multi/${roomId}`);
+    else handleCreateRoom();
   };
 
   return (

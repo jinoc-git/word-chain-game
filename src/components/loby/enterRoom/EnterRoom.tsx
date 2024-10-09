@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
-import short from 'short-uuid';
 
 import { EnterRoomSchema } from '@/schema/enterRoomSchema';
 
@@ -19,7 +18,7 @@ type EnterRoomInput = z.infer<typeof EnterRoomSchema>;
 
 interface Props {
   user: UserType | null;
-  joinSocketRoom: (args: CreateOrJoinSocketRoomArgs) => boolean;
+  joinSocketRoom: (args: CreateOrJoinSocketRoomArgs) => Promise<boolean>;
 }
 
 const EnterRoom = ({ user, joinSocketRoom }: Props) => {
@@ -34,11 +33,19 @@ const EnterRoom = ({ user, joinSocketRoom }: Props) => {
     mode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<EnterRoomInput> = ({ roomId }) => {
-    const originCode = short.generate();
-    const shortCode = originCode.slice(0, 6).toUpperCase();
-    console.log(originCode, shortCode);
-    router.push(`/game/multi/${roomId}`);
+  const onSubmit: SubmitHandler<EnterRoomInput> = async ({ roomId }) => {
+    if (!user) return;
+
+    const isValidRoomId = await joinSocketRoom({
+      roomId,
+      userId: user.id,
+      userName: user.nickname,
+    });
+
+    if (isValidRoomId) router.push(`/game/multi/${roomId}`);
+    else {
+      console.log('is not valid room id');
+    }
   };
 
   return (
