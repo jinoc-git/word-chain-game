@@ -28,15 +28,14 @@ app.prepare().then(() => {
 
       const isValidRoom = rooms[roomId] == undefined;
       if (isValidRoom) {
-        socket.emit('createRoomSuccess', `success join ${roomId}`);
         rooms[roomId] = [{ socketId: socket.id, userId, nickname }];
-        socket.to(roomId).emit('newUser', { users: rooms[roomId] });
+        socket.emit('createRoomSuccess', { users: rooms[roomId] });
       } else {
         socket.emit('createRoomFail', `fail join ${roomId}`);
       }
     });
 
-    socket.on('joinRoom', ({ roomId, userId, nickname }) => {
+    socket.on('joinRoom', ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
       const isValidRoom = rooms[roomId] != undefined;
       if (isValidRoom) {
         socket.join(roomId);

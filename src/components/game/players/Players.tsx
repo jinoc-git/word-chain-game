@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Chip } from '@nextui-org/react';
 
-import usePlayer from '@/hooks/usePlayer';
+import { usePlayerActions, usePlayerState } from '@/store/playerStore';
 
 export const mockPlayers = [
   { nickname: 'abcdef', id: '1' },
@@ -21,13 +21,18 @@ export const mockPlayers = [
 ];
 
 const Players = () => {
-  const { curPlayers } = usePlayer();
+  const curPlayers = usePlayerState();
+  const { playerObserver } = usePlayerActions();
+  console.log('players', curPlayers);
+  React.useEffect(() => {
+    playerObserver();
+  }, []);
 
   return (
     <section className="w-full flex flex-wrap gap-2">
-      {mockPlayers.map(({ nickname, id }, idx) => {
+      {curPlayers.map(({ nickname, userId }, idx) => {
         return (
-          <Chip key={`${idx + 1}player`} size="sm" radius="sm" color="primary" data-testid={id}>
+          <Chip key={`${idx + 1}player`} size="sm" radius="sm" color="primary" data-testid={userId}>
             {nickname}
           </Chip>
         );

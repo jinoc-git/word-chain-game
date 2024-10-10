@@ -1,6 +1,9 @@
 import React from 'react';
 
 import { socket } from '@/socket/socket';
+import { usePlayerActions } from '@/store/playerStore';
+
+import type { PlayerType } from './usePlayer';
 
 export interface CreateOrJoinSocketRoomArgs {
   roomId: string;
@@ -12,14 +15,17 @@ const useSocket = () => {
   const [isConnected, setIsConnected] = React.useState(false);
   const [transport, setTransport] = React.useState('N/A');
 
+  const { initPlayer } = usePlayerActions();
+
   const createSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
     let isValidRoomId = false;
     try {
       const res = await new Promise((resolve, reject) => {
         socket.emit('createRoom', { roomId, userId, nickname });
 
-        socket.on('createRoomSuccess', (data) => {
-          console.log(data);
+        socket.on('createRoomSuccess', ({ users }: { users: PlayerType[] }) => {
+          console.log('success', users);
+          initPlayer(users);
           resolve(true);
         });
         socket.on('createRoomFail', (data) => {
