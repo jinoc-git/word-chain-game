@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { checkValidWord } from '@/api/word';
+import { checkValidWord } from '@/lib/word';
 import { useWordActions } from '@/store/wordStore';
 import { checkFirstCharacter } from '@/utils/checkFirstCharacter';
 

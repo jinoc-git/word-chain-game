@@ -6,15 +6,24 @@ import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input } from '@nextui-org/react';
-import short from 'short-uuid';
+import { useRouter } from 'next/navigation';
 
 import { EnterRoomSchema } from '@/schema/enterRoomSchema';
 
+import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
+import type { UserType } from '@/types/auth.type';
 import type { z } from 'zod';
 
 type EnterRoomInput = z.infer<typeof EnterRoomSchema>;
 
-const EnterRoom = () => {
+interface Props {
+  user: UserType | null;
+  joinSocketRoom: (args: CreateOrJoinSocketRoomArgs) => Promise<boolean>;
+}
+
+const EnterRoom = ({ user, joinSocketRoom }: Props) => {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -24,16 +33,25 @@ const EnterRoom = () => {
     mode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<EnterRoomInput> = (data) => {
-    const originCode = short.generate();
-    const shortCode = originCode.slice(0, 6).toUpperCase();
-    console.log(originCode, shortCode);
+  const onSubmit: SubmitHandler<EnterRoomInput> = async ({ roomId }) => {
+    if (!user) return;
+
+    const isValidRoomId = await joinSocketRoom({
+      roomId,
+      userId: user.id,
+      nickname: user.nickname,
+    });
+
+    if (isValidRoomId) router.push(`/game/multi/${roomId}`);
+    else {
+      console.log('is not valid room id');
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full flex gap-2">
       <Input
-        {...register('roomCode')}
+        {...register('roomId')}
         type="text"
         placeholder="방 코드 입력하기"
         size="md"
