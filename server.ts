@@ -5,6 +5,7 @@ import { Server } from 'socket.io';
 
 import type { PlayerType } from '@/hooks/usePlayer';
 import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
+import type { QuitGameArgs } from '@/store/playerStore';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
@@ -41,9 +42,18 @@ app.prepare().then(() => {
         socket.join(roomId);
         rooms[roomId].push({ socketId: socket.id, userId, nickname });
         socket.emit('joinRoomSuccess', { users: rooms[roomId] });
-        socket.to(roomId).emit('newUser', { users: rooms[roomId] });
+        socket.to(roomId).emit('updateUser', { users: rooms[roomId] });
       } else {
         socket.emit('joinRoomFail', `fail join ${roomId}`);
+      }
+    });
+
+    socket.on('quitGame', ({ roomId, userId }: QuitGameArgs) => {
+      const afterUsers = rooms[roomId].filter((user) => user.userId !== userId);
+      if (afterUsers.length === 0) delete rooms[roomId];
+      else {
+        rooms[roomId] = afterUsers;
+        socket.to(roomId).emit('updateUser', { users: rooms[roomId] });
       }
     });
   });

@@ -4,10 +4,15 @@ import { socket } from '@/socket/socket';
 
 import type { PlayerType } from '@/hooks/usePlayer';
 
+export interface QuitGameArgs {
+  roomId: string;
+  userId: string;
+}
+
 interface Actions {
   initPlayer: (users: PlayerType[]) => void;
   playerObserver: () => void;
-  resetPlayerAndOffObserver: () => void;
+  quitGameAndOffObserver: (args: QuitGameArgs) => void;
 }
 
 interface Store {
@@ -22,15 +27,13 @@ export const playerStore = create<Store>((set, get) => ({
       set({ curPlayer: users });
     },
     playerObserver: () => {
-      console.log('observer start');
-      socket.on('newUser', (users: PlayerType[]) => {
-        console.log('observer', users);
+      socket.on('updateUser', (users: PlayerType[]) => {
         set({ curPlayer: users });
       });
     },
-    resetPlayerAndOffObserver: () => {
-      console.log('reset observer');
-      socket.off('newUser');
+    quitGameAndOffObserver: (args: QuitGameArgs) => {
+      socket.emit('quitGame', args);
+      socket.off('updateUser');
       set({ curPlayer: [] });
     },
   },

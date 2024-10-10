@@ -23,7 +23,7 @@ export const mockPlayers = [
 const Players = () => {
   const curPlayers = usePlayerState();
   const { playerObserver } = usePlayerActions();
-  console.log('players', curPlayers);
+
   React.useEffect(() => {
     playerObserver();
   }, []);
