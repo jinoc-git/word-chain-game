@@ -3,7 +3,7 @@ import React from 'react';
 import { socket } from '@/socket/socket';
 import { usePlayerActions } from '@/store/playerStore';
 
-import type { PlayerType } from './usePlayer';
+import type { PlayerType } from '@/store/playerStore';
 
 export interface CreateOrJoinSocketRoomArgs {
   roomId: string;
