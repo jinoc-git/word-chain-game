@@ -3,9 +3,8 @@ import { createServer } from 'http';
 import next from 'next';
 import { Server } from 'socket.io';
 
-import type { PlayerType } from '@/hooks/usePlayer';
 import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
-import type { QuitGameArgs } from '@/store/playerStore';
+import type { PlayerType, QuitGameArgs } from '@/store/playerStore';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
