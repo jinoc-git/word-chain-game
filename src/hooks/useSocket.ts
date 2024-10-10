@@ -5,18 +5,18 @@ import { socket } from '@/socket/socket';
 export interface CreateOrJoinSocketRoomArgs {
   roomId: string;
   userId: string;
-  userName: string;
+  nickname: string;
 }
 
 const useSocket = () => {
   const [isConnected, setIsConnected] = React.useState(false);
   const [transport, setTransport] = React.useState('N/A');
 
-  const createSocketRoom = async ({ roomId, userId, userName }: CreateOrJoinSocketRoomArgs) => {
+  const createSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
     let isValidRoomId = false;
     try {
       const res = await new Promise((resolve, reject) => {
-        socket.emit('createRoom', { roomId, userId, userName });
+        socket.emit('createRoom', { roomId, userId, nickname });
 
         socket.on('createRoomSuccess', (data) => {
           console.log(data);
@@ -38,11 +38,11 @@ const useSocket = () => {
     return isValidRoomId;
   };
 
-  const joinSocketRoom = async ({ roomId, userId, userName }: CreateOrJoinSocketRoomArgs) => {
+  const joinSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
     let isValidRoomId = false;
     try {
       const res = await new Promise((resolve, reject) => {
-        socket.emit('joinRoom', { roomId, userId, userName });
+        socket.emit('joinRoom', { roomId, userId, nickname });
 
         socket.on('joinRoomSuccess', (data) => {
           console.log(data);

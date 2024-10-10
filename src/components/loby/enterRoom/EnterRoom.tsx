@@ -39,7 +39,7 @@ const EnterRoom = ({ user, joinSocketRoom }: Props) => {
     const isValidRoomId = await joinSocketRoom({
       roomId,
       userId: user.id,
-      userName: user.nickname,
+      nickname: user.nickname,
     });
 
     if (isValidRoomId) router.push(`/game/multi/${roomId}`);

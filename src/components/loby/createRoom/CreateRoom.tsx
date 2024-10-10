@@ -25,7 +25,7 @@ const CreateRoom = ({ user, createSocketRoom }: Props) => {
     const isValidRoomId = await createSocketRoom({
       roomId,
       userId: user.id,
-      userName: user.nickname,
+      nickname: user.nickname,
     });
 
     if (isValidRoomId) router.push(`/game/multi/${roomId}`);

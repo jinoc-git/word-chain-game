@@ -4,6 +4,8 @@ import React from 'react';
 
 import { Chip } from '@nextui-org/react';
 
+import usePlayer from '@/hooks/usePlayer';
+
 export const mockPlayers = [
   { nickname: 'abcdef', id: '1' },
   { nickname: 'fedcba', id: '2' },
@@ -19,6 +21,8 @@ export const mockPlayers = [
 ];
 
 const Players = () => {
+  const { curPlayers } = usePlayer();
+
   return (
     <section className="w-full flex flex-wrap gap-2">
       {mockPlayers.map(({ nickname, id }, idx) => {
