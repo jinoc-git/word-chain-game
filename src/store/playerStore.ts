@@ -2,7 +2,12 @@ import { create } from 'zustand';
 
 import { socket } from '@/socket/socket';
 
-import type { PlayerType } from '@/hooks/usePlayer';
+export interface PlayerType {
+  socketId: string;
+  userId: string;
+  nickname: string;
+  isRoomChief?: boolean;
+}
 
 export interface QuitGameArgs {
   roomId: string;

@@ -3,8 +3,11 @@ import { createServer } from 'http';
 import next from 'next';
 import { Server } from 'socket.io';
 
+import { quitRoom } from '@/utils/aboutServer';
+
 import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
-import type { PlayerType, QuitGameArgs } from '@/store/playerStore';
+import type { QuitGameArgs } from '@/store/playerStore';
+import type { Rooms } from '@/types/server.type';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
@@ -13,7 +16,7 @@ const port = 3000;
 const app = next({ dev, hostname, port });
 const handler = app.getRequestHandler();
 
-const rooms: Record<string, PlayerType[]> = {};
+const rooms: Rooms = {};
 
 app.prepare().then(() => {
   const httpServer = createServer(handler);
@@ -28,7 +31,7 @@ app.prepare().then(() => {
 
       const isValidRoom = rooms[roomId] == undefined;
       if (isValidRoom) {
-        rooms[roomId] = [{ socketId: socket.id, userId, nickname }];
+        rooms[roomId] = [{ socketId: socket.id, userId, nickname, isRoomChief: true }];
         socket.emit('createRoomSuccess', { users: rooms[roomId] });
       } else {
         socket.emit('createRoomFail', `fail join ${roomId}`);
@@ -39,7 +42,7 @@ app.prepare().then(() => {
       const isValidRoom = rooms[roomId] != undefined;
       if (isValidRoom) {
         socket.join(roomId);
-        rooms[roomId].push({ socketId: socket.id, userId, nickname });
+        rooms[roomId].push({ socketId: socket.id, userId, nickname, isRoomChief: false });
         socket.emit('joinRoomSuccess', { users: rooms[roomId] });
         socket.to(roomId).emit('updateUser', { users: rooms[roomId] });
       } else {
@@ -48,7 +51,7 @@ app.prepare().then(() => {
     });
 
     socket.on('quitGame', ({ roomId, userId }: QuitGameArgs) => {
-      const afterUsers = rooms[roomId].filter((user) => user.userId !== userId);
+      const afterUsers = quitRoom(userId, rooms[roomId]);
       if (afterUsers.length === 0) delete rooms[roomId];
       else {
         rooms[roomId] = afterUsers;
