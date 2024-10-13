@@ -3,7 +3,7 @@ import { createServer } from 'http';
 import next from 'next';
 import { Server } from 'socket.io';
 
-import { quitRoom } from '@/utils/aboutServer';
+import { quitRoom } from './src/utils/aboutServer.ts';
 
 import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
 import type { QuitGameArgs } from '@/store/playerStore';
