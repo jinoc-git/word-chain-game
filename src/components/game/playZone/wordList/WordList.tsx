@@ -13,8 +13,8 @@ const WordList = () => {
   const words = useWordState();
 
   return (
-    <Card isBlurred>
-      <CardHeader className="flex items-center gap-2 h-[50px]">
+    <Card className="border">
+      <CardHeader className="flex items-center gap-2 h-[50px]  ">
         {words.map((word, idx) => {
           const isLast = words.length === idx + 1;
 
