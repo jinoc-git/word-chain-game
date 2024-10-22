@@ -2,10 +2,15 @@
 
 import React from 'react';
 
+import ToastProvider from './toastProvider/ToastProvider';
 import UIProvider from './uiProvider/UIProvider';
 
 const AllProviders = ({ children }: { children: React.ReactNode }) => {
-  return <UIProvider>{children}</UIProvider>;
+  return (
+    <ToastProvider>
+      <UIProvider>{children}</UIProvider>
+    </ToastProvider>
+  );
 };
 
 export default AllProviders;
