@@ -3,6 +3,7 @@
 import React from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input } from '@nextui-org/react';
@@ -34,7 +35,10 @@ const EnterRoom = ({ user, joinSocketRoom }: Props) => {
   });
 
   const onSubmit: SubmitHandler<EnterRoomInput> = async ({ roomId }) => {
-    if (!user) return;
+    if (!user) {
+      toast.error('로그인이 필요합니다.');
+      return;
+    }
 
     const isValidRoomId = await joinSocketRoom({
       roomId,
@@ -43,9 +47,7 @@ const EnterRoom = ({ user, joinSocketRoom }: Props) => {
     });
 
     if (isValidRoomId) router.push(`/game/multi/${roomId}`);
-    else {
-      console.log('is not valid room id');
-    }
+    else toast.error('방 코드를 확인해주세요.');
   };
 
   return (
