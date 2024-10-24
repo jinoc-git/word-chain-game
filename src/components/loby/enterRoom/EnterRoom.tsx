@@ -28,6 +28,7 @@ const EnterRoom = ({ user, joinSocketRoom }: Props) => {
   const {
     register,
     handleSubmit,
+    setFocus,
     formState: { errors, isValid },
   } = useForm<EnterRoomInput>({
     resolver: zodResolver(EnterRoomSchema),
@@ -47,7 +48,10 @@ const EnterRoom = ({ user, joinSocketRoom }: Props) => {
     });
 
     if (isValidRoomId) router.push(`/game/multi/${roomId}`);
-    else toast.error('방 코드를 확인해주세요.');
+    else {
+      setFocus('roomId');
+      toast.error('방 코드를 확인해주세요.');
+    }
   };
 
   return (
