@@ -7,7 +7,7 @@ import { quitRoom } from './src/utils/aboutServer.ts';
 
 import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
 import type { QuitGameArgs } from '@/store/playerStore';
-import type { Rooms } from '@/types/server.type';
+import type { Room, Rooms } from '@/types/server.type';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
@@ -31,7 +31,11 @@ app.prepare().then(() => {
 
       const isValidRoom = rooms[roomId] == undefined;
       if (isValidRoom) {
-        rooms[roomId] = [{ socketId: socket.id, userId, nickname, isRoomChief: true }];
+        const room: Room = {
+          state: false,
+          players: [{ socketId: socket.id, userId, nickname, isRoomChief: true }],
+        };
+        rooms[roomId] = room;
         socket.emit('createRoomSuccess', { users: rooms[roomId] });
       } else {
         socket.emit('createRoomFail', `fail join ${roomId}`);
@@ -42,7 +46,7 @@ app.prepare().then(() => {
       const isValidRoom = rooms[roomId] != undefined;
       if (isValidRoom) {
         socket.join(roomId);
-        rooms[roomId].push({ socketId: socket.id, userId, nickname, isRoomChief: false });
+        rooms[roomId].players.push({ socketId: socket.id, userId, nickname, isRoomChief: false });
         socket.emit('joinRoomSuccess', { users: rooms[roomId] });
         socket.to(roomId).emit('updateUser', { users: rooms[roomId] });
       } else {
@@ -51,10 +55,10 @@ app.prepare().then(() => {
     });
 
     socket.on('quitGame', ({ roomId, userId }: QuitGameArgs) => {
-      const afterUsers = quitRoom(userId, rooms[roomId]);
+      const afterUsers = quitRoom(userId, rooms[roomId].players);
       if (afterUsers.length === 0) delete rooms[roomId];
       else {
-        rooms[roomId] = afterUsers;
+        rooms[roomId].players = afterUsers;
         socket.to(roomId).emit('updateUser', { users: rooms[roomId] });
       }
     });

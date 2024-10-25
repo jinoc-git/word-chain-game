@@ -26,7 +26,6 @@ const useSocket = () => {
         socket.emit('createRoom', { roomId, userId, nickname });
 
         socket.on('createRoomSuccess', ({ users }: { users: PlayerType[] }) => {
-          console.log('success', users);
           initPlayer(users);
           resolve(true);
         });
