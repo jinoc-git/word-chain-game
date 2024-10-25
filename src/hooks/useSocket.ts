@@ -1,5 +1,7 @@
 import React from 'react';
 
+import _ from 'lodash';
+
 import { socket } from '@/socket/socket';
 import { usePlayerActions } from '@/store/playerStore';
 
@@ -93,7 +95,12 @@ const useSocket = () => {
     };
   }, []);
 
-  return { isConnected, transport, createSocketRoom, joinSocketRoom };
+  return {
+    isConnected,
+    transport,
+    createSocketRoom: _.throttle(createSocketRoom, 750),
+    joinSocketRoom: _.throttle(joinSocketRoom, 750),
+  };
 };
 
 export default useSocket;
