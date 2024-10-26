@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { socket } from '@/socket/socket';
 import { usePlayerActions } from '@/store/playerStore';
 
-import type { PlayerType } from '@/store/playerStore';
+import type { Room } from '@/types/server.type';
 
 export interface CreateOrJoinSocketRoomArgs {
   roomId: string;
@@ -25,12 +25,12 @@ const useSocket = () => {
       const res = await new Promise((resolve, reject) => {
         socket.emit('createRoom', { roomId, userId, nickname });
 
-        socket.on('createRoomSuccess', ({ users }: { users: PlayerType[] }) => {
-          initPlayer(users);
+        socket.on('createRoomSuccess', (room: Room) => {
+          initPlayer(room.players);
           resolve(true);
         });
-        socket.on('createRoomFail', (data) => {
-          console.log(data);
+        socket.on('createRoomFail', (message: string) => {
+          console.log(message);
           reject(false);
         });
 
@@ -51,12 +51,12 @@ const useSocket = () => {
       const res = await new Promise((resolve, reject) => {
         socket.emit('joinRoom', { roomId, userId, nickname });
 
-        socket.on('joinRoomSuccess', (data) => {
-          console.log(data);
+        socket.on('joinRoomSuccess', (room: Room) => {
+          console.log(room);
           resolve(true);
         });
-        socket.on('joinRoomFail', (data) => {
-          console.log(data);
+        socket.on('joinRoomFail', (message: string) => {
+          console.log(message);
           reject(false);
         });
 

@@ -36,7 +36,7 @@ app.prepare().then(() => {
           players: [{ socketId: socket.id, userId, nickname, isRoomChief: true }],
         };
         rooms[roomId] = room;
-        socket.emit('createRoomSuccess', { users: rooms[roomId] });
+        socket.emit('createRoomSuccess', rooms[roomId]);
       } else {
         socket.emit('createRoomFail', `fail join ${roomId}`);
       }
@@ -47,8 +47,8 @@ app.prepare().then(() => {
       if (isValidRoom) {
         socket.join(roomId);
         rooms[roomId].players.push({ socketId: socket.id, userId, nickname, isRoomChief: false });
-        socket.emit('joinRoomSuccess', { users: rooms[roomId] });
-        socket.to(roomId).emit('updateUser', { users: rooms[roomId] });
+        socket.emit('joinRoomSuccess', rooms[roomId]);
+        socket.to(roomId).emit('updateUser', rooms[roomId]);
       } else {
         socket.emit('joinRoomFail', `fail join ${roomId}`);
       }
@@ -59,9 +59,11 @@ app.prepare().then(() => {
       if (afterUsers.length === 0) delete rooms[roomId];
       else {
         rooms[roomId].players = afterUsers;
-        socket.to(roomId).emit('updateUser', { users: rooms[roomId] });
+        socket.to(roomId).emit('updateUser', rooms[roomId]);
       }
     });
+
+    socket.on('startGame', ({}) => {});
   });
 
   httpServer
