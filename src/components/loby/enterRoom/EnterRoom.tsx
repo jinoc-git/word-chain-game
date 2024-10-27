@@ -48,10 +48,7 @@ const EnterRoom = ({ user, joinSocketRoom }: Props) => {
     });
 
     if (isValidRoomId) router.push(`/game/multi/${roomId}`);
-    else {
-      setFocus('roomId');
-      toast.error('방 코드를 확인해주세요.');
-    }
+    else setFocus('roomId');
   };
 
   return (

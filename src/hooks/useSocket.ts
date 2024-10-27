@@ -1,11 +1,12 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 
 import _ from 'lodash';
 
 import { socket } from '@/socket/socket';
 import { usePlayerActions } from '@/store/playerStore';
 
-import type { PlayerType } from '@/store/playerStore';
+import type { Room } from '@/types/server.type';
 
 export interface CreateOrJoinSocketRoomArgs {
   roomId: string;
@@ -20,56 +21,54 @@ const useSocket = () => {
   const { initPlayer } = usePlayerActions();
 
   const createSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
-    let isValidRoomId = false;
     try {
-      const res = await new Promise((resolve, reject) => {
+      const res: boolean | undefined = await new Promise((resolve, reject) => {
         socket.emit('createRoom', { roomId, userId, nickname });
 
-        socket.on('createRoomSuccess', ({ users }: { users: PlayerType[] }) => {
-          console.log('success', users);
-          initPlayer(users);
+        socket.on('createRoomSuccess', (room: Room) => {
+          initPlayer(room.players);
           resolve(true);
         });
-        socket.on('createRoomFail', (data) => {
-          console.log(data);
-          reject(false);
+        socket.on('createRoomFail', (message: string) => {
+          reject(new Error(message));
         });
 
-        setTimeout(() => reject(new Error('time out')), 5000);
+        setTimeout(() => reject(new Error('통신 오류! 잠시후 다시 시도해주세요')), 5000);
       });
 
-      isValidRoomId = res as boolean;
+      return res;
     } catch (error) {
-      isValidRoomId = false;
+      if (error instanceof Error) {
+        toast.error(error.message);
+        return false;
+      }
     }
-
-    return isValidRoomId;
   };
 
   const joinSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
-    let isValidRoomId = false;
     try {
-      const res = await new Promise((resolve, reject) => {
+      const res: boolean | undefined = await new Promise((resolve, reject) => {
         socket.emit('joinRoom', { roomId, userId, nickname });
 
-        socket.on('joinRoomSuccess', (data) => {
-          console.log(data);
+        socket.on('joinRoomSuccess', (room: Room) => {
+          console.log(room);
           resolve(true);
         });
-        socket.on('joinRoomFail', (data) => {
-          console.log(data);
-          reject(false);
+        socket.on('joinRoomFail', (message: string) => {
+          console.log(message);
+          reject(new Error(message));
         });
 
-        setTimeout(() => reject(new Error('time out')), 5000);
+        setTimeout(() => reject(new Error('통신 오류! 잠시후 다시 시도해주세요')), 5000);
       });
 
-      isValidRoomId = res as boolean;
+      return res;
     } catch (error) {
-      isValidRoomId = false;
+      if (error instanceof Error) {
+        toast.error(error.message);
+        return false;
+      }
     }
-
-    return isValidRoomId;
   };
 
   React.useEffect(() => {

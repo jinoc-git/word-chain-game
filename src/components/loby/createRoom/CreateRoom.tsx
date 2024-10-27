@@ -29,7 +29,7 @@ const CreateRoom = ({ user, createSocketRoom }: Props) => {
     });
 
     if (isValidRoomId) router.push(`/game/multi/${roomId}`);
-    else handleCreateRoom();
+    // else handleCreateRoom();
   };
 
   return (
