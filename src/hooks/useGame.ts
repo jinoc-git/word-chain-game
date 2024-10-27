@@ -24,7 +24,7 @@ const useGame = () => {
           reject(new Error(message));
         });
 
-        setTimeout(() => reject(new Error('time out! check socket')), 5000);
+        setTimeout(() => reject(new Error('통신 오류! 잠시후 다시 시도해주세요')), 5000);
       });
 
       if (state) startGame();

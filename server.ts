@@ -38,7 +38,7 @@ app.prepare().then(() => {
         rooms[roomId] = room;
         socket.emit('createRoomSuccess', rooms[roomId]);
       } else {
-        socket.emit('createRoomFail', `fail join ${roomId}`);
+        socket.emit('createRoomFail', '잠시후 다시 시도해주세요.');
       }
     });
 
@@ -50,7 +50,7 @@ app.prepare().then(() => {
         socket.emit('joinRoomSuccess', rooms[roomId]);
         socket.to(roomId).emit('updateUser', rooms[roomId]);
       } else {
-        socket.emit('joinRoomFail', `fail join ${roomId}`);
+        socket.emit('joinRoomFail', '방 코드를 확인해주세요.');
       }
     });
 
@@ -65,10 +65,10 @@ app.prepare().then(() => {
 
     socket.on('handleGameState', ({ userId, roomId, state }: HandleGameStateSocketArgs) => {
       const player = rooms[roomId].players.find((player) => player.userId === userId);
-      if (!player) socket.emit('handleGameStateFail', 'you are not room member');
+      if (!player) socket.emit('handleGameStateFail', '방 오류 발생!');
       else {
         const isRoomChief = player.isRoomChief === true;
-        if (!isRoomChief) socket.emit('handleGameStateFail', 'you are not room chief');
+        if (!isRoomChief) socket.emit('handleGameStateFail', '방장이 아닙니다!');
         else {
           rooms[roomId].state = state;
           socket.emit('handleGameStateSuccess', `game state is ${state}`);

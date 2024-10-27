@@ -22,7 +22,7 @@ const useSocket = () => {
 
   const createSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
     try {
-      const res: boolean | string = await new Promise((resolve, reject) => {
+      const res: boolean | undefined = await new Promise((resolve, reject) => {
         socket.emit('createRoom', { roomId, userId, nickname });
 
         socket.on('createRoomSuccess', (room: Room) => {
@@ -33,7 +33,7 @@ const useSocket = () => {
           reject(new Error(message));
         });
 
-        setTimeout(() => reject(new Error('time out! check socket')), 5000);
+        setTimeout(() => reject(new Error('통신 오류! 잠시후 다시 시도해주세요')), 5000);
       });
 
       return res;
@@ -46,9 +46,8 @@ const useSocket = () => {
   };
 
   const joinSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
-    let isValidRoomId = false;
     try {
-      const res = await new Promise((resolve, reject) => {
+      const res: boolean | undefined = await new Promise((resolve, reject) => {
         socket.emit('joinRoom', { roomId, userId, nickname });
 
         socket.on('joinRoomSuccess', (room: Room) => {
@@ -57,18 +56,19 @@ const useSocket = () => {
         });
         socket.on('joinRoomFail', (message: string) => {
           console.log(message);
-          reject(false);
+          reject(new Error(message));
         });
 
-        setTimeout(() => reject(new Error('time out')), 5000);
+        setTimeout(() => reject(new Error('통신 오류! 잠시후 다시 시도해주세요')), 5000);
       });
 
-      isValidRoomId = res as boolean;
+      return res;
     } catch (error) {
-      isValidRoomId = false;
+      if (error instanceof Error) {
+        toast.error(error.message);
+        return false;
+      }
     }
-
-    return isValidRoomId;
   };
 
   React.useEffect(() => {
