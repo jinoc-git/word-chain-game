@@ -7,7 +7,7 @@ import { quitRoom } from './src/utils/aboutServer.ts';
 
 import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
 import type { QuitGameArgs } from '@/store/playerStore';
-import type { Room, Rooms } from '@/types/server.type';
+import type { HandleGameStateSocketArgs, Room, Rooms } from '@/types/server.type';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
@@ -63,7 +63,19 @@ app.prepare().then(() => {
       }
     });
 
-    socket.on('startGame', ({}) => {});
+    socket.on('handleGameState', ({ userId, roomId, state }: HandleGameStateSocketArgs) => {
+      const player = rooms[roomId].players.find((player) => player.userId === userId);
+      if (!player) socket.emit('handleGameStateFail', 'you are not room member');
+      else {
+        const isRoomChief = player.isRoomChief === true;
+        if (!isRoomChief) socket.emit('handleGameStateFail', 'you are not room chief');
+        else {
+          rooms[roomId].state = state;
+          socket.emit('handleGameStateSuccess', `game state is ${state}`);
+          socket.to(roomId).emit('gameStateIsChange', { gameState: state });
+        }
+      }
+    });
   });
 
   httpServer

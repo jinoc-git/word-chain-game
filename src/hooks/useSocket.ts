@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 
 import _ from 'lodash';
 
@@ -20,9 +21,8 @@ const useSocket = () => {
   const { initPlayer } = usePlayerActions();
 
   const createSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
-    let isValidRoomId = false;
     try {
-      const res = await new Promise((resolve, reject) => {
+      const res: boolean | string = await new Promise((resolve, reject) => {
         socket.emit('createRoom', { roomId, userId, nickname });
 
         socket.on('createRoomSuccess', (room: Room) => {
@@ -30,19 +30,19 @@ const useSocket = () => {
           resolve(true);
         });
         socket.on('createRoomFail', (message: string) => {
-          console.log(message);
-          reject(false);
+          reject(new Error(message));
         });
 
-        setTimeout(() => reject(new Error('time out')), 5000);
+        setTimeout(() => reject(new Error('time out! check socket')), 5000);
       });
 
-      isValidRoomId = res as boolean;
+      return res;
     } catch (error) {
-      isValidRoomId = false;
+      if (error instanceof Error) {
+        toast.error(error.message);
+        return false;
+      }
     }
-
-    return isValidRoomId;
   };
 
   const joinSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {

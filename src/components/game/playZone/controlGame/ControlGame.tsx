@@ -11,10 +11,10 @@ const ControlGame = () => {
 
   return (
     <div className="flex justify-around w-full mt-[100px]">
-      <Button color="primary" isDisabled={isGameStarted} onClick={() => handleGameState('start')}>
+      <Button color="primary" isDisabled={isGameStarted} onClick={() => handleGameState(true)}>
         게임 시작
       </Button>
-      <Button color="primary" isDisabled={!isGameStarted} onClick={() => handleGameState('stop')}>
+      <Button color="primary" isDisabled={!isGameStarted} onClick={() => handleGameState(false)}>
         게임 중단
       </Button>
     </div>
