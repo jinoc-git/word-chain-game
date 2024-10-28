@@ -1,14 +1,19 @@
 import '@testing-library/jest-dom';
 
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn().mockReturnValue({
-    push: jest.fn(),
-    replace: jest.fn(),
+vi.mock('next/navigation', () => ({
+  useRouter: vi.fn().mockReturnValue({
+    push: vi.fn(),
+    replace: vi.fn(),
     events: {
-      on: jest.fn(),
-      off: jest.fn(),
-      emit: jest.fn(),
+      on: vi.fn(),
+      off: vi.fn(),
+      emit: vi.fn(),
     },
     isFallback: false,
   }),
+  useParams: vi.fn(),
+}));
+
+vi.mock('@/utils/createRoomId', () => ({
+  createRoomId: vi.fn(() => 'ABCDEF'),
 }));

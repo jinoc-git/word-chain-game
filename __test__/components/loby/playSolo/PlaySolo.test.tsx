@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/navigation';
 
 import PlaySolo from '@/components/loby/playSolo/PlaySolo';
+import { createRoomId } from '@/utils/createRoomId';
 
 describe('PlaySolo', () => {
   it('should change pathname when play solo button is clicked', async () => {
@@ -13,6 +14,6 @@ describe('PlaySolo', () => {
     const playSoloButton = screen.getByRole('button', { name: /혼자 하기/i });
     await user.click(playSoloButton);
 
-    expect(router.push).toHaveBeenCalledWith(`/game/123?solo`);
+    expect(router.push).toHaveBeenCalledWith(`/game/solo/${createRoomId()}`);
   });
 });
