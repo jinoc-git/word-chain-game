@@ -25,14 +25,7 @@
     },
     "types": ["vitest/globals"]
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "server.ts",
-    "__test__"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "server.ts"],
   "exclude": ["node_modules", "next.config.mjs"],
   "ts-node": {
     "esm": true,
