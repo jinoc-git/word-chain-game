@@ -17,3 +17,8 @@ vi.mock('next/navigation', () => ({
 vi.mock('@/utils/createRoomId', () => ({
   createRoomId: vi.fn(() => 'ABCDEF'),
 }));
+
+vi.mock('@/hooks/useWord', () => ({
+  isValidWord: true,
+  enterWordAndCheck: vi.fn().mockReturnValue(true),
+}));

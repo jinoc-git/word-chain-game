@@ -7,8 +7,6 @@ import { uuid } from 'short-uuid';
 
 import { useWordState } from '@/store/wordStore';
 
-export const mockWords = ['인사동', '동생', '생필품'];
-
 const WordList = () => {
   const words = useWordState();
 
