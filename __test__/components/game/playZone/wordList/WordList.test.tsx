@@ -1,9 +1,26 @@
 import { render, screen } from '@testing-library/react';
 
-import WordList, { mockWords } from '@/components/game/playZone/wordList/WordList';
+import WordList from '@/components/game/playZone/wordList/WordList';
+
+const mockWords = ['대나무', '무다리', '리어카'];
 
 describe('WordList', () => {
-  it.each(mockWords)('shoul render word list', (word) => {
+  beforeEach(() => {
+    vi.mock('@/store/wordStore', () => ({
+      useWordState: vi.fn(() => mockWords),
+      useWordActions: vi.fn(() => ({
+        getWordsCount: vi.fn(() => mockWords.length),
+        getLastWord: vi.fn(() => mockWords[2]),
+        pushNewWord: vi.fn(),
+      })),
+    }));
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it.each(mockWords)('should render enterd word', (word) => {
     render(<WordList />);
 
     expect(screen.getByText(word)).toBeInTheDocument();

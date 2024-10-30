@@ -6,20 +6,6 @@ import { Chip } from '@nextui-org/react';
 
 import { usePlayerActions, usePlayerState } from '@/store/playerStore';
 
-export const mockPlayers = [
-  { nickname: 'abcdef', id: '1' },
-  { nickname: 'fedcba', id: '2' },
-  { nickname: 'bcdefa', id: '3' },
-  { nickname: 'cdefab', id: '4' },
-  { nickname: 'defabc', id: '5' },
-  { nickname: 'efabcd', id: '6' },
-  { nickname: 'fabcde', id: '7' },
-  { nickname: 'fabcde', id: '8' },
-  { nickname: 'fabcde', id: '9' },
-  { nickname: 'fabcde', id: '10' },
-  { nickname: 'fabcde', id: '11' },
-];
-
 const Players = () => {
   const curPlayers = usePlayerState();
   const { playerObserver } = usePlayerActions();
