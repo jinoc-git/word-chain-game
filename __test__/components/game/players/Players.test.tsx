@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react';
 
 import Players from '@/components/game/players/Players';
+import { createMockSocket } from '__test__/utils';
 
 import type { PlayerType } from '@/store/playerStore';
+import type { MockSocket } from '__test__/utils';
 
 // socket io 모킹 후 faker 사용 예정
 const mockPlayers: PlayerType[] = [
@@ -12,7 +14,15 @@ const mockPlayers: PlayerType[] = [
 ];
 
 describe('Players', () => {
-  beforeEach(() => {
+  const mockSocket: MockSocket = {
+    io: null,
+    serverSocket: null,
+    clientSocket: null,
+  };
+
+  beforeEach(async () => {
+    await createMockSocket(mockSocket);
+
     vi.mock('@/store/playerStore', () => ({
       usePlayerState: vi.fn(() => mockPlayers),
       usePlayerActions: vi.fn(() => ({
