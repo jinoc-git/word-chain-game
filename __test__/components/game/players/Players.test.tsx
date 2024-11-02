@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import Players from '@/components/game/players/Players';
-import { createMockSocket } from '__test__/utils';
+import { createMockSocket, deleteMockSocket } from '__test__/utils';
 
 import type { PlayerType } from '@/store/playerStore';
 import type { MockSocket } from '__test__/utils';
@@ -34,6 +34,12 @@ describe('Players', () => {
     }));
 
     render(<Players />);
+  });
+
+  afterAll(() => {
+    vi.clearAllMocks();
+
+    deleteMockSocket(mockSocket);
   });
 
   it.each(mockPlayers)('should render players nickname', ({ userId, nickname }) => {
