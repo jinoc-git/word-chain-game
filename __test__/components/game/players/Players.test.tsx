@@ -1,17 +1,11 @@
 import { render, screen } from '@testing-library/react';
 
 import Players from '@/components/game/players/Players';
+import { mockPlayers, mockRoomChief } from '__test__/mocks/players';
 import { createMockSocket, deleteMockSocket } from '__test__/utils';
 
 import type { PlayerType } from '@/store/playerStore';
 import type { MockSocket } from '__test__/utils';
-
-// socket io 모킹 후 faker 사용 예정
-const mockPlayers: PlayerType[] = [
-  { socketId: 'a1', userId: 'a1', nickname: 'a1', isRoomChief: true },
-  { socketId: 'a2', userId: 'a2', nickname: 'a2', isRoomChief: false },
-  { socketId: 'a3', userId: 'a3', nickname: 'a3', isRoomChief: false },
-];
 
 describe('Players', () => {
   const mockSocket: MockSocket = {
@@ -42,10 +36,18 @@ describe('Players', () => {
     deleteMockSocket(mockSocket);
   });
 
-  it.each(mockPlayers)('should render players nickname', ({ userId, nickname }) => {
-    const playerChip = screen.getByTestId(userId);
+  it('should render room chief', () => {
+    return new Promise<void>((resolve) => {
+      mockSocket.clientSocket?.on('createRoomSuccess', ({ userId, nickname }: PlayerType) => {
+        const playerChip = screen.getByTestId(userId);
 
-    expect(playerChip).toBeInTheDocument();
-    expect(playerChip).toHaveTextContent(nickname);
+        expect(playerChip).toBeInTheDocument();
+        expect(playerChip).toHaveTextContent(nickname);
+
+        resolve();
+      });
+
+      mockSocket.serverSocket?.emit('createRoomSuccess', mockRoomChief);
+    });
   });
 });
