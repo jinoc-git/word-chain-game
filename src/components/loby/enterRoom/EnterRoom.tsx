@@ -13,13 +13,14 @@ import { EnterRoomSchema } from '@/schema/enterRoomSchema';
 
 import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
 import type { UserType } from '@/types/auth.type';
+import type { DebouncedFuncLeading } from 'lodash';
 import type { z } from 'zod';
 
 type EnterRoomInput = z.infer<typeof EnterRoomSchema>;
 
 interface Props {
   user: UserType | null;
-  joinSocketRoom: (args: CreateOrJoinSocketRoomArgs) => Promise<boolean>;
+  joinSocketRoom: DebouncedFuncLeading<(args: CreateOrJoinSocketRoomArgs) => Promise<boolean>>;
 }
 
 const EnterRoom = ({ user, joinSocketRoom }: Props) => {
