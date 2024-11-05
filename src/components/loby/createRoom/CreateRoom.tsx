@@ -9,10 +9,11 @@ import { createRoomId } from '@/utils/createRoomId';
 
 import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
 import type { UserType } from '@/types/auth.type';
+import type { DebouncedFuncLeading } from 'lodash';
 
 interface Props {
   user: UserType | null;
-  createSocketRoom: (args: CreateOrJoinSocketRoomArgs) => Promise<boolean>;
+  createSocketRoom: DebouncedFuncLeading<(args: CreateOrJoinSocketRoomArgs) => Promise<boolean>>;
 }
 
 const CreateRoom = ({ user, createSocketRoom }: Props) => {
