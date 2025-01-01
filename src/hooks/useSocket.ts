@@ -87,7 +87,7 @@ const useSocket = () => {
     };
 
     if (socket.connected) onConnect();
-
+    console.log(socket);
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
