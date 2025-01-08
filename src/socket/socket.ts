@@ -8,7 +8,7 @@ export const socket = io(process.env.NEXT_PUBLIC_GAME_CHAIN_SERVER + '/socket.io
   reconnectionDelay: 1000, // 재연결 시도 간격
   reconnectionAttempts: 5, // 재연결 시도 횟수
   transports: ['websocket', 'polling'],
-  // extraHeaders: {
-  //   'Access-Control-Allow-Origin': 'https://word-chain-game-mocha.vercel.app',
-  // },
+  extraHeaders: {
+    'Access-Control-Allow-Origin': 'https://word-chain-game-mocha.vercel.app',
+  },
 });
