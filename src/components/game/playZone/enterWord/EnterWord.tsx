@@ -24,6 +24,7 @@ const EnterWord = () => {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<EnterWordInput>({
     resolver: zodResolver(enterWordSchema),
@@ -34,6 +35,7 @@ const EnterWord = () => {
     const isValid = await enterWordAndCheck(enterWord);
     if (!isValid) {
       handleShake();
+      setError('enterWord', { type: '401', message: '없는 단어입니다!' });
       return;
     }
 
@@ -48,13 +50,13 @@ const EnterWord = () => {
           variant="bordered"
           placeholder="단어를 입력하세요."
           isInvalid={!isValidWord}
+          errorMessage={errors.enterWord?.message}
           className={`${isShake ? 'animate-shake' : ''}`}
         />
         <button type="submit" className="hidden" disabled={isSubmitting}>
           제출
         </button>
       </form>
-      <p className=" text-red-600">{errors.enterWord?.message}</p>
     </div>
   );
 };
