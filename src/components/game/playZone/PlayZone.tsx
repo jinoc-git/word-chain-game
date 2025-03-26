@@ -14,12 +14,12 @@ const PlayZone = () => {
   const { isRoomChief } = usePlayerActions();
 
   const playerIsRoomChief = user !== null && isRoomChief(user);
-
+  console.log('📢', playerIsRoomChief);
   return (
     <section className="">
       <WordList />
       <EnterWord />
-      {playerIsRoomChief && <ControlGame />}
+      {true && <ControlGame />}
     </section>
   );
 };
