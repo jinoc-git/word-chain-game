@@ -47,6 +47,7 @@ const EnterWord = () => {
           {...register('enterWord')}
           variant="bordered"
           placeholder="단어를 입력하세요."
+          isInvalid={!isValidWord}
           className={`${isShake ? 'animate-shake' : ''}`}
         />
         <button type="submit" className="hidden" disabled={isSubmitting}>
