@@ -3,13 +3,13 @@
 import React from 'react';
 
 import useCountDown from '@/hooks/useCountDown';
-import { useAuthState } from '@/store/authStore';
-import { usePlayerActions } from '@/store/playerStore';
+import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
+import { usePlayerActions } from '@/stores/playerStore';
 
 import GameStateButtonArea from './gameStateButtonArea/GameStateButtonArea';
 
 const ControlGame = () => {
-  const user = useAuthState();
+  const user = useAuthState((store) => store.user);
   const { isRoomChief } = usePlayerActions();
 
   const { count, startCount } = useCountDown(10);

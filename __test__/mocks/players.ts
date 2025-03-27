@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import type { PlayerType } from '@/store/playerStore';
+import type { PlayerType } from '@/stores/playerStore';
 
 export const mockRoomChief: PlayerType = {
   socketId: faker.string.nanoid(),

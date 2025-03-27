@@ -1,4 +1,4 @@
-import type { PlayerType } from '@/store/playerStore';
+import type { PlayerType } from '@/stores/playerStore';
 
 export interface HandleGameStateSocketArgs {
   userId: string;

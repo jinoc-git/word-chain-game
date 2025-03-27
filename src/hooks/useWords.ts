@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { checkValidWord } from '@/lib/word';
-import { useWordActions } from '@/store/wordStore';
+import { useWordActions } from '@/stores/wordStore';
 import { checkFirstCharacter } from '@/utils/checkFirstCharacter';
 import checkOnlyKorean from '@/utils/checkOnlyKorean';
 

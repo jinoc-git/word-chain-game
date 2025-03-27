@@ -6,15 +6,15 @@ import { Button } from '@nextui-org/react';
 import { House } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 
-import { useAuthActions, useAuthState } from '@/store/authStore';
-import { usePlayerActions } from '@/store/playerStore';
+import { useAuthActions, useAuthState } from '@/providers/storeProvider/authStoreProvider';
+import { usePlayerActions } from '@/stores/playerStore';
 
 const GoToLoby = () => {
   const router = useRouter();
   const params = useParams();
 
-  const user = useAuthState();
-  const { checkLogin } = useAuthActions();
+  const user = useAuthState((store) => store.user);
+  const checkLogin = useAuthActions((actions) => actions.checkLogin);
   const { quitGameAndOffObserver } = usePlayerActions();
 
   const handleGoToLoby = () => {
