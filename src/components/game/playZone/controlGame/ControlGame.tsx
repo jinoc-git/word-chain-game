@@ -2,32 +2,27 @@
 
 import React from 'react';
 
-import { Button } from '@nextui-org/button';
-import { useParams } from 'next/navigation';
+import useCountDown from '@/hooks/useCountDown';
+import { useAuthState } from '@/store/authStore';
+import { usePlayerActions } from '@/store/playerStore';
 
-import useGame from '@/hooks/useGame';
+import GameStateButtonArea from './gameStateButtonArea/GameStateButtonArea';
 
 const ControlGame = () => {
-  const { isGameStarted, handleGameState } = useGame();
-  const { gameId } = useParams<{ mode: string; gameId: string }>();
+  const user = useAuthState();
+  const { isRoomChief } = usePlayerActions();
+
+  const { count, startCount } = useCountDown(10);
+
+  const playerIsRoomChief = user !== null && isRoomChief(user);
 
   return (
-    <div className="flex justify-around w-full mt-[100px]">
-      <Button
-        color="primary"
-        isDisabled={isGameStarted}
-        onClick={() => handleGameState(true, gameId)}
-      >
-        게임 시작
-      </Button>
-      <Button
-        color="primary"
-        isDisabled={!isGameStarted}
-        onClick={() => handleGameState(false, gameId)}
-      >
-        게임 중단
-      </Button>
-    </div>
+    <>
+      <div className="w-full flex-box py-6">
+        <p className="font-bold text-xl">{count}</p>
+      </div>
+      <GameStateButtonArea startCount={startCount} />
+    </>
   );
 };
 

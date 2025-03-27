@@ -12,10 +12,13 @@ const useCountDown = (initialCount: number) => {
   }, [isActive, count]);
 
   React.useEffect(() => {
-    if (count <= 0) setIsActive(false);
+    if (count <= 0) {
+      setIsActive(false);
+      setCount(initialCount);
+    }
   }, [count]);
 
-  const startCount = () => setIsActive(true);
+  const startCount = React.useCallback(() => setIsActive(true), []);
 
   const resetAndStartCount = () => {
     if (isActive) setCount(initialCount);
