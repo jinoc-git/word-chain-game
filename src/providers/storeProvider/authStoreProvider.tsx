@@ -31,7 +31,7 @@ export const useAuthState = <T,>(selector: (state: Pick<AuthStore, 'user'>) => T
 
 export const useAuthActions = <T,>(selector: (state: AuthStoreActions) => T): T => {
   const authStoreContext = useContext(AuthStoreContext);
-  if (!authStoreContext) throw new Error('useAuthState must be used within AuthStoreProvider');
+  if (!authStoreContext) throw new Error('useAuthActions must be used within AuthStoreProvider');
 
   return useStore(authStoreContext, ({ actions }) => selector(actions));
 };
