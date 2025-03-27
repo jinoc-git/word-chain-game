@@ -16,7 +16,8 @@ const useCountDown = (initialCount: number) => {
   }, [count]);
 
   const startCount = () => setIsActive(true);
-  const reStartCount = () => {
+
+  const resetAndStartCount = () => {
     if (isActive) setCount(initialCount);
     else {
       setIsActive(true);
@@ -24,12 +25,12 @@ const useCountDown = (initialCount: number) => {
     }
   };
 
-  const resetCount = () => {
+  const stopCount = React.useCallback(() => {
     setCount(initialCount);
     setIsActive(false);
-  };
+  }, []);
 
-  return { count, startCount, reStartCount, resetCount };
+  return { count, startCount, resetAndStartCount, stopCount };
 };
 
 export default useCountDown;
