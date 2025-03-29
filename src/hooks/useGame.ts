@@ -4,13 +4,19 @@ import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
 import { socket } from '@/socket/socket';
 import { useGameActions, useGameState } from '@/stores/gameStore';
 
-const useGame = () => {
+const useGame = (mode: string) => {
   const gameState = useGameState();
   const { startGame, endGame } = useGameActions();
   const user = useAuthState((store) => store.user);
 
   const handleGameState = async (state: boolean, roomId: string) => {
     if (user === null) return;
+
+    if (mode === 'solo') {
+      if (state) startGame();
+      else endGame();
+      return;
+    }
 
     try {
       await new Promise((resolve, reject) => {

@@ -1,35 +1,28 @@
+'use client';
+
 import React from 'react';
 
 import { Button } from '@nextui-org/button';
-import { useParams } from 'next/navigation';
-
-import useGame from '@/hooks/useGame';
 
 interface Props {
-  startCount: () => void;
+  isGameStarted: boolean;
+  handleGameStateButton: (state: boolean) => Promise<void>;
 }
 
-const GameStateButtonArea = ({ startCount }: Props) => {
-  const { mode, gameId } = useParams<{ mode: string; gameId: string }>();
-  const { isGameStarted, handleGameState } = useGame();
-
-  const startGame = async () => {
-    if (mode === 'multi') {
-      await handleGameState(true, gameId);
-    }
-
-    startCount();
-  };
-
+const GameStateButtonArea = ({ isGameStarted, handleGameStateButton }: Props) => {
   return (
     <div className="flex justify-around w-full mt-[100px]">
-      <Button color="primary" isDisabled={isGameStarted} onClick={startGame}>
+      <Button
+        color="primary"
+        isDisabled={isGameStarted}
+        onClick={() => handleGameStateButton(true)}
+      >
         게임 시작
       </Button>
       <Button
         color="primary"
         isDisabled={!isGameStarted}
-        onClick={() => handleGameState(false, gameId)}
+        onClick={() => handleGameStateButton(false)}
       >
         게임 중단
       </Button>
