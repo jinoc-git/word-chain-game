@@ -10,11 +10,11 @@ export const waitFor = (socket: ServerSocket | ClientSocket, event: string) => {
   });
 };
 
-export interface MockSocket {
+export type MockSocket = {
   io: Server | null;
   serverSocket: ServerSocket | null;
   clientSocket: ClientSocket | null;
-}
+};
 
 export const createMockSocket = async (mockSocket: MockSocket) => {
   await new Promise<void>((resolve) => {

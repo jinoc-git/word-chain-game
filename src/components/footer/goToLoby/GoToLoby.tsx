@@ -7,7 +7,7 @@ import { House } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 
 import { useAuthActions, useAuthState } from '@/providers/storeProvider/authStoreProvider';
-import { usePlayerActions } from '@/stores/playerStore';
+import { usePlayerActions } from '@/providers/storeProvider/playerStoreProvider';
 
 const GoToLoby = () => {
   const router = useRouter();
@@ -15,7 +15,7 @@ const GoToLoby = () => {
 
   const user = useAuthState((store) => store.user);
   const checkLogin = useAuthActions((actions) => actions.checkLogin);
-  const { quitGameAndOffObserver } = usePlayerActions();
+  const quitGameAndOffObserver = usePlayerActions((actions) => actions.quitGameAndOffObserver);
 
   const handleGoToLoby = () => {
     if (checkLogin()) router.push('/loby');

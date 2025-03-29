@@ -1,14 +1,14 @@
 import type { PlayerType } from '@/stores/playerStore';
 
-export interface HandleGameStateSocketArgs {
+export type HandleGameStateSocketArgs = {
   userId: string;
   roomId: string;
   state: boolean;
-}
+};
 
-export interface Room {
+export type Room = {
   state: boolean;
   players: PlayerType[];
-}
+};
 
 export type Rooms = Record<string, Room>;
