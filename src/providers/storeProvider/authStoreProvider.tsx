@@ -7,11 +7,11 @@ import { useStore } from 'zustand';
 
 import { createAuthStore } from '@/stores/authStore';
 
-import type { AuthStore, AuthStoreActions } from '@/stores/authStore';
+import type { AuthStoreActions, AuthStoreState } from '@/stores/authStore';
 
-interface StoreProps {
+type StoreProps = {
   children: ReactNode;
-}
+};
 
 export type AuthStoreApi = ReturnType<typeof createAuthStore>;
 export const AuthStoreContext = createContext<AuthStoreApi | undefined>(undefined);
@@ -22,7 +22,7 @@ export const AuthStoreProvider = ({ children }: StoreProps) => {
   return <AuthStoreContext.Provider value={storeRef.current}>{children}</AuthStoreContext.Provider>;
 };
 
-export const useAuthState = <T,>(selector: (state: Pick<AuthStore, 'user'>) => T): T => {
+export const useAuthState = <T,>(selector: (state: AuthStoreState) => T): T => {
   const authStoreContext = useContext(AuthStoreContext);
   if (!authStoreContext) throw new Error('useAuthState must be used within AuthStoreProvider');
 
