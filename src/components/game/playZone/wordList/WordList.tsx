@@ -5,7 +5,7 @@ import React from 'react';
 import { Card, CardHeader, Chip } from '@nextui-org/react';
 import { uuid } from 'short-uuid';
 
-import { useWordState } from '@/store/wordStore';
+import { useWordState } from '@/stores/wordStore';
 
 const WordList = () => {
   const words = useWordState();

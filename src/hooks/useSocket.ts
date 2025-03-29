@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import _ from 'lodash';
 
 import { socket } from '@/socket/socket';
-import { usePlayerActions } from '@/store/playerStore';
+import { usePlayerActions } from '@/stores/playerStore';
 
 import type { Room } from '@/types/server.type';
 

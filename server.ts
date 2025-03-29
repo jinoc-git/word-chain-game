@@ -6,7 +6,7 @@ import { Server } from 'socket.io';
 import { quitRoom } from './src/utils/aboutServer.ts';
 
 import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
-import type { QuitGameArgs } from '@/store/playerStore';
+import type { QuitGameArgs } from '@/stores/playerStore.ts';
 import type { HandleGameStateSocketArgs, Room, Rooms } from '@/types/server.type';
 
 const dev = process.env.NODE_ENV !== 'production';

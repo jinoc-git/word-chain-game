@@ -4,7 +4,7 @@ import Players from '@/components/game/players/Players';
 import { mockPlayers, mockRoomChief } from '__test__/mocks/players';
 import { createMockSocket, deleteMockSocket } from '__test__/utils';
 
-import type { PlayerType } from '@/store/playerStore';
+import type { PlayerType } from '@/stores/playerStore';
 import type { MockSocket } from '__test__/utils';
 
 describe('Players', () => {

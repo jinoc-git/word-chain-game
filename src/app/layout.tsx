@@ -18,8 +18,8 @@ export default function RootLayout({
   return (
     <html lang="ko" className="dark" suppressHydrationWarning>
       <body>
-        <AuthObserver />
         <AllProviders>
+          <AuthObserver />
           <main className=" w-screen h-screen flex-box">{children}</main>
         </AllProviders>
       </body>

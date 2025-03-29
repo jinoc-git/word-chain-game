@@ -1,4 +1,4 @@
-import type { PlayerType } from '@/store/playerStore';
+import type { PlayerType } from '@/stores/playerStore';
 
 export const quitRoom = (quitPlayerId: string, players: PlayerType[]) => {
   const newPlayers = players.filter(({ userId }) => userId !== quitPlayerId);

@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Chip } from '@nextui-org/react';
 
-import { usePlayerActions, usePlayerState } from '@/store/playerStore';
+import { usePlayerActions, usePlayerState } from '@/stores/playerStore';
 
 const Players = () => {
   const curPlayers = usePlayerState();
