@@ -1,35 +1,41 @@
-import { create } from 'zustand';
+import { createStore } from 'zustand/vanilla';
 
-interface Actions {
+export type WordStoreState = {
+  words: string[];
+};
+
+export type WordStoreActions = {
   getWordsCount: () => number;
   getLastWord: () => string;
   pushNewWord: (newWord: string) => void;
-}
+};
 
-interface Store {
-  words: string[];
-  actions: Actions;
-}
+export type WordStore = WordStoreState & {
+  actions: WordStoreActions;
+};
 
-export const wordStore = create<Store>((set, get) => ({
+const defaultInitState: WordStoreState = {
   words: [],
-  actions: {
-    getWordsCount: () => {
-      return get().words.length;
-    },
-    getLastWord: () => {
-      const words = get().words;
-      return words[words.length - 1];
-    },
-    pushNewWord: (newWord: string) => {
-      const newWords = [...get().words, newWord];
+};
 
-      if (newWords.length > 3) newWords.shift();
+export const createWordStore = (initState: WordStoreState = defaultInitState) => {
+  return createStore<WordStore>()((set, get) => ({
+    ...initState,
+    actions: {
+      getWordsCount: () => {
+        return get().words.length;
+      },
+      getLastWord: () => {
+        const words = get().words;
+        return words[words.length - 1];
+      },
+      pushNewWord: (newWord: string) => {
+        const newWords = [...get().words, newWord];
 
-      set({ words: newWords });
+        if (newWords.length > 3) newWords.shift();
+
+        set({ words: newWords });
+      },
     },
-  },
-}));
-
-export const useWordState = () => wordStore(({ words }) => words);
-export const useWordActions = () => wordStore(({ actions }) => actions);
+  }));
+};

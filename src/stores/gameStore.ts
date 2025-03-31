@@ -1,26 +1,32 @@
-import { create } from 'zustand';
+import { createStore } from 'zustand/vanilla';
 
-interface Actions {
+export type GameStoreState = {
+  gameState: boolean;
+};
+
+export type GameStoreActions = {
   startGame: () => void;
   endGame: () => void;
-}
+};
 
-interface Store {
-  gameState: boolean;
-  actions: Actions;
-}
+export type GameStore = GameStoreState & {
+  actions: GameStoreActions;
+};
 
-export const gameStore = create<Store>((set, get) => ({
+const defaultInitState: GameStoreState = {
   gameState: false,
-  actions: {
-    startGame: () => {
-      set({ gameState: true });
-    },
-    endGame: () => {
-      set({ gameState: false });
-    },
-  },
-}));
+};
 
-export const useGameState = () => gameStore(({ gameState }) => gameState);
-export const useGameActions = () => gameStore(({ actions }) => actions);
+export const createGameStore = (initState: GameStoreState = defaultInitState) => {
+  return createStore<GameStore>((set, get) => ({
+    ...initState,
+    actions: {
+      startGame: () => {
+        set({ gameState: true });
+      },
+      endGame: () => {
+        set({ gameState: false });
+      },
+    },
+  }));
+};

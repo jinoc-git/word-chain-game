@@ -1,12 +1,19 @@
 import React from 'react';
 
 import { AuthStoreProvider } from './authStoreProvider';
+import { GameStoreProvider } from './gameStoreProvider';
+import { PlayerStoreProvider } from './playerStoreProvider';
+import { WordStoreProvider } from './wordStoreProvider';
 
 const StoreProviders = ({ children }: React.PropsWithChildren) => {
   return (
-    <>
-      <AuthStoreProvider>{children}</AuthStoreProvider>
-    </>
+    <AuthStoreProvider>
+      <GameStoreProvider>
+        <PlayerStoreProvider>
+          <WordStoreProvider>{children}</WordStoreProvider>
+        </PlayerStoreProvider>
+      </GameStoreProvider>
+    </AuthStoreProvider>
   );
 };
 

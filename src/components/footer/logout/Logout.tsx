@@ -7,14 +7,14 @@ import { LogOut } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 
 import { useAuthActions, useAuthState } from '@/providers/storeProvider/authStoreProvider';
-import { usePlayerActions } from '@/stores/playerStore';
+import { usePlayerActions } from '@/providers/storeProvider/playerStoreProvider';
 
 const Logout = () => {
   const params = useParams();
 
-  const user = useAuthState((store) => store.user);
+  const user = useAuthState((state) => state.user);
   const logout = useAuthActions((actions) => actions.logout);
-  const { quitGameAndOffObserver } = usePlayerActions();
+  const quitGameAndOffObserver = usePlayerActions((actions) => actions.quitGameAndOffObserver);
 
   const router = useRouter();
 

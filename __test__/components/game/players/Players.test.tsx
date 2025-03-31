@@ -17,7 +17,7 @@ describe('Players', () => {
   beforeEach(async () => {
     await createMockSocket(mockSocket);
 
-    vi.mock('@/store/playerStore', () => ({
+    vi.mock('@/providers/storeProvider/playerStoreProvider', () => ({
       usePlayerState: vi.fn(() => mockPlayers),
       usePlayerActions: vi.fn(() => ({
         initPlayer: vi.fn(),

@@ -4,11 +4,11 @@ import React from 'react';
 
 import { Chip } from '@nextui-org/react';
 
-import { usePlayerActions, usePlayerState } from '@/stores/playerStore';
+import { usePlayerActions, usePlayerState } from '@/providers/storeProvider/playerStoreProvider';
 
 const Players = () => {
-  const curPlayers = usePlayerState();
-  const { playerObserver } = usePlayerActions();
+  const curPlayers = usePlayerState((state) => state.curPlayers);
+  const playerObserver = usePlayerActions((actions) => actions.playerObserver);
 
   React.useEffect(() => {
     playerObserver();
