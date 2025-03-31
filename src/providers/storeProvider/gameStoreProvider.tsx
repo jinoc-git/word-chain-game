@@ -7,7 +7,7 @@ import { useStore } from 'zustand';
 
 import { createGameStore } from '@/stores/gameStore';
 
-import type { GameStoreActions, GameStoreState } from '@/stores/gameStore';
+import type { GameStore, GameStoreActions, GameStoreState } from '@/stores/gameStore';
 
 type StoreProps = {
   children: ReactNode;
@@ -22,16 +22,17 @@ export const GameStoreProvider = ({ children }: StoreProps) => {
   return <GameStoreContext.Provider value={storeRef.current}>{children}</GameStoreContext.Provider>;
 };
 
-export const useGameState = <T,>(selector: (state: GameStoreState) => T): T => {
+const useGameStore = <T,>(selector: (state: GameStore) => T): T => {
   const gameStoreContext = useContext(GameStoreContext);
-  if (!gameStoreContext) throw new Error('useGameState must be used within GameStoreProvider');
+  if (!gameStoreContext) throw new Error('useGameStore must be used within GameStoreProvider');
 
-  return useStore(gameStoreContext, ({ gameState }) => selector({ gameState }));
+  return useStore(gameStoreContext, selector);
+};
+
+export const useGameState = <T,>(selector: (state: GameStoreState) => T): T => {
+  return useGameStore(selector);
 };
 
 export const useGameActions = <T,>(selector: (state: GameStoreActions) => T): T => {
-  const gameStoreContext = useContext(GameStoreContext);
-  if (!gameStoreContext) throw new Error('useGameActions must be used within GameStoreProvider');
-
-  return useStore(gameStoreContext, ({ actions }) => selector(actions));
+  return useGameStore(({ actions }) => selector(actions));
 };

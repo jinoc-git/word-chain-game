@@ -12,7 +12,7 @@ import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
 
 const Loby = () => {
   const { isConnected, createSocketRoom, joinSocketRoom } = useSocket();
-  const user = useAuthState((store) => store.user);
+  const user = useAuthState((state) => state.user);
 
   console.log(isConnected);
 

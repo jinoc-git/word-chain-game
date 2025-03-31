@@ -12,7 +12,7 @@ import { usePlayerActions } from '@/providers/storeProvider/playerStoreProvider'
 const Logout = () => {
   const params = useParams();
 
-  const user = useAuthState((store) => store.user);
+  const user = useAuthState((state) => state.user);
   const logout = useAuthActions((actions) => actions.logout);
   const quitGameAndOffObserver = usePlayerActions((actions) => actions.quitGameAndOffObserver);
 

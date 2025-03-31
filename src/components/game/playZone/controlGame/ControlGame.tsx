@@ -14,7 +14,7 @@ import GameStateButtonArea from './gameStateButtonArea/GameStateButtonArea';
 const ControlGame = () => {
   const { mode, gameId } = useParams<{ mode: string; gameId: string }>();
 
-  const user = useAuthState((store) => store.user);
+  const user = useAuthState((state) => state.user);
   const { isGameStarted, handleGameState } = useGame(mode);
   const isRoomChief = usePlayerActions((actions) => actions.isRoomChief);
 

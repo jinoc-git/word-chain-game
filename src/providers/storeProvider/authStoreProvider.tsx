@@ -7,7 +7,7 @@ import { useStore } from 'zustand';
 
 import { createAuthStore } from '@/stores/authStore';
 
-import type { AuthStoreActions, AuthStoreState } from '@/stores/authStore';
+import type { AuthStore, AuthStoreActions, AuthStoreState } from '@/stores/authStore';
 
 type StoreProps = {
   children: ReactNode;
@@ -22,16 +22,17 @@ export const AuthStoreProvider = ({ children }: StoreProps) => {
   return <AuthStoreContext.Provider value={storeRef.current}>{children}</AuthStoreContext.Provider>;
 };
 
-export const useAuthState = <T,>(selector: (state: AuthStoreState) => T): T => {
+const useAuthStore = <T,>(selector: (state: AuthStore) => T): T => {
   const authStoreContext = useContext(AuthStoreContext);
-  if (!authStoreContext) throw new Error('useAuthState must be used within AuthStoreProvider');
+  if (!authStoreContext) throw new Error('useAuthStore must be used within AuthStoreProvider');
 
-  return useStore(authStoreContext, ({ user }) => selector({ user }));
+  return useStore(authStoreContext, selector);
+};
+
+export const useAuthState = <T,>(selector: (state: AuthStoreState) => T): T => {
+  return useAuthStore(selector);
 };
 
 export const useAuthActions = <T,>(selector: (state: AuthStoreActions) => T): T => {
-  const authStoreContext = useContext(AuthStoreContext);
-  if (!authStoreContext) throw new Error('useAuthActions must be used within AuthStoreProvider');
-
-  return useStore(authStoreContext, ({ actions }) => selector(actions));
+  return useAuthStore(({ actions }) => selector(actions));
 };

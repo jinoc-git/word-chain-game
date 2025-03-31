@@ -5,9 +5,9 @@ import { useGameActions, useGameState } from '@/providers/storeProvider/gameStor
 import { socket } from '@/socket/socket';
 
 const useGame = (mode: string) => {
-  const gameState = useGameState(({ gameState }) => gameState);
+  const gameState = useGameState((state) => state.gameState);
   const { startGame, endGame } = useGameActions((actions) => actions);
-  const user = useAuthState((store) => store.user);
+  const user = useAuthState((state) => state.user);
 
   const handleGameState = async (state: boolean, roomId: string) => {
     if (user === null) return;

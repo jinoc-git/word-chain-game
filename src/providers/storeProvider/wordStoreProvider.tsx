@@ -6,7 +6,7 @@ import { useStore } from 'zustand';
 
 import { createWordStore } from '@/stores/wordStore';
 
-import type { WordStoreActions, WordStoreState } from '@/stores/wordStore';
+import type { WordStore, WordStoreActions, WordStoreState } from '@/stores/wordStore';
 
 type StoreProps = {
   children: ReactNode;
@@ -21,16 +21,17 @@ export const WordStoreProvider = ({ children }: StoreProps) => {
   return <WordStoreContext.Provider value={storeRef.current}>{children}</WordStoreContext.Provider>;
 };
 
-export const useWordState = <T,>(selector: (state: WordStoreState) => T): T => {
+const useWordStore = <T,>(selector: (state: WordStore) => T): T => {
   const wordStoreContext = useContext(WordStoreContext);
-  if (!wordStoreContext) throw new Error('useWordState must be used within WordStoreContext');
+  if (!wordStoreContext) throw new Error('useWordStore must be used within WordStoreContext');
 
-  return useStore(wordStoreContext, ({ words }) => selector({ words }));
+  return useStore(wordStoreContext, selector);
+};
+
+export const useWordState = <T,>(selector: (state: WordStoreState) => T): T => {
+  return useWordStore(selector);
 };
 
 export const useWordActions = <T,>(selector: (state: WordStoreActions) => T): T => {
-  const wordStoreContext = useContext(WordStoreContext);
-  if (!wordStoreContext) throw new Error('useWordActions must be used within WordStoreContext');
-
-  return useStore(wordStoreContext, ({ actions }) => selector(actions));
+  return useWordStore(({ actions }) => selector(actions));
 };

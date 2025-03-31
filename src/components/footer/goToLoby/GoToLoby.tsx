@@ -13,7 +13,7 @@ const GoToLoby = () => {
   const router = useRouter();
   const params = useParams();
 
-  const user = useAuthState((store) => store.user);
+  const user = useAuthState((state) => state.user);
   const checkLogin = useAuthActions((actions) => actions.checkLogin);
   const quitGameAndOffObserver = usePlayerActions((actions) => actions.quitGameAndOffObserver);
 

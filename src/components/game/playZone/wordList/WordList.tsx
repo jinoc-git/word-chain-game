@@ -8,7 +8,7 @@ import { uuid } from 'short-uuid';
 import { useWordState } from '@/providers/storeProvider/wordStoreProvider';
 
 const WordList = () => {
-  const words = useWordState(({ words }) => words);
+  const words = useWordState((state) => state.words);
 
   return (
     <Card className="border">
