@@ -1,14 +1,20 @@
 import React from 'react';
 
 import { checkValidWord } from '@/lib/word';
-import { useWordActions } from '@/store/wordStore';
+import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 import { checkFirstCharacter } from '@/utils/checkFirstCharacter';
+import checkOnlyKorean from '@/utils/checkOnlyKorean';
 
 const useWords = () => {
   const [isValidWord, setIsValidWord] = React.useState(false);
-  const { getWordsCount, getLastWord, pushNewWord } = useWordActions();
+  const { getWordsCount, getLastWord, pushNewWord } = useWordActions((actions) => actions);
 
   const enterWordAndCheck = async (enterWord: string) => {
+    const isOnlyKorean = checkOnlyKorean(enterWord);
+    if (!isOnlyKorean) {
+      setIsValidWord(false);
+      return false;
+    }
     if (getWordsCount() >= 1) {
       const lastWord = getLastWord();
       const isValidFirstCharacter = checkFirstCharacter(lastWord, enterWord);

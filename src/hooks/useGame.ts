@@ -1,16 +1,22 @@
 import { toast } from 'react-toastify';
 
+import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
+import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
 import { socket } from '@/socket/socket';
-import { useAuthState } from '@/store/authStore';
-import { useGameActions, useGameState } from '@/store/gameStore';
 
-const useGame = () => {
-  const gameState = useGameState();
-  const { startGame, endGame } = useGameActions();
-  const user = useAuthState();
+const useGame = (mode: string) => {
+  const gameState = useGameState((state) => state.gameState);
+  const { startGame, endGame } = useGameActions((actions) => actions);
+  const user = useAuthState((state) => state.user);
 
   const handleGameState = async (state: boolean, roomId: string) => {
     if (user === null) return;
+
+    if (mode === 'solo') {
+      if (state) startGame();
+      else endGame();
+      return;
+    }
 
     try {
       await new Promise((resolve, reject) => {

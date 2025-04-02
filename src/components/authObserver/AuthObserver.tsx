@@ -4,12 +4,12 @@ import React from 'react';
 
 import { usePathname, useRouter } from 'next/navigation';
 
-import { useAuthActions } from '@/store/authStore';
+import { useAuthActions } from '@/providers/storeProvider/authStoreProvider';
 
 const AuthObserver = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const { checkLogin } = useAuthActions();
+  const checkLogin = useAuthActions((actions) => actions.checkLogin);
 
   React.useEffect(() => {
     if (checkLogin()) return;

@@ -3,22 +3,22 @@ import { toast } from 'react-toastify';
 
 import _ from 'lodash';
 
+import { usePlayerActions } from '@/providers/storeProvider/playerStoreProvider';
 import { socket } from '@/socket/socket';
-import { usePlayerActions } from '@/store/playerStore';
 
 import type { Room } from '@/types/server.type';
 
-export interface CreateOrJoinSocketRoomArgs {
+export type CreateOrJoinSocketRoomArgs = {
   roomId: string;
   userId: string;
   nickname: string;
-}
+};
 
 const useSocket = () => {
   const [isConnected, setIsConnected] = React.useState(false);
   const [transport, setTransport] = React.useState('N/A');
 
-  const { initPlayer } = usePlayerActions();
+  const initPlayer = usePlayerActions((actions) => actions.initPlayer);
 
   const createSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
     try {

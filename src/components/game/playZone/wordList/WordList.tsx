@@ -5,10 +5,10 @@ import React from 'react';
 import { Card, CardHeader, Chip } from '@nextui-org/react';
 import { uuid } from 'short-uuid';
 
-import { useWordState } from '@/store/wordStore';
+import { useWordState } from '@/providers/storeProvider/wordStoreProvider';
 
 const WordList = () => {
-  const words = useWordState();
+  const words = useWordState((state) => state.words);
 
   return (
     <Card className="border">

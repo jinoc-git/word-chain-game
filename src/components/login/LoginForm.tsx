@@ -9,8 +9,8 @@ import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { uuid } from 'short-uuid';
 
+import { useAuthActions } from '@/providers/storeProvider/authStoreProvider';
 import { loginFormSchema } from '@/schema/loginFormSchema';
-import { useAuthActions } from '@/store/authStore';
 
 import type { UserType } from '@/types/auth.type';
 import type { z } from 'zod';
@@ -18,7 +18,7 @@ import type { z } from 'zod';
 type LoginFormInput = z.infer<typeof loginFormSchema>;
 
 const LoginForm = () => {
-  const { login } = useAuthActions();
+  const login = useAuthActions((actions) => actions.login);
 
   const router = useRouter();
 
