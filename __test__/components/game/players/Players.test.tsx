@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import Players from '@/components/game/players/Players';
-import { mockPlayers, mockRoomChief } from '__test__/mocks/players';
+import { mockRoomChief } from '__test__/mocks/players';
 import { createMockSocket, deleteMockSocket } from '__test__/utils';
 
 import type { PlayerType } from '@/stores/playerStore';
@@ -16,16 +16,6 @@ describe('Players', () => {
 
   beforeEach(async () => {
     await createMockSocket(mockSocket);
-
-    vi.mock('@/providers/storeProvider/playerStoreProvider', () => ({
-      usePlayerState: vi.fn(() => mockPlayers),
-      usePlayerActions: vi.fn(() => ({
-        initPlayer: vi.fn(),
-        playerObserver: vi.fn(),
-        quitGameAndOffObserver: vi.fn(),
-        isRoomChief: vi.fn(() => true),
-      })),
-    }));
 
     render(<Players />);
   });
