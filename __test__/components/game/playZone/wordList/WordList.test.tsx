@@ -15,15 +15,6 @@ describe('WordList', () => {
 
   beforeAll(async () => {
     await createMockSocket(mockSocket);
-
-    vi.mock('@/providers/storeProvider/wordStoreProvider', () => ({
-      useWordState: vi.fn(() => mockWords),
-      useWordActions: vi.fn(() => ({
-        getWordsCount: vi.fn(() => mockWords.length),
-        getLastWord: vi.fn(() => mockWords[2]),
-        pushNewWord: vi.fn(),
-      })),
-    }));
   });
 
   afterAll(() => {
