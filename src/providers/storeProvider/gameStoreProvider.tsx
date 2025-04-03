@@ -30,7 +30,7 @@ const useGameStore = <T,>(selector: (state: GameStore) => T): T => {
 };
 
 export const useGameState = <T,>(selector: (state: GameStoreState) => T): T => {
-  return useGameStore(selector);
+  return useGameStore(({ state }) => selector(state));
 };
 
 export const useGameActions = <T,>(selector: (state: GameStoreActions) => T): T => {
