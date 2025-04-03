@@ -31,7 +31,10 @@ export const mockStores = {
     },
   },
   game: {
-    gameState: false,
+    state: {
+      gameState: false,
+      isWaitingTurn: true,
+    },
     actions: {
       startGame: vi.fn(),
       endGame: vi.fn(),

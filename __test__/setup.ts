@@ -40,7 +40,7 @@ vi.mock('@/providers/storeProvider/authStoreProvider', () => ({
 }));
 
 vi.mock('@/providers/storeProvider/gameStoreProvider', () => ({
-  useGameState: vi.fn(() => mockStores.game.gameState),
+  useGameState: vi.fn(() => mockStores.game.state),
   useGameActions: vi.fn((selector) => selector(mockStores.game.actions)),
   GameStoreProvider: ({ children }: { children: ReactNode }) => children,
 }));
