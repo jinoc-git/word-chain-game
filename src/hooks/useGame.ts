@@ -5,20 +5,18 @@ import { useGameActions } from '@/providers/storeProvider/gameStoreProvider';
 import { socket } from '@/socket/socket';
 
 const useGame = (mode: string) => {
-  const { startGame, endGame } = useGameActions((actions) => actions);
+  const { startGame, endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
   const user = useAuthState((state) => state.user);
-
-  const handleSoloGame = (state: boolean) => {
-    if (state) startGame();
-    else endGame();
-  };
 
   const setGameState = (state: boolean) => {
     if (state) startGame();
     else endGame();
+    setIsWaitingTurn(true);
   };
 
-  const setMultiRoomState = async (state: boolean, roomId: string) => {
+  const handleSoloGame = (state: boolean) => {};
+
+  const handleMultiGame = async (state: boolean, roomId: string) => {
     if (user === null) return;
 
     await new Promise((resolve, reject) => {
@@ -26,19 +24,24 @@ const useGame = (mode: string) => {
 
       socket.on('handleGameStateSuccess', (message: string) => {
         resolve(true);
+        clearTimeout(timeoutId);
       });
 
       socket.on('handleGameStateFail', (message: string) => {
         reject(new Error(message));
+        clearTimeout(timeoutId);
       });
 
-      setTimeout(() => reject(new Error('통신 오류! 잠시후 다시 시도해주세요')), 5000);
+      const timeoutId = setTimeout(
+        () => reject(new Error('통신 오류! 잠시후 다시 시도해주세요')),
+        5000,
+      );
     });
   };
 
   const handleGameState = async (state: boolean, roomId?: string) => {
     try {
-      if (roomId) setMultiRoomState(state, roomId);
+      if (roomId) handleMultiGame(state, roomId);
 
       setGameState(state);
     } catch (error) {
