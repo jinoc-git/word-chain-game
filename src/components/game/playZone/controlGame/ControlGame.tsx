@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import useCountDown from '@/hooks/useCountDown';
 import useGame from '@/hooks/useGame';
 import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
+import { useGameState } from '@/providers/storeProvider/gameStoreProvider';
 import { usePlayerActions } from '@/providers/storeProvider/playerStoreProvider';
 
 import GameStateButtonArea from './gameStateButtonArea/GameStateButtonArea';
@@ -15,13 +16,14 @@ const ControlGame = () => {
   const { mode, gameId } = useParams<{ mode: string; gameId: string }>();
 
   const user = useAuthState((state) => state.user);
-  const { isGameStarted, handleGameState } = useGame(mode);
+  const isGameStarted = useGameState((state) => state.gameState);
+  const { handleGameState } = useGame(mode);
   const isRoomChief = usePlayerActions((actions) => actions.isRoomChief);
 
   const { count, startCount, stopCount } = useCountDown(10);
 
   const handleGameStateButton = async (state: boolean) => {
-    await handleGameState(state, gameId);
+    await handleGameState(state, mode === 'multi' ? gameId : undefined);
 
     if (state) startCount();
     else stopCount();
