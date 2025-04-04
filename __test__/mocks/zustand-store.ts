@@ -38,6 +38,7 @@ export const mockStores = {
     actions: {
       startGame: vi.fn(),
       endGame: vi.fn(),
+      setIsWaitingTurn: vi.fn(),
     },
   },
 };
