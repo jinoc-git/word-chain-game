@@ -1,8 +1,12 @@
 import React from 'react';
 
+import { useGameActions } from '@/providers/storeProvider/gameStoreProvider';
+
 const useCountDown = (initialCount: number) => {
   const [count, setCount] = React.useState(initialCount);
   const [isActive, setIsActive] = React.useState(false);
+
+  const endGame = useGameActions((actions) => actions.endGame);
 
   React.useEffect(() => {
     if (!isActive || count <= 0) return;
@@ -15,6 +19,7 @@ const useCountDown = (initialCount: number) => {
     if (count <= 0) {
       setIsActive(false);
       setCount(initialCount);
+      endGame();
     }
   }, [count]);
 
@@ -31,6 +36,7 @@ const useCountDown = (initialCount: number) => {
   const stopCount = React.useCallback(() => {
     setCount(initialCount);
     setIsActive(false);
+    endGame();
   }, []);
 
   return { count, startCount, resetAndStartCount, stopCount };

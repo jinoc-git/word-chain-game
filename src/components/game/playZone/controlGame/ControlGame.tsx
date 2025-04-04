@@ -17,7 +17,7 @@ const ControlGame = () => {
 
   const user = useAuthState((state) => state.user);
   const isGameStarted = useGameState((state) => state.gameState);
-  const { handleGameState } = useGame(mode);
+  const { handleGameState } = useGame();
   const isRoomChief = usePlayerActions((actions) => actions.isRoomChief);
 
   const { count, startCount, stopCount } = useCountDown(10);

@@ -2,10 +2,13 @@ import { toast } from 'react-toastify';
 
 import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
 import { useGameActions } from '@/providers/storeProvider/gameStoreProvider';
+import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 import { socket } from '@/socket/socket';
+import { getRandomFirstWord } from '@/utils/getRandomFirstWord';
 
-const useGame = (mode: string) => {
+const useGame = () => {
   const { startGame, endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
+  const { resetWords, pushNewWord } = useWordActions((actions) => actions);
   const user = useAuthState((state) => state.user);
 
   const setGameState = (state: boolean) => {
@@ -14,7 +17,10 @@ const useGame = (mode: string) => {
     setIsWaitingTurn(true);
   };
 
-  const handleSoloGame = (state: boolean) => {};
+  const setWords = (state: boolean) => {
+    resetWords();
+    if (state) pushNewWord(getRandomFirstWord());
+  };
 
   const handleMultiGame = async (state: boolean, roomId: string) => {
     if (user === null) return;
@@ -41,8 +47,9 @@ const useGame = (mode: string) => {
 
   const handleGameState = async (state: boolean, roomId?: string) => {
     try {
-      if (roomId) handleMultiGame(state, roomId);
+      if (roomId) await handleMultiGame(state, roomId);
 
+      setWords(state);
       setGameState(state);
     } catch (error) {
       if (error instanceof Error) {

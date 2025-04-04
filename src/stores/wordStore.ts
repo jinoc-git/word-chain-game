@@ -8,6 +8,7 @@ export type WordStoreActions = {
   getWordsCount: () => number;
   getLastWord: () => string;
   pushNewWord: (newWord: string) => void;
+  resetWords: () => void;
 };
 
 export type WordStore = WordStoreState & {
@@ -36,6 +37,7 @@ export const createWordStore = (initState: WordStoreState = defaultInitState) =>
 
         set({ words: newWords });
       },
+      resetWords: () => set({ words: [] }),
     },
   }));
 };
