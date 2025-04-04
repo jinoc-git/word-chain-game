@@ -8,7 +8,7 @@ export type GameStoreState = {
 export type GameStoreActions = {
   startGame: () => void;
   endGame: () => void;
-  setIsWatingTurn: (wating: boolean) => void;
+  setIsWaitingTurn: (waiting: boolean) => void;
 };
 
 export type GameStore = {
@@ -31,8 +31,8 @@ export const createGameStore = (initState: GameStoreState = defaultInitState) =>
       endGame: () => {
         set((store) => ({ state: { ...store.state, gameState: false } }));
       },
-      setIsWatingTurn: (wating: boolean) => {
-        set((store) => ({ state: { ...store.state, isWaitingTurn: wating } }));
+      setIsWaitingTurn: (waiting: boolean) => {
+        set((store) => ({ state: { ...store.state, isWaitingTurn: waiting } }));
       },
     },
   }));
