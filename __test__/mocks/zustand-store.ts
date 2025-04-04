@@ -28,6 +28,7 @@ export const mockStores = {
       getWordsCount: vi.fn(),
       getLastWord: vi.fn(),
       pushNewWord: vi.fn(),
+      resetWords: vi.fn(),
     },
   },
   game: {
