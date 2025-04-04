@@ -25,13 +25,13 @@ const useCountDown = (initialCount: number) => {
 
   const startCount = React.useCallback(() => setIsActive(true), []);
 
-  const resetAndStartCount = () => {
+  const resetAndStartCount = React.useCallback(() => {
     if (isActive) setCount(initialCount);
     else {
       setIsActive(true);
       setCount(initialCount);
     }
-  };
+  }, [isActive]);
 
   const stopCount = React.useCallback(() => {
     setCount(initialCount);

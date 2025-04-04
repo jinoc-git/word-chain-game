@@ -4,6 +4,7 @@ import React from 'react';
 
 import { useParams } from 'next/navigation';
 
+import { GAME_PLAYING_TEXT, GAME_WAITING_TEXT } from '@/constants/gameStateText';
 import useCountDown from '@/hooks/useCountDown';
 import useGame from '@/hooks/useGame';
 import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
@@ -22,19 +23,22 @@ const ControlGame = () => {
 
   const { count, startCount, stopCount } = useCountDown(10);
 
-  const handleGameStateButton = async (state: boolean) => {
+  const handleGameStateButton = React.useCallback(async (state: boolean) => {
     await handleGameState(state, mode === 'multi' ? gameId : undefined);
 
     if (state) startCount();
     else stopCount();
-  };
+  }, []);
 
   const playerIsRoomChief = user !== null && isRoomChief(user);
   const shouldRenderButtonArea = mode === 'solo' || playerIsRoomChief;
 
   return (
     <>
-      <div className="w-full flex-box py-6">
+      <div className="w-full flex-box py-6 flex-col gap-2">
+        <p className="font-bold text-xl text-yellow-600">
+          {isGameStarted ? GAME_PLAYING_TEXT : GAME_WAITING_TEXT}
+        </p>
         <p className="font-bold text-xl">{count}</p>
       </div>
       {shouldRenderButtonArea && (

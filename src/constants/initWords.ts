@@ -13,4 +13,4 @@ export const INIT_WORDS = [
   '고향',
   '마음',
   '인사',
-];
+] as const;
