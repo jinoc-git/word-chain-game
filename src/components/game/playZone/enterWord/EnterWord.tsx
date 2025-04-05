@@ -9,7 +9,6 @@ import { Input } from '@nextui-org/react';
 
 import useShakeAnimate from '@/hooks/useShakeAnimate';
 import useWords from '@/hooks/useWords';
-import { postWordToAIAndGetNextWord } from '@/lib/openai';
 import { enterWordSchema } from '@/schema/enterWordSchema';
 
 import type { z } from 'zod';
@@ -19,30 +18,37 @@ type EnterWordInput = z.infer<typeof enterWordSchema>;
 const EnterWord = () => {
   const { isShake, handleShake } = useShakeAnimate();
 
-  const { isValidWord, checkWordIsValid, pushNewWord } = useWords();
+  const { isValidWord, checkWord, pushNewWord } = useWords();
 
   const {
     register,
     handleSubmit,
     reset,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<EnterWordInput>({
     resolver: zodResolver(enterWordSchema),
     mode: 'onSubmit',
   });
 
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
-    const isValid = await checkWordIsValid(enterWord);
+    const isValid = await checkWord(enterWord);
     if (!isValid) {
       handleShake();
-      setError('enterWord', { type: '401', message: '없는 단어입니다!' });
+      // setError('enterWord', { type: '401', message: '없는 단어입니다!' });
+      reset();
       return;
     }
 
-    const res = await postWordToAIAndGetNextWord(enterWord);
-    console.log('📢', res);
+    pushNewWord(enterWord);
     reset();
+
+    // const res = await postWordToAIAndGetNextWord(enterWord);
+
+    // if (res) {
+    //   const isAIDefeated = checkAIDefeated(enterWord, res);
+    //   pushNewWord(res);
+    // }
   };
 
   return (
@@ -52,8 +58,6 @@ const EnterWord = () => {
           {...register('enterWord')}
           variant="bordered"
           placeholder="단어를 입력하세요."
-          isInvalid={!isValidWord}
-          errorMessage={errors.enterWord?.message}
           className={`${isShake ? 'animate-shake' : ''}`}
         />
         <button type="submit" className="hidden" disabled={isSubmitting}>
