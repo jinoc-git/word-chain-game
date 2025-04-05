@@ -9,7 +9,7 @@ const useWords = () => {
   const [isValidWord, setIsValidWord] = React.useState(false);
   const { getWordsCount, getLastWord, pushNewWord } = useWordActions((actions) => actions);
 
-  const enterWordAndCheck = async (enterWord: string) => {
+  const checkWordIsValid = async (enterWord: string) => {
     const isOnlyKorean = checkOnlyKorean(enterWord);
     if (!isOnlyKorean) {
       setIsValidWord(false);
@@ -30,13 +30,11 @@ const useWords = () => {
       return false;
     }
 
-    pushNewWord(enterWord);
     setIsValidWord(true);
-
     return true;
   };
 
-  return { isValidWord, enterWordAndCheck };
+  return { isValidWord, checkWordIsValid, pushNewWord };
 };
 
 export default useWords;

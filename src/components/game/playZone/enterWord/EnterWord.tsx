@@ -9,6 +9,7 @@ import { Input } from '@nextui-org/react';
 
 import useShakeAnimate from '@/hooks/useShakeAnimate';
 import useWords from '@/hooks/useWords';
+import { postWordToAIAndGetNextWord } from '@/lib/openai';
 import { enterWordSchema } from '@/schema/enterWordSchema';
 
 import type { z } from 'zod';
@@ -18,7 +19,7 @@ type EnterWordInput = z.infer<typeof enterWordSchema>;
 const EnterWord = () => {
   const { isShake, handleShake } = useShakeAnimate();
 
-  const { isValidWord, enterWordAndCheck } = useWords();
+  const { isValidWord, checkWordIsValid, pushNewWord } = useWords();
 
   const {
     register,
@@ -32,13 +33,15 @@ const EnterWord = () => {
   });
 
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
-    const isValid = await enterWordAndCheck(enterWord);
+    const isValid = await checkWordIsValid(enterWord);
     if (!isValid) {
       handleShake();
       setError('enterWord', { type: '401', message: '없는 단어입니다!' });
       return;
     }
 
+    const res = await postWordToAIAndGetNextWord(enterWord);
+    console.log('📢', res);
     reset();
   };
 

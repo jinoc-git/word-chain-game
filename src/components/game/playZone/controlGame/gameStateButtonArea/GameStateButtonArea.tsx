@@ -10,7 +10,6 @@ interface Props {
 }
 
 const GameStateButtonArea = ({ isGameStarted, handleGameStateButton }: Props) => {
-  console.log('gat');
   return (
     <div className="flex justify-around w-full mt-[100px]">
       <Button
