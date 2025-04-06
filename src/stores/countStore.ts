@@ -37,13 +37,11 @@ export const createCountStore = (initState: CountStoreState = defaultInitState) 
         const { _clearTimeout, startCount } = get().actions;
 
         _clearTimeout();
-        const timeoutId = setTimeout(
-          () => set(({ state }) => ({ state: { ...state, count: state.count - 1 } })),
-          1000,
-        );
+        const timeoutId = setTimeout(() => {
+          set(({ state }) => ({ state: { ...state, count: state.count - 1 } }));
+          return startCount();
+        }, 1000);
         set(({ state }) => ({ state: { ...state, _timeoutId: timeoutId } }));
-
-        return startCount();
       },
       endCount: () => {
         get().actions._clearTimeout();

@@ -42,7 +42,6 @@ const EnterWord = () => {
     const isValid = await checkWord(enterWord);
     if (!isValid) {
       handleShake();
-      // setError('enterWord', { type: '401', message: '없는 단어입니다!' });
       reset();
       return;
     }
