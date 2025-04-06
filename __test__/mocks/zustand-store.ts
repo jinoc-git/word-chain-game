@@ -42,4 +42,19 @@ export const mockStores = {
       setIsWaitingTurn: vi.fn(),
     },
   },
+  count: {
+    state: {
+      _timeoutId: undefined,
+      isActiveCount: false,
+      count: 10,
+    },
+    actions: {
+      startCount: vi.fn(),
+      endCount: vi.fn(),
+      resetCount: vi.fn(),
+      pauseCount: vi.fn(),
+      resumeCount: vi.fn(),
+      _clearTimeout: vi.fn(),
+    },
+  },
 };

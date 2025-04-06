@@ -56,3 +56,9 @@ vi.mock('@/providers/storeProvider/wordStoreProvider', () => ({
   useWordActions: vi.fn((selector) => selector(mockStores.word.actions)),
   WordStoreProvider: ({ children }: { children: ReactNode }) => children,
 }));
+
+vi.mock('@/providers/storeProvider/countStoreProvider', () => ({
+  useCountState: vi.fn(() => mockStores.count.state),
+  useCountActions: vi.fn((selector) => selector(mockStores.count.actions)),
+  CountStoreProvider: ({ children }: { children: ReactNode }) => children,
+}));
