@@ -22,7 +22,7 @@ const defaultInitState: GameStoreState = {
 };
 
 export const createGameStore = (initState: GameStoreState = defaultInitState) => {
-  return createStore<GameStore>((set, get) => ({
+  return createStore<GameStore>()((set, get) => ({
     state: initState,
     actions: {
       startGame: () => {
