@@ -28,20 +28,29 @@ const useGame = () => {
     await new Promise((resolve, reject) => {
       socket.emit('handleGameState', { userId: user.id, roomId, state });
 
-      socket.on('handleGameStateSuccess', (message: string) => {
+      const gameStateSuccessHandler = (message: string) => {
+        console.log(message);
+        socket.off('handleGameStateSuccess', gameStateSuccessHandler);
+        socket.off('handleGameStateFail', gameStateFailHandler);
+        clearTimeout(timeoutId);
         resolve(true);
+      };
+      const gameStateFailHandler = (message: string) => {
+        console.log(message);
+        socket.off('handleGameStateSuccess', gameStateSuccessHandler);
+        socket.off('handleGameStateFail', gameStateFailHandler);
         clearTimeout(timeoutId);
-      });
-
-      socket.on('handleGameStateFail', (message: string) => {
         reject(new Error(message));
-        clearTimeout(timeoutId);
-      });
+      };
 
-      const timeoutId = setTimeout(
-        () => reject(new Error('통신 오류! 잠시후 다시 시도해주세요')),
-        5000,
-      );
+      socket.on('handleGameStateSuccess', gameStateSuccessHandler);
+      socket.on('handleGameStateFail', gameStateFailHandler);
+
+      const timeoutId = setTimeout(() => {
+        socket.off('handleGameStateSuccess', gameStateSuccessHandler);
+        socket.off('handleGameStateFail', gameStateFailHandler);
+        reject(new Error('통신 오류! 잠시후 다시 시도해주세요'));
+      }, 5000);
     });
   };
 
