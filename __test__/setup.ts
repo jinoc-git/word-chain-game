@@ -33,6 +33,8 @@ vi.mock('lodash', () => ({
   },
 }));
 
+vi.mock('zustand');
+
 vi.mock('@/providers/storeProvider/authStoreProvider', () => ({
   useAuthState: vi.fn(() => mockStores.auth.user),
   useAuthActions: vi.fn((selector) => selector(mockStores.auth.actions)),
