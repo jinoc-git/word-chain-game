@@ -9,6 +9,7 @@ import { Input } from '@nextui-org/react';
 
 import useShakeAnimate from '@/hooks/useShakeAnimate';
 import useWords from '@/hooks/useWords';
+import { useGameState } from '@/providers/storeProvider/gameStoreProvider';
 import { enterWordSchema } from '@/schema/enterWordSchema';
 
 import type { z } from 'zod';
@@ -17,19 +18,25 @@ type EnterWordInput = z.infer<typeof enterWordSchema>;
 
 const EnterWord = () => {
   const { isShake, handleShake } = useShakeAnimate();
-
   const { isValidWord, checkWord, pushNewWord } = useWords();
+
+  const isWaitingTurn = useGameState((state) => state.isWaitingTurn);
 
   const {
     register,
     handleSubmit,
     reset,
     setError,
+    setFocus,
     formState: { isSubmitting },
   } = useForm<EnterWordInput>({
     resolver: zodResolver(enterWordSchema),
     mode: 'onSubmit',
   });
+
+  React.useEffect(() => {
+    if (!isWaitingTurn) setFocus('enterWord');
+  }, [isWaitingTurn]);
 
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
     const isValid = await checkWord(enterWord);
@@ -57,7 +64,9 @@ const EnterWord = () => {
         <Input
           {...register('enterWord')}
           variant="bordered"
-          placeholder="단어를 입력하세요."
+          placeholder={isWaitingTurn ? '상대를 기다리는 중...' : '단어를 입력하세요!'}
+          disabled={isWaitingTurn}
+          autoComplete="off"
           className={`${isShake ? 'animate-shake' : ''}`}
         />
         <button type="submit" className="hidden" disabled={isSubmitting}>

@@ -6,7 +6,7 @@ const useCountDown = (initialCount: number) => {
   const [count, setCount] = React.useState(initialCount);
   const [isActive, setIsActive] = React.useState(false);
 
-  const endGame = useGameActions((actions) => actions.endGame);
+  const { endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
 
   React.useEffect(() => {
     if (!isActive || count <= 0) return;
@@ -20,6 +20,7 @@ const useCountDown = (initialCount: number) => {
       setIsActive(false);
       setCount(initialCount);
       endGame();
+      setIsWaitingTurn(true);
     }
   }, [count]);
 

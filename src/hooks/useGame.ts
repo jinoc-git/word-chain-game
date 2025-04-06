@@ -12,9 +12,13 @@ const useGame = () => {
   const user = useAuthState((state) => state.user);
 
   const setGameState = (state: boolean) => {
-    if (state) startGame();
-    else endGame();
-    setIsWaitingTurn(true);
+    if (state) {
+      startGame();
+      setIsWaitingTurn(false);
+    } else {
+      endGame();
+      setIsWaitingTurn(true);
+    }
   };
 
   const setWords = (state: boolean) => {
