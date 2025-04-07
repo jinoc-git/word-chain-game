@@ -8,8 +8,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@nextui-org/react';
 
 import useShakeAnimate from '@/hooks/useShakeAnimate';
-import useWords from '@/hooks/useWords';
+import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
+import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 import { enterWordSchema } from '@/schema/enterWordSchema';
+import { checkWordIsValid } from '@/utils/checkWordValid';
 
 import type { z } from 'zod';
 
@@ -18,29 +20,37 @@ type EnterWordInput = z.infer<typeof enterWordSchema>;
 const EnterWord = () => {
   const { isShake, handleShake } = useShakeAnimate();
 
-  const { isValidWord, enterWordAndCheck } = useWords();
+  const isWaitingTurn = useGameState((state) => state.isWaitingTurn);
+  const setIsWaitingTurn = useGameActions((actions) => actions.setIsWaitingTurn);
+  const { pushNewWord, getLastWord } = useWordActions((actions) => actions);
 
   const {
     register,
     handleSubmit,
     reset,
-    setError,
-    formState: { errors, isSubmitting },
+    setFocus,
+    formState: { isSubmitting },
   } = useForm<EnterWordInput>({
     resolver: zodResolver(enterWordSchema),
     mode: 'onSubmit',
   });
 
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
-    const isValid = await enterWordAndCheck(enterWord);
+    const isValid = await checkWordIsValid(getLastWord(), enterWord);
     if (!isValid) {
       handleShake();
-      setError('enterWord', { type: '401', message: '없는 단어입니다!' });
+      reset();
       return;
     }
 
+    pushNewWord(enterWord);
     reset();
+    setIsWaitingTurn(true);
   };
+
+  React.useEffect(() => {
+    if (!isWaitingTurn) setFocus('enterWord');
+  }, [isWaitingTurn]);
 
   return (
     <div className="flexCol gap-2 items-center mt-3">
@@ -48,9 +58,9 @@ const EnterWord = () => {
         <Input
           {...register('enterWord')}
           variant="bordered"
-          placeholder="단어를 입력하세요."
-          isInvalid={!isValidWord}
-          errorMessage={errors.enterWord?.message}
+          placeholder={isWaitingTurn ? '상대를 기다리는 중...' : '단어를 입력하세요!'}
+          disabled={isWaitingTurn}
+          autoComplete="off"
           className={`${isShake ? 'animate-shake' : ''}`}
         />
         <button type="submit" className="hidden" disabled={isSubmitting}>

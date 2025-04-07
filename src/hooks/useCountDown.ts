@@ -1,39 +1,31 @@
 import React from 'react';
 
-const useCountDown = (initialCount: number) => {
-  const [count, setCount] = React.useState(initialCount);
-  const [isActive, setIsActive] = React.useState(false);
+import { useCountActions, useCountState } from '@/providers/storeProvider/countStoreProvider';
+import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
 
-  React.useEffect(() => {
-    if (!isActive || count <= 0) return;
-    const timeoutId = setTimeout(() => setCount((prev) => prev - 1), 1000);
+const useCountDown = () => {
+  const { count, isActiveCount } = useCountState((state) => state);
+  const { gameState, isWaitingTurn } = useGameState((state) => state);
 
-    return () => clearTimeout(timeoutId);
-  }, [isActive, count]);
+  const { endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
+  const { endCount, resetCount, startCount } = useCountActions((actions) => actions);
 
   React.useEffect(() => {
     if (count <= 0) {
-      setIsActive(false);
-      setCount(initialCount);
+      endGame();
+      setIsWaitingTurn(true);
+      endCount();
     }
   }, [count]);
 
-  const startCount = React.useCallback(() => setIsActive(true), []);
-
-  const resetAndStartCount = () => {
-    if (isActive) setCount(initialCount);
-    else {
-      setIsActive(true);
-      setCount(initialCount);
+  React.useEffect(() => {
+    if (gameState) {
+      resetCount();
+      startCount();
     }
-  };
+  }, [gameState, isWaitingTurn]);
 
-  const stopCount = React.useCallback(() => {
-    setCount(initialCount);
-    setIsActive(false);
-  }, []);
-
-  return { count, startCount, resetAndStartCount, stopCount };
+  return { count, isActiveCount };
 };
 
 export default useCountDown;

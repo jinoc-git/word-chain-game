@@ -37,7 +37,7 @@ const defaultInitState: PlayerStoreState = {
 };
 
 export const createPlayerStore = (initState: PlayerStoreState = defaultInitState) => {
-  return createStore<PlayerStore>((set, get) => ({
+  return createStore<PlayerStore>()((set, get) => ({
     ...initState,
     actions: {
       initPlayer: (players) => {

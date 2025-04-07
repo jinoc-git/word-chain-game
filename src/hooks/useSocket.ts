@@ -20,20 +20,44 @@ const useSocket = () => {
 
   const initPlayer = usePlayerActions((actions) => actions.initPlayer);
 
+  const connectSocket = () => {
+    if (!socket.connected) socket.connect();
+  };
+
+  const disconnectSocket = () => {
+    if (socket.connected) socket.disconnect();
+  };
+
   const createSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
     try {
+      if (!socket.connected) connectSocket();
+
       const res: boolean | undefined = await new Promise((resolve, reject) => {
         socket.emit('createRoom', { roomId, userId, nickname });
 
-        socket.on('createRoomSuccess', (room: Room) => {
+        const createRoomSuccessHandler = (room: Room) => {
           initPlayer(room.players);
+          socket.off('createRoomSuccess', createRoomSuccessHandler);
+          socket.off('createRoomFail', createRoomFailHandler);
+          clearTimeout(timeoutId);
           resolve(true);
-        });
-        socket.on('createRoomFail', (message: string) => {
-          reject(new Error(message));
-        });
+        };
 
-        setTimeout(() => reject(new Error('통신 오류! 잠시후 다시 시도해주세요')), 5000);
+        const createRoomFailHandler = (message: string) => {
+          socket.off('createRoomSuccess', createRoomSuccessHandler);
+          socket.off('createRoomFail', createRoomFailHandler);
+          clearTimeout(timeoutId);
+          reject(new Error(message));
+        };
+
+        socket.on('createRoomSuccess', createRoomSuccessHandler);
+        socket.on('createRoomFail', createRoomFailHandler);
+
+        const timeoutId = setTimeout(() => {
+          socket.off('createRoomSuccess', createRoomSuccessHandler);
+          socket.off('createRoomFail', createRoomFailHandler);
+          reject(new Error('통신 오류! 잠시후 다시 시도해주세요'));
+        }, 5000);
       });
 
       return res;
@@ -47,19 +71,35 @@ const useSocket = () => {
 
   const joinSocketRoom = async ({ roomId, userId, nickname }: CreateOrJoinSocketRoomArgs) => {
     try {
+      if (!socket.connected) connectSocket();
+
       const res: boolean | undefined = await new Promise((resolve, reject) => {
         socket.emit('joinRoom', { roomId, userId, nickname });
 
-        socket.on('joinRoomSuccess', (room: Room) => {
+        const joinRoomSuccessHandler = (room: Room) => {
           console.log(room);
+          socket.off('joinRoomSuccess', joinRoomSuccessHandler);
+          socket.off('joinRoomFail', joinRoomFailHandler);
+          clearTimeout(timeoutId);
           resolve(true);
-        });
-        socket.on('joinRoomFail', (message: string) => {
-          console.log(message);
-          reject(new Error(message));
-        });
+        };
 
-        setTimeout(() => reject(new Error('통신 오류! 잠시후 다시 시도해주세요')), 5000);
+        const joinRoomFailHandler = (message: string) => {
+          console.log(message);
+          socket.off('joinRoomSuccess', joinRoomSuccessHandler);
+          socket.off('joinRoomFail', joinRoomFailHandler);
+          clearTimeout(timeoutId);
+          reject(new Error(message));
+        };
+
+        socket.on('joinRoomSuccess', joinRoomSuccessHandler);
+        socket.on('joinRoomFail', joinRoomFailHandler);
+
+        const timeoutId = setTimeout(() => {
+          socket.off('joinRoomSuccess', joinRoomSuccessHandler);
+          socket.off('joinRoomFail', joinRoomFailHandler);
+          reject(new Error('통신 오류! 잠시후 다시 시도해주세요'));
+        }, 5000);
       });
 
       return res;
@@ -86,17 +126,23 @@ const useSocket = () => {
       setTransport('N/A');
     };
 
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+
     if (socket.connected) onConnect();
-    console.log(socket);
+
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);
+      socket.io.engine.off('upgrade');
     };
   }, []);
 
   return {
     isConnected,
     transport,
+    connectSocket,
+    disconnectSocket,
     createSocketRoom: _.throttle(createSocketRoom, 750),
     joinSocketRoom: _.throttle(joinSocketRoom, 750),
   };

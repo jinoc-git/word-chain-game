@@ -1,21 +1,11 @@
-'use client';
-
 import React from 'react';
 
 import { Card, CardBody, CardHeader } from '@nextui-org/react';
 
-import CreateRoom from '@/components/loby/createRoom/CreateRoom';
-import EnterRoom from '@/components/loby/enterRoom/EnterRoom';
+import PlayMulti from '@/components/loby/playMulti/PlayMulti';
 import PlaySolo from '@/components/loby/playSolo/PlaySolo';
-import useSocket from '@/hooks/useSocket';
-import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
 
 const Loby = () => {
-  const { isConnected, createSocketRoom, joinSocketRoom } = useSocket();
-  const user = useAuthState((state) => state.user);
-
-  console.log(isConnected);
-
   return (
     <section>
       <Card className="main-layout">
@@ -24,8 +14,7 @@ const Loby = () => {
         </CardHeader>
         <CardBody className=" space-y-5">
           <PlaySolo />
-          <CreateRoom user={user} createSocketRoom={createSocketRoom} />
-          <EnterRoom user={user} joinSocketRoom={joinSocketRoom} />
+          <PlayMulti />
         </CardBody>
       </Card>
     </section>
