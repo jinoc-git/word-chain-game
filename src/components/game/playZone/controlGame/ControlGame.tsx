@@ -24,7 +24,7 @@ const ControlGame = () => {
   const { count, isActiveCount } = useCountDown();
 
   const handleGameStateButton = React.useCallback(async (state: boolean) => {
-    await handleGameState(state, mode);
+    await handleGameState(state);
   }, []);
 
   const playerIsRoomChief = user !== null && isRoomChief(user);
