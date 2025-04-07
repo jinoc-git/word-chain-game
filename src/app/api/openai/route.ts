@@ -4,7 +4,7 @@ import OpenAI from 'openai';
 import { AI_DEFEATED_FLAG } from '@/constants/aiDefeatedFlag';
 
 const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_KEY,
+  apiKey: process.env.OPENAI_KEY,
 });
 
 export const POST = async (req: Request) => {

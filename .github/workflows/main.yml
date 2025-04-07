@@ -27,7 +27,7 @@ jobs:
           echo "NEXT_PUBLIC_NAVER_CLIENT_ID=${{ secrets.NEXT_PUBLIC_NAVER_CLIENT_ID }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_NAVER_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_NAVER_CLIENT_SECRET }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_GAME_CHAIN_SERVER=${{ secrets.NEXT_PUBLIC_GAME_CHAIN_SERVER }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_OPENAI_KEY=${{ secrets.NEXT_PUBLIC_OPENAI_KEY }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_OPENAI_KEY=${{ secrets.OPENAI_KEY }}" >> $GITHUB_ENV
 
       - name: Debug Environment Variables
         run: env | grep NEXT_PUBLIC_
