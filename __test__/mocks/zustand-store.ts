@@ -23,9 +23,12 @@ export const mockStores = {
     },
   },
   word: {
-    words: mockWords,
+    state: {
+      totalWordsCount: 0,
+      words: mockWords,
+    },
     actions: {
-      getWordsCount: vi.fn(),
+      // getWordsCount: vi.fn(),
       getLastWord: vi.fn(),
       pushNewWord: vi.fn(),
       resetWords: vi.fn(),

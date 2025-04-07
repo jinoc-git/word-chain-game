@@ -18,13 +18,13 @@ const ControlGame = () => {
 
   const user = useAuthState((state) => state.user);
   const isGameStarted = useGameState((state) => state.gameState);
-  const { handleGameState } = useGame();
+  const { handleGameState } = useGame(mode, gameId);
   const isRoomChief = usePlayerActions((actions) => actions.isRoomChief);
 
   const { count, isActiveCount } = useCountDown();
 
   const handleGameStateButton = React.useCallback(async (state: boolean) => {
-    await handleGameState(state, mode === 'multi' ? gameId : undefined);
+    await handleGameState(state, mode);
   }, []);
 
   const playerIsRoomChief = user !== null && isRoomChief(user);

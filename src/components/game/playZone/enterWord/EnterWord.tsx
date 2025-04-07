@@ -26,7 +26,6 @@ const EnterWord = () => {
     register,
     handleSubmit,
     reset,
-    setError,
     setFocus,
     formState: { isSubmitting },
   } = useForm<EnterWordInput>({

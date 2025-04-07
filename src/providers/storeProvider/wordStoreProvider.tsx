@@ -29,7 +29,7 @@ const useWordStore = <T,>(selector: (state: WordStore) => T): T => {
 };
 
 export const useWordState = <T,>(selector: (state: WordStoreState) => T): T => {
-  return useWordStore(selector);
+  return useWordStore(({ state }) => selector(state));
 };
 
 export const useWordActions = <T,>(selector: (state: WordStoreActions) => T): T => {

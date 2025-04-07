@@ -1,14 +1,18 @@
+import React from 'react';
 import { toast } from 'react-toastify';
 
 import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
 import { useCountActions } from '@/providers/storeProvider/countStoreProvider';
-import { useGameActions } from '@/providers/storeProvider/gameStoreProvider';
+import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
 import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 import { socket } from '@/socket/socket';
 import { getRandomFirstWord } from '@/utils/getRandomFirstWord';
 
-const useGame = () => {
+const useGame = (mode: string, roomId: string) => {
+  const [isGameStarted, setIsGameStarted] = React.useState(false);
   const user = useAuthState((state) => state.user);
+  const gameState = useGameState((state) => state.gameState);
+
   const { startGame, endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
   const { resetWords, pushNewWord } = useWordActions((actions) => actions);
   const { startCount, endCount } = useCountActions((actions) => actions);
@@ -17,18 +21,20 @@ const useGame = () => {
     if (state) {
       startGame();
       setIsWaitingTurn(false);
+      setIsGameStarted(true);
     } else {
       endGame();
       setIsWaitingTurn(true);
+      setIsGameStarted(false);
     }
   };
 
-  const setWords = (state: boolean) => {
+  const settingWords = (state: boolean) => {
     resetWords();
     if (state) pushNewWord(getRandomFirstWord());
   };
 
-  const handleMultiGame = async (state: boolean, roomId: string) => {
+  const handleMultiGame = async (state: boolean) => {
     if (user === null) return;
 
     await new Promise((resolve, reject) => {
@@ -65,11 +71,11 @@ const useGame = () => {
     else endCount();
   };
 
-  const handleGameState = async (state: boolean, roomId?: string) => {
+  const handleGameState = async (state: boolean) => {
     try {
-      if (roomId) await handleMultiGame(state, roomId);
+      if (mode === 'multi') await handleMultiGame(state);
 
-      setWords(state);
+      settingWords(state);
       setGameState(state);
       handleCountDown(state);
     } catch (error) {
@@ -78,6 +84,12 @@ const useGame = () => {
       }
     }
   };
+
+  React.useEffect(() => {
+    if (isGameStarted && !gameState) {
+      handleGameState(false);
+    }
+  }, [gameState]);
 
   return { handleGameState };
 };
