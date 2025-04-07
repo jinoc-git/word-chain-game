@@ -26,7 +26,7 @@ describe('ControlGame when multi game', () => {
     render(<ControlGame />);
 
     const startButton = screen.getByRole('button', { name: /게임 시작/i });
-    const endButton = screen.getByRole('button', { name: /게임 중단/i });
+    const endButton = screen.getByRole('button', { name: /게임 종료/i });
 
     expect(startButton).toBeInTheDocument();
     expect(endButton).toBeInTheDocument();

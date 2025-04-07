@@ -8,9 +8,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@nextui-org/react';
 
 import useShakeAnimate from '@/hooks/useShakeAnimate';
-import useWords from '@/hooks/useWords';
-import { useGameState } from '@/providers/storeProvider/gameStoreProvider';
+import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
+import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 import { enterWordSchema } from '@/schema/enterWordSchema';
+import { checkWordIsValid } from '@/utils/checkWordValid';
 
 import type { z } from 'zod';
 
@@ -18,9 +19,10 @@ type EnterWordInput = z.infer<typeof enterWordSchema>;
 
 const EnterWord = () => {
   const { isShake, handleShake } = useShakeAnimate();
-  const { isValidWord, checkWord, pushNewWord } = useWords();
 
   const isWaitingTurn = useGameState((state) => state.isWaitingTurn);
+  const setIsWaitingTurn = useGameActions((actions) => actions.setIsWaitingTurn);
+  const { pushNewWord, getLastWord } = useWordActions((actions) => actions);
 
   const {
     register,
@@ -33,12 +35,8 @@ const EnterWord = () => {
     mode: 'onSubmit',
   });
 
-  React.useEffect(() => {
-    if (!isWaitingTurn) setFocus('enterWord');
-  }, [isWaitingTurn]);
-
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
-    const isValid = await checkWord(enterWord);
+    const isValid = await checkWordIsValid(getLastWord(), enterWord);
     if (!isValid) {
       handleShake();
       reset();
@@ -47,14 +45,12 @@ const EnterWord = () => {
 
     pushNewWord(enterWord);
     reset();
-
-    // const res = await postWordToAIAndGetNextWord(enterWord);
-
-    // if (res) {
-    //   const isAIDefeated = checkAIDefeated(enterWord, res);
-    //   pushNewWord(res);
-    // }
+    setIsWaitingTurn(true);
   };
+
+  React.useEffect(() => {
+    if (!isWaitingTurn) setFocus('enterWord');
+  }, [isWaitingTurn]);
 
   return (
     <div className="flexCol gap-2 items-center mt-3">

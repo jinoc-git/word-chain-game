@@ -1,7 +1,17 @@
 import { checkNaverDictionary } from '@/lib/word';
 
-import { checkFirstCharacter } from './checkFirstCharacter';
-import checkOnlyKorean from './checkOnlyKorean';
+const checkFirstCharacter = (before: string, now: string) => {
+  const needCharacter = before.slice(-1);
+  const firstCharacter = now.slice(0, 1);
+
+  if (needCharacter === firstCharacter) return true;
+  else return false;
+};
+
+const checkOnlyKorean = (text: string) => {
+  const koreaRegex = /^[가-힣]+$/;
+  return koreaRegex.test(text);
+};
 
 export const checkWordIsValid = async (lastWord: string, enterWord: string) => {
   const isOnlyKorean = checkOnlyKorean(enterWord);

@@ -1,37 +1,35 @@
-import React from 'react';
 import { toast } from 'react-toastify';
 
 import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
 import { useCountActions } from '@/providers/storeProvider/countStoreProvider';
-import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
+import { useGameActions } from '@/providers/storeProvider/gameStoreProvider';
 import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 import { socket } from '@/socket/socket';
-import { getRandomFirstWord } from '@/utils/getRandomFirstWord';
+
+import useSoloGame from './useSoloGame';
 
 const useGame = (mode: string, roomId: string) => {
-  const [isGameStarted, setIsGameStarted] = React.useState(false);
   const user = useAuthState((state) => state.user);
-  const gameState = useGameState((state) => state.gameState);
+
+  useSoloGame(mode);
 
   const { startGame, endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
-  const { resetWords, pushNewWord } = useWordActions((actions) => actions);
+  const { initRandomWord, resetWords } = useWordActions((actions) => actions);
   const { startCount, endCount } = useCountActions((actions) => actions);
 
   const setGameState = (state: boolean) => {
     if (state) {
       startGame();
       setIsWaitingTurn(false);
-      setIsGameStarted(true);
     } else {
       endGame();
       setIsWaitingTurn(true);
-      setIsGameStarted(false);
     }
   };
 
   const settingWords = (state: boolean) => {
-    resetWords();
-    if (state) pushNewWord(getRandomFirstWord());
+    if (state) initRandomWord();
+    else resetWords();
   };
 
   const handleMultiGame = async (state: boolean) => {
@@ -84,12 +82,6 @@ const useGame = (mode: string, roomId: string) => {
       }
     }
   };
-
-  React.useEffect(() => {
-    if (isGameStarted && !gameState) {
-      handleGameState(false);
-    }
-  }, [gameState]);
 
   return { handleGameState };
 };
