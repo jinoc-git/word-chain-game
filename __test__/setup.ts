@@ -36,31 +36,31 @@ vi.mock('lodash', () => ({
 vi.mock('zustand');
 
 vi.mock('@/providers/storeProvider/authStoreProvider', () => ({
-  useAuthState: vi.fn(() => mockStores.auth.user),
+  useAuthState: vi.fn((selector) => selector(mockStores.auth)),
   useAuthActions: vi.fn((selector) => selector(mockStores.auth.actions)),
   AuthStoreProvider: ({ children }: { children: ReactNode }) => children,
 }));
 
 vi.mock('@/providers/storeProvider/gameStoreProvider', () => ({
-  useGameState: vi.fn(() => mockStores.game.state),
+  useGameState: vi.fn((selector) => selector(mockStores.game.state)),
   useGameActions: vi.fn((selector) => selector(mockStores.game.actions)),
   GameStoreProvider: ({ children }: { children: ReactNode }) => children,
 }));
 
 vi.mock('@/providers/storeProvider/playerStoreProvider', () => ({
-  usePlayerState: vi.fn(() => mockStores.player.curPlayers),
+  usePlayerState: vi.fn((selector) => selector(mockStores.player)),
   usePlayerActions: vi.fn((selector) => selector(mockStores.player.actions)),
   PlayerStoreProvider: ({ children }: { children: ReactNode }) => children,
 }));
 
 vi.mock('@/providers/storeProvider/wordStoreProvider', () => ({
-  useWordState: vi.fn(() => mockStores.word.words),
+  useWordState: vi.fn((selector) => selector(mockStores.word.state)),
   useWordActions: vi.fn((selector) => selector(mockStores.word.actions)),
   WordStoreProvider: ({ children }: { children: ReactNode }) => children,
 }));
 
 vi.mock('@/providers/storeProvider/countStoreProvider', () => ({
-  useCountState: vi.fn(() => mockStores.count.state),
+  useCountState: vi.fn((selector) => selector(mockStores.count.state)),
   useCountActions: vi.fn((selector) => selector(mockStores.count.actions)),
   CountStoreProvider: ({ children }: { children: ReactNode }) => children,
 }));
