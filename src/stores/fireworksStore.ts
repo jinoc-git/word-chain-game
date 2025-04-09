@@ -14,11 +14,11 @@ type TConductorInstance = {
 };
 
 export type FireworksStoreState = {
-  controller: any;
+  controller: TConductorInstance | null;
 };
 
 export type FireworksStoreActions = {
-  onInitHandler: () => void;
+  onInitHandler: (instance: TConductorInstance) => void;
   onShoot: () => void;
 };
 
@@ -31,11 +31,14 @@ const defaultInitState: FireworksStoreState = {
 };
 
 export const createFireworksStore = (initState: FireworksStoreState = defaultInitState) => {
-  return createStore<FireworksStore>()(() => ({
+  return createStore<FireworksStore>()((set, get) => ({
     ...initState,
     actions: {
-      onInitHandler: () => {},
-      onShoot: () => {},
+      onInitHandler: (instance) => set({ controller: instance }),
+      onShoot: () => {
+        const controller = get().controller;
+        if (controller) controller.shoot();
+      },
     },
   }));
 };
