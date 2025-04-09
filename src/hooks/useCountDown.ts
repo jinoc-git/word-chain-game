@@ -22,6 +22,8 @@ const useCountDown = () => {
     if (gameState) {
       resetCount();
       startCount();
+    } else {
+      endCount();
     }
   }, [gameState, isWaitingTurn]);
 

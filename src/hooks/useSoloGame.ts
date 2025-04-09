@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { AI_DEFEATED_FLAG } from '@/constants/aiDefeatedFlag';
+import { useFireworksActions } from '@/providers/storeProvider/fireworksProvider';
 import { useGameActions } from '@/providers/storeProvider/gameStoreProvider';
 import { useWordActions, useWordState } from '@/providers/storeProvider/wordStoreProvider';
 import { handleOpenAIResponse } from '@/utils/soloGame';
@@ -15,14 +16,17 @@ const useSoloGame = (mode: string) => {
   }, [totalWordCount]);
 
   const { endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
-  const { pushNewWord, getLastWord } = useWordActions((actions) => actions);
+  const { pushNewWord, getLastWord, resetWords } = useWordActions((actions) => actions);
+  const onShoot = useFireworksActions((actions) => actions.onShoot);
 
   const playWithAI = async (lastWord: string) => {
     const res = await handleOpenAIResponse(lastWord);
-
+    // console.log(res);
     if (res === AI_DEFEATED_FLAG) {
       endGame();
       setIsWaitingTurn(true);
+      resetWords();
+      onShoot();
     } else {
       setIsWaitingTurn(false);
       pushNewWord(res);
