@@ -15,7 +15,7 @@ const useSoloGame = (mode: string) => {
   }, [totalWordCount]);
 
   const { endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
-  const { pushNewWord, getLastWord } = useWordActions((actions) => actions);
+  const { pushNewWord, getLastWord, resetWords } = useWordActions((actions) => actions);
 
   const playWithAI = async (lastWord: string) => {
     const res = await handleOpenAIResponse(lastWord);
@@ -23,6 +23,7 @@ const useSoloGame = (mode: string) => {
     if (res === AI_DEFEATED_FLAG) {
       endGame();
       setIsWaitingTurn(true);
+      resetWords();
     } else {
       setIsWaitingTurn(false);
       pushNewWord(res);
