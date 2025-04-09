@@ -2,7 +2,7 @@ import ky from 'ky';
 
 import type { ApiResponse } from '@/types/naver.type';
 
-export const checkValidWord = async (enterWord: string) => {
+export const checkNaverDictionary = async (enterWord: string) => {
   try {
     const encodedWord = encodeURI(enterWord);
     const result = await ky

@@ -24,7 +24,7 @@ const GameStateButtonArea = ({ isGameStarted, handleGameStateButton }: Props) =>
         isDisabled={!isGameStarted}
         onClick={() => handleGameStateButton(false)}
       >
-        게임 중단
+        게임 종료
       </Button>
     </div>
   );

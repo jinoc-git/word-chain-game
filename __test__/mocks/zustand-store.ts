@@ -23,18 +23,41 @@ export const mockStores = {
     },
   },
   word: {
-    words: mockWords,
+    state: {
+      totalWordsCount: 0,
+      words: mockWords,
+    },
     actions: {
-      getWordsCount: vi.fn(),
+      // getWordsCount: vi.fn(),
       getLastWord: vi.fn(),
       pushNewWord: vi.fn(),
+      resetWords: vi.fn(),
     },
   },
   game: {
-    gameState: false,
+    state: {
+      gameState: false,
+      isWaitingTurn: true,
+    },
     actions: {
       startGame: vi.fn(),
       endGame: vi.fn(),
+      setIsWaitingTurn: vi.fn(),
+    },
+  },
+  count: {
+    state: {
+      _timeoutId: undefined,
+      isActiveCount: false,
+      count: 10,
+    },
+    actions: {
+      startCount: vi.fn(),
+      endCount: vi.fn(),
+      resetCount: vi.fn(),
+      pauseCount: vi.fn(),
+      resumeCount: vi.fn(),
+      _clearTimeout: vi.fn(),
     },
   },
 };

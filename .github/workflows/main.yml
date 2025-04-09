@@ -1,0 +1,46 @@
+name: Vercel Build Check
+
+on:
+  pull_request:
+    branches: -dev
+
+jobs:
+  vercel-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies (Production Only)
+        run: npm install
+
+      - name: Set environment variables
+        run: |
+          echo "NEXT_PUBLIC_FB_API_KEY=${{ secrets.NEXT_PUBLIC_FB_API_KEY }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_FB_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FB_AUTH_DOMAIN }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_FB_PROJECT_ID=${{ secrets.NEXT_PUBLIC_FB_PROJECT_ID }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_FB_BUCKET=${{ secrets.NEXT_PUBLIC_FB_BUCKET }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_FB_MESSAGING=${{ secrets.NEXT_PUBLIC_FB_MESSAGING }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_FB_APP_ID=${{ secrets.NEXT_PUBLIC_FB_APP_ID }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_FB_MEASUREMENT=${{ secrets.NEXT_PUBLIC_FB_MEASUREMENT }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_NAVER_CLIENT_ID=${{ secrets.NEXT_PUBLIC_NAVER_CLIENT_ID }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_NAVER_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_NAVER_CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_GAME_CHAIN_SERVER=${{ secrets.NEXT_PUBLIC_GAME_CHAIN_SERVER }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_OPENAI_KEY=${{ secrets.OPENAI_KEY }}" >> $GITHUB_ENV
+
+      - name: Debug Environment Variables
+        run: env | grep NEXT_PUBLIC_
+
+      - name: Run Next.js Build (without Vercel)
+        run: npm run build
+
+      - name: Check Build Success
+        if: success()
+        run: echo "✅ Build successful!"
+
+      - name: Fail on Build Error
+        if: failure()
+        run: |
+          echo "❌ Build failed!"
+          exit 1
