@@ -6,7 +6,7 @@ import type { DictionaryApiResponse } from '@/types/dictionary.type';
 const DICTIONARY_KEY = process.env.NEXT_PUBLIC_DICTIONARY_API_KEY;
 const DICTIONARY_URL = 'https://opendict.korean.go.kr/api/search';
 
-// api 변경 해야함, 두음법칙도 적용해야함
+// 두음법칙도 적용해야함
 export const GET = async (req: NextRequest) => {
   try {
     const searchParams = req.nextUrl.searchParams;
