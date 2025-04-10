@@ -1,4 +1,4 @@
-import { checkNaverDictionary } from '@/lib/word';
+import { checkDictionary } from '@/lib/word';
 
 const checkFirstCharacter = (before: string, now: string) => {
   const needCharacter = before.slice(-1);
@@ -20,7 +20,7 @@ export const checkWordIsValid = async (lastWord: string, enterWord: string) => {
   const isValidFirstCharacter = checkFirstCharacter(lastWord, enterWord);
   if (!isValidFirstCharacter) return false;
 
-  const isExistWord = await checkNaverDictionary(enterWord);
+  const isExistWord = await checkDictionary(enterWord);
   if (!isExistWord) return false;
 
   return true;
