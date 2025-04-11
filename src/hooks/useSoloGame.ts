@@ -21,7 +21,7 @@ const useSoloGame = (mode: string) => {
 
   const playWithAI = async (lastWord: string) => {
     const res = await handleOpenAIResponse(lastWord);
-    // console.log(res);
+
     if (res === AI_DEFEATED_FLAG) {
       endGame();
       setIsWaitingTurn(true);
