@@ -50,6 +50,7 @@ const EnterWord = () => {
 
   React.useEffect(() => {
     if (!isWaitingTurn) setFocus('enterWord');
+    else reset();
   }, [isWaitingTurn]);
 
   return (

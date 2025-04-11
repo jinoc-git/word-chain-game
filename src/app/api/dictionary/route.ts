@@ -22,7 +22,7 @@ export const GET = async (req: NextRequest) => {
           req_type: 'json',
           part: 'word', // 검색 대상 exam - 용례
           type1: 'word', // all - 전체, phrase - 구, idiom - 관용구, proverb - 속담
-          pose: '1,2', // 품사
+          pos: '1,2', // 품사
         },
         headers: { 'Content-Type': 'application/json' },
       })
@@ -30,6 +30,6 @@ export const GET = async (req: NextRequest) => {
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
-    if (error instanceof Error) return NextResponse.json(error.name, { status: 401 });
+    return NextResponse.json(error, { status: 401 });
   }
 };

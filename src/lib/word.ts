@@ -4,11 +4,9 @@ import type { DictionaryApiResponse } from '@/types/dictionary.type';
 
 export const checkDictionary = async (enterWord: string) => {
   try {
-    const encodedWord = encodeURI(enterWord);
-
     const result = await ky
       .get<DictionaryApiResponse>(window?.location?.origin + '/api/dictionary', {
-        searchParams: { q: encodedWord },
+        searchParams: { q: enterWord },
       })
       .json();
 
@@ -19,6 +17,6 @@ export const checkDictionary = async (enterWord: string) => {
 
     return true;
   } catch (error) {
-    console.error(error);
+    if (error instanceof Error) console.log(error.message);
   }
 };
