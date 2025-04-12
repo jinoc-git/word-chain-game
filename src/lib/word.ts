@@ -13,7 +13,8 @@ export const checkDictionary = async (enterWord: string) => {
     const item = result.channel?.item;
 
     if (!item || (Array.isArray(item) && item.length === 0)) return false;
-    if (item[0].word !== enterWord) return false;
+    const onlyCharacter = item[0].word.replace(/\^|\-/g, '');
+    if (onlyCharacter !== enterWord) return false;
 
     return true;
   } catch (error) {

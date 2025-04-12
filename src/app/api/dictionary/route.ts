@@ -21,6 +21,7 @@ export const GET = async (req: NextRequest) => {
           q: word,
           req_type: 'json',
           part: 'word', // 검색 대상 exam - 용례
+          advanced: 'y', // 자세히 찾기
           type1: 'word', // all - 전체, phrase - 구, idiom - 관용구, proverb - 속담
           pos: '1,2', // 품사
         },
