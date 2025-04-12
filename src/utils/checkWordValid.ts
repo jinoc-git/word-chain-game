@@ -1,10 +1,23 @@
+import { DUEUM_LIST } from '@/constants/dueum';
 import { checkDictionary } from '@/lib/word';
 
-const checkFirstCharacter = (before: string, now: string) => {
-  const needCharacter = before.slice(-1);
-  const firstCharacter = now.slice(0, 1);
+import type { DueumKey } from '@/constants/dueum';
 
-  if (needCharacter === firstCharacter) return true;
+const checkDueum = (char: string): char is DueumKey => {
+  if (char in DUEUM_LIST) return true;
+  else return false;
+};
+
+const checkFirstCharacter = (before: string, now: string) => {
+  const beforeCharacter = before.slice(-1);
+  const nowCharacter = now.slice(0, 1);
+
+  if (checkDueum(beforeCharacter)) {
+    const dueumCharacter = DUEUM_LIST[beforeCharacter];
+    if (nowCharacter === dueumCharacter) return true;
+  }
+
+  if (beforeCharacter === nowCharacter) return true;
   else return false;
 };
 

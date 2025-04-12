@@ -32,7 +32,8 @@ export const DUEUM_LIST = {
   론: '논',
   롱: '농',
   뢰: '뇌',
-  뇨: '료',
+  뇨: '요',
+  료: '요',
   룡: '용',
   루: '누',
   뉴: '유',
@@ -50,3 +51,5 @@ export const DUEUM_LIST = {
   림: '임',
   립: '입',
 } as const;
+
+export type DueumKey = keyof typeof DUEUM_LIST;
