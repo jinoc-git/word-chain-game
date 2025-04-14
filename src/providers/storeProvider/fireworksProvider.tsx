@@ -32,7 +32,7 @@ export const FireworksStoreProvider = ({ children }: StoreProps) => {
 const useFireworksStore = <T,>(selector: (state: FireworksStore) => T): T => {
   const fireworksStoreContext = useContext(FireworksStoreContext);
   if (!fireworksStoreContext)
-    throw new Error('usePlayerStore must be used within PlayerStoreProvider');
+    throw new Error('useFireworksStore must be used within PlayerStoreProvider');
 
   return useStore(fireworksStoreContext, selector);
 };

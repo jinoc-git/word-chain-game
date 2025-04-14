@@ -59,6 +59,7 @@ const EnterRoom = ({ user, joinSocketRoom }: Props) => {
         type="text"
         placeholder="방 코드 입력하기"
         size="md"
+        autoComplete="off"
         className="w-1/2"
       />
       <Button

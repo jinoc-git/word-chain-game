@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import _ from 'lodash';
 
-import EnterRoom from '@/components/loby/enterRoom/EnterRoom';
+import EnterRoom from '@/components/loby/playMulti/enterRoom/EnterRoom';
 import { mockStores } from '__test__/mocks/zustand-store';
 
 describe('EnterRoom', () => {
