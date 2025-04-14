@@ -38,7 +38,6 @@ const convertDueum = (char: string) => {
     if (isDueumMoeumToIeung) {
       disassembleChar.choseong = 'ㅇ';
       const finalCharacter = assemble(Object.values(disassembleChar));
-      console.log(finalCharacter);
       return finalCharacter;
     }
 
