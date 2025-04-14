@@ -1,24 +1,60 @@
-import { DUEUM_LIST } from '@/constants/dueum';
+import { assemble, disassembleCompleteCharacter } from 'es-hangul';
+
+import {
+  DUEUM_MOEUM_NIEUN_TO_IEUNG,
+  DUEUM_MOEUM_RIEUL_TO_IEUNG,
+  DUEUM_MOEUM_RIEUL_TO_NIEUN,
+} from '@/constants/dueum';
 import { checkDictionary } from '@/lib/word';
 
-import type { DueumKey } from '@/constants/dueum';
+/**
+ * 글자가 두음 법칙이 적용되는 글자면 두음 법칙을 적용한 글자를 반환.
+ * 아닐 경우 글자 그대로 반환
+ */
+const convertDueum = (char: string) => {
+  const disassembleChar = disassembleCompleteCharacter(char);
+  const isNieun = disassembleChar?.choseong === 'ㄴ';
+  const isRieul = disassembleChar?.choseong === 'ㄹ';
 
-const checkDueum = (char: string): char is DueumKey => {
-  if (char in DUEUM_LIST) return true;
-  else return false;
+  if (isNieun) {
+    const isDueumMoeum = DUEUM_MOEUM_NIEUN_TO_IEUNG.includes(disassembleChar.jungseong);
+    if (isDueumMoeum) {
+      disassembleChar.choseong = 'ㅇ';
+      const finalCharacter = assemble(Object.values(disassembleChar));
+      return finalCharacter;
+    }
+
+    return char;
+  }
+
+  if (isRieul) {
+    const isDueumMoeumToNieun = DUEUM_MOEUM_RIEUL_TO_NIEUN.includes(disassembleChar.jungseong);
+    if (isDueumMoeumToNieun) {
+      disassembleChar.choseong = 'ㄴ';
+      const finalCharacter = assemble(Object.values(disassembleChar));
+      return finalCharacter;
+    }
+    const isDueumMoeumToIeung = DUEUM_MOEUM_RIEUL_TO_IEUNG.includes(disassembleChar.jungseong);
+    if (isDueumMoeumToIeung) {
+      disassembleChar.choseong = 'ㅇ';
+      const finalCharacter = assemble(Object.values(disassembleChar));
+      return finalCharacter;
+    }
+
+    return char;
+  }
+
+  return char;
 };
 
 const checkFirstCharacter = (before: string, now: string) => {
   const beforeCharacter = before.slice(-1);
   const nowCharacter = now.slice(0, 1);
 
-  if (checkDueum(beforeCharacter)) {
-    const dueumCharacter = DUEUM_LIST[beforeCharacter];
-    if (nowCharacter === dueumCharacter) return true;
-  }
-
   if (beforeCharacter === nowCharacter) return true;
-  else return false;
+  if (convertDueum(beforeCharacter) === nowCharacter) return true;
+
+  return false;
 };
 
 const checkOnlyKorean = (text: string) => {
