@@ -5,15 +5,34 @@ on:
     branches: -dev
 
 jobs:
-  vercel-build:
+  vercel-build-and-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.7.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      # - name: Cache pnpm
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.npm-global
+      #     key: ${{ runner.os }}-pnpm-cache
+      #     restore-keys: |
+      #       ${{ runner.os }}-pnpm-cache
+
       - name: Install dependencies (Production Only)
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Set environment variables
         run: |
@@ -31,8 +50,21 @@ jobs:
       - name: Debug Environment Variables
         run: env | grep NEXT_PUBLIC_
 
+      - name: Run tests
+        run: pnpm run test
+
+      - name: Check Test Success
+        if: success()
+        run: echo "✅ Test successful!"
+
+      - name: Fail on Test Error
+        if: failure()
+        run: |
+          echo "❌ Test failed!"
+          exit 1
+
       - name: Run Next.js Build (without Vercel)
-        run: npm run build
+        run: pnpm run build
 
       - name: Check Build Success
         if: success()
