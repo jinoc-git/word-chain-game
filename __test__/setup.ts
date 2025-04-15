@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
-import type { ReactNode } from 'react';
+
+import { type ReactNode } from 'react';
 
 import { mockStores } from './mocks/zustand-store';
 
@@ -63,4 +64,10 @@ vi.mock('@/providers/storeProvider/countStoreProvider', () => ({
   useCountState: vi.fn((selector) => selector(mockStores.count.state)),
   useCountActions: vi.fn((selector) => selector(mockStores.count.actions)),
   CountStoreProvider: ({ children }: { children: ReactNode }) => children,
+}));
+
+vi.mock('@/providers/storeProvider/fireworksStoreProvider', () => ({
+  useFireworksState: vi.fn((selector) => selector(mockStores.fireworks)),
+  useFireworksActions: vi.fn((selector) => selector(mockStores.fireworks.actions)),
+  FireworksStoreProvider: ({ children }: { children: ReactNode }) => children,
 }));

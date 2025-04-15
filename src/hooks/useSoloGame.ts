@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { AI_DEFEATED_FLAG } from '@/constants/aiDefeatedFlag';
-import { useFireworksActions } from '@/providers/storeProvider/fireworksProvider';
+import { useFireworksActions } from '@/providers/storeProvider/fireworksStoreProvider';
 import { useGameActions } from '@/providers/storeProvider/gameStoreProvider';
 import { useWordActions, useWordState } from '@/providers/storeProvider/wordStoreProvider';
 import { handleOpenAIResponse } from '@/utils/soloGame';

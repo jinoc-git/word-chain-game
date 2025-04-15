@@ -2,7 +2,7 @@ import React from 'react';
 
 import { AuthStoreProvider } from './authStoreProvider';
 import { CountStoreProvider } from './countStoreProvider';
-import { FireworksStoreProvider } from './fireworksProvider';
+import { FireworksStoreProvider } from './fireworksStoreProvider';
 import { GameStoreProvider } from './gameStoreProvider';
 import { PlayerStoreProvider } from './playerStoreProvider';
 import { WordStoreProvider } from './wordStoreProvider';
