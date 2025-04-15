@@ -16,7 +16,7 @@ describe('CreateRoom', () => {
 
     const router = useRouter();
     const user = userEvent.setup();
-    const makeRoomButton = screen.getByRole('button', { name: /방 만들기/i });
+    const makeRoomButton = screen.getByRole('button', { name: /방 만들기11/i });
     await user.click(makeRoomButton);
 
     expect(router.push).toHaveBeenCalledWith(`/game/multi/${createRoomId()}`);
