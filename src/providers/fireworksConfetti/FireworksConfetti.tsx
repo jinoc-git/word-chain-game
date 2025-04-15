@@ -4,7 +4,7 @@ import React from 'react';
 import Fireworks from 'react-canvas-confetti/dist/presets/fireworks';
 import type { TDecorateOptionsFn } from 'react-canvas-confetti/dist/types';
 
-import { useFireworksActions } from '../storeProvider/fireworksProvider';
+import { useFireworksActions } from '../storeProvider/fireworksStoreProvider';
 
 const FireworksConfetti = () => {
   const onInitHandler = useFireworksActions((actions) => actions.onInitHandler);
