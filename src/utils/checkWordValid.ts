@@ -7,41 +7,33 @@ import {
 } from '@/constants/dueum';
 import { checkDictionary } from '@/lib/word';
 
+type ConversionRule = { moeums: string[]; targetChoseong: 'ㅇ' | 'ㄴ' };
+const conversionRules: Record<string, Array<ConversionRule>> = {
+  ㄴ: [{ moeums: DUEUM_MOEUM_NIEUN_TO_IEUNG, targetChoseong: 'ㅇ' }],
+  ㄹ: [
+    { moeums: DUEUM_MOEUM_RIEUL_TO_NIEUN, targetChoseong: 'ㄴ' },
+    { moeums: DUEUM_MOEUM_RIEUL_TO_IEUNG, targetChoseong: 'ㅇ' },
+  ],
+};
+
 /**
  * 글자가 두음 법칙이 적용되는 글자면 두음 법칙을 적용한 글자를 반환.
  * 아닐 경우 글자 그대로 반환
  */
 const convertDueum = (char: string) => {
-  const disassembleChar = disassembleCompleteCharacter(char);
-  const isNieun = disassembleChar?.choseong === 'ㄴ';
-  const isRieul = disassembleChar?.choseong === 'ㄹ';
+  const disassembledChar = disassembleCompleteCharacter(char);
+  if (!disassembledChar) return char;
 
-  if (isNieun) {
-    const isDueumMoeum = DUEUM_MOEUM_NIEUN_TO_IEUNG.includes(disassembleChar.jungseong);
-    if (isDueumMoeum) {
-      disassembleChar.choseong = 'ㅇ';
-      const finalCharacter = assemble(Object.values(disassembleChar));
-      return finalCharacter;
+  const { choseong, jungseong } = disassembledChar;
+
+  const rules = conversionRules[choseong];
+  if (!rules) return char;
+
+  for (const rule of rules) {
+    if (rule.moeums.includes(jungseong)) {
+      disassembledChar.choseong = rule.targetChoseong;
+      return assemble(Object.values(disassembledChar));
     }
-
-    return char;
-  }
-
-  if (isRieul) {
-    const isDueumMoeumToNieun = DUEUM_MOEUM_RIEUL_TO_NIEUN.includes(disassembleChar.jungseong);
-    if (isDueumMoeumToNieun) {
-      disassembleChar.choseong = 'ㄴ';
-      const finalCharacter = assemble(Object.values(disassembleChar));
-      return finalCharacter;
-    }
-    const isDueumMoeumToIeung = DUEUM_MOEUM_RIEUL_TO_IEUNG.includes(disassembleChar.jungseong);
-    if (isDueumMoeumToIeung) {
-      disassembleChar.choseong = 'ㅇ';
-      const finalCharacter = assemble(Object.values(disassembleChar));
-      return finalCharacter;
-    }
-
-    return char;
   }
 
   return char;
