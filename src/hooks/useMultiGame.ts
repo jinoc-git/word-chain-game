@@ -1,4 +1,3 @@
-import React from 'react';
 import { toast } from 'react-toastify';
 
 import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
@@ -56,8 +55,6 @@ const useMultiGame = (roomId: string) => {
       }
     }
   };
-
-  React.useEffect;
 
   return { handleMultiGameState };
 };

@@ -18,9 +18,10 @@ const ControlMultiGame = () => {
   const isRoomChief = usePlayerActions((actions) => actions.isRoomChief);
   const { handleMultiGameState } = useMultiGame(gameId);
 
-  const handleGameStateButton = React.useCallback(async (state: boolean) => {
+  const handleGameStateButton = async (state: boolean) => {
+    if (!user) return;
     await handleMultiGameState(state);
-  }, []);
+  };
 
   const playerIsRoomChief = user !== null && isRoomChief(user);
 
