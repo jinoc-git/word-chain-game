@@ -5,9 +5,8 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 
 import { GAME_PLAYING_TEXT, GAME_WAITING_TEXT } from '@/constants/gameStateText';
-import useCountDown from '@/hooks/useCountDown';
-import useGame from '@/hooks/useGame';
 import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
+import { useCountState } from '@/providers/storeProvider/countStoreProvider';
 import { useGameState } from '@/providers/storeProvider/gameStoreProvider';
 import { usePlayerActions } from '@/providers/storeProvider/playerStoreProvider';
 
@@ -18,13 +17,11 @@ const ControlGame = () => {
 
   const user = useAuthState((state) => state.user);
   const isGameStarted = useGameState((state) => state.gameState);
-  const { handleGameState } = useGame(mode, gameId);
+  const { count, isActiveCount } = useCountState((state) => state);
   const isRoomChief = usePlayerActions((actions) => actions.isRoomChief);
 
-  const { count, isActiveCount } = useCountDown();
-
   const handleGameStateButton = React.useCallback(async (state: boolean) => {
-    await handleGameState(state);
+    // await handleGameState(state);
   }, []);
 
   const playerIsRoomChief = user !== null && isRoomChief(user);

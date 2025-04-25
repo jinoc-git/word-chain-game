@@ -1,10 +1,13 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 
 import { AI_DEFEATED_FLAG } from '@/constants/aiDefeatedFlag';
 import { useFireworksActions } from '@/providers/storeProvider/fireworksStoreProvider';
 import { useGameActions } from '@/providers/storeProvider/gameStoreProvider';
 import { useWordActions, useWordState } from '@/providers/storeProvider/wordStoreProvider';
 import { handleOpenAIResponse } from '@/utils/soloGame';
+
+import useGame from './useGame';
 
 const useSoloGame = (mode: string) => {
   const totalWordCount = useWordState((state) => state.totalWordCount);
@@ -32,10 +35,22 @@ const useSoloGame = (mode: string) => {
       pushNewWord(res);
     }
   };
+
+  const { setGameState, settingWords, handleCountDown } = useGame();
+
+  const handleGameState = (state: boolean) => {
+    try {
+      settingWords(state);
+      setGameState(state);
+      handleCountDown(state);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
+  };
+
+  return { handleGameState };
 };
 
 export default useSoloGame;
-
-// useGame으로 전체 핸들링
-// useSoloGame과 useMultiGame으로 각각 핸들링
-// useCountDown은 useGame에서

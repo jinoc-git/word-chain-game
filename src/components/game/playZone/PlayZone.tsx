@@ -6,7 +6,7 @@ import WordList from './wordList/WordList';
 
 const PlayZone = () => {
   return (
-    <section className="">
+    <section>
       <WordList />
       <EnterWord />
       <ControlGame />
