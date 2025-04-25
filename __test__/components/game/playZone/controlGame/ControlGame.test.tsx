@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useParams } from 'next/navigation';
 
-import ControlGame from '@/components/game/playZone/controlGame/ControlGame';
+import ControlGame from '@/components/game/playZone/controlGame/ControlMultiGame';
 
 describe('ControlGame when solo game', () => {
   beforeAll(() => {

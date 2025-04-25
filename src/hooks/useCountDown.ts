@@ -27,10 +27,10 @@ const useCountDown = () => {
     }
   }, [gameState, isWaitingTurn]);
 
-  const handleCountDown = (state: boolean) => {
+  const handleCountDown = React.useCallback((state: boolean) => {
     if (state) startCount();
     else endCount();
-  };
+  }, []);
 
   return { handleCountDown };
 };

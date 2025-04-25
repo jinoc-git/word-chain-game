@@ -9,11 +9,11 @@ import { handleOpenAIResponse } from '@/utils/soloGame';
 
 import useGame from './useGame';
 
-const useSoloGame = (mode: string) => {
+const useSoloGame = () => {
   const totalWordCount = useWordState((state) => state.totalWordCount);
 
   React.useEffect(() => {
-    if (mode === 'solo' && totalWordCount > 1 && totalWordCount % 2 === 0) {
+    if (totalWordCount > 1 && totalWordCount % 2 === 0) {
       playWithAI(getLastWord());
     }
   }, [totalWordCount]);
