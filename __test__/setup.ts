@@ -16,6 +16,7 @@ vi.mock('next/navigation', () => ({
     isFallback: false,
   }),
   useParams: vi.fn(),
+  usePathname: vi.fn(),
 }));
 
 vi.mock('@/utils/createRoomId', () => ({
