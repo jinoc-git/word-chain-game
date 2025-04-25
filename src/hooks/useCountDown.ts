@@ -4,7 +4,7 @@ import { useCountActions, useCountState } from '@/providers/storeProvider/countS
 import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
 
 const useCountDown = () => {
-  const { count, isActiveCount } = useCountState((state) => state);
+  const count = useCountState((state) => state.count);
   const { gameState, isWaitingTurn } = useGameState((state) => state);
 
   const { endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
@@ -27,7 +27,12 @@ const useCountDown = () => {
     }
   }, [gameState, isWaitingTurn]);
 
-  return { count, isActiveCount };
+  const handleCountDown = React.useCallback((state: boolean) => {
+    if (state) startCount();
+    else endCount();
+  }, []);
+
+  return { handleCountDown };
 };
 
 export default useCountDown;

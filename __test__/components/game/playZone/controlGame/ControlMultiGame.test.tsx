@@ -2,15 +2,15 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useParams } from 'next/navigation';
 
-import ControlGame from '@/components/game/playZone/controlGame/ControlGame';
+import ControlMultiGame from '@/components/game/playZone/controlGame/ControlMultiGame';
 
-describe('ControlGame when solo game', () => {
+describe('ControlMultiGame', () => {
   beforeAll(() => {
-    vi.mocked(useParams).mockReturnValue({ mode: 'solo', gameId: 'abcdef' });
+    vi.mocked(useParams).mockReturnValue({ gameId: 'abcdef' });
   });
 
   it('게임 시작, 종료 버튼 서로 토글되면서 disabled 되는지 ', async () => {
-    render(<ControlGame />);
+    render(<ControlMultiGame />);
 
     const startButton = screen.getByRole('button', { name: /게임 시작/i });
     expect(startButton).not.toBeDisabled();
@@ -38,7 +38,7 @@ describe('ControlGame when multi game', () => {
   });
 
   it('should render buttons', () => {
-    render(<ControlGame />);
+    render(<ControlMultiGame />);
 
     const startButton = screen.getByRole('button', { name: /게임 시작/i });
     const endButton = screen.getByRole('button', { name: /게임 종료/i });

@@ -4,12 +4,15 @@ import React from 'react';
 
 import { Button } from '@nextui-org/button';
 
+import { useGameState } from '@/providers/storeProvider/gameStoreProvider';
+
 interface Props {
-  isGameStarted: boolean;
-  handleGameStateButton: (state: boolean) => Promise<void>;
+  handleGameStateButton: (state: boolean) => void | Promise<void>;
 }
 
-const GameStateButtonArea = ({ isGameStarted, handleGameStateButton }: Props) => {
+const GameStateButtonArea = ({ handleGameStateButton }: Props) => {
+  const isGameStarted = useGameState((state) => state.gameState);
+
   return (
     <div className="flex justify-around w-full mt-[100px]">
       <Button
