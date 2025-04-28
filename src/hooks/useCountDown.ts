@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { useCountActions, useCountState } from '@/providers/storeProvider/countStoreProvider';
 import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
@@ -10,7 +10,7 @@ const useCountDown = () => {
   const { endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
   const { endCount, resetCount, startCount } = useCountActions((actions) => actions);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (count <= 0) {
       endGame();
       setIsWaitingTurn(true);
@@ -18,7 +18,7 @@ const useCountDown = () => {
     }
   }, [count]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (gameState) {
       resetCount();
       startCount();
@@ -27,7 +27,7 @@ const useCountDown = () => {
     }
   }, [gameState, isWaitingTurn]);
 
-  const handleCountDown = React.useCallback((state: boolean) => {
+  const handleCountDown = useCallback((state: boolean) => {
     if (state) startCount();
     else endCount();
   }, []);

@@ -1,4 +1,5 @@
-import { useCountActions } from '@/providers/storeProvider/countStoreProvider';
+import { useCallback } from 'react';
+
 import { useGameActions } from '@/providers/storeProvider/gameStoreProvider';
 import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 
@@ -23,13 +24,12 @@ import useCountDown from './useCountDown';
  * 컴포넌트 마운트 시 카운트다운 관련 사이드 이펙트를 등록합니다.
  */
 const useGame = () => {
-  useCountDown();
+  const { handleCountDown } = useCountDown();
 
   const { startGame, endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
   const { initRandomWord, resetWords } = useWordActions((actions) => actions);
-  const { startCount, endCount } = useCountActions((actions) => actions);
 
-  const setGameState = (state: boolean) => {
+  const setGameState = useCallback((state: boolean) => {
     if (state) {
       startGame();
       setIsWaitingTurn(false);
@@ -37,17 +37,12 @@ const useGame = () => {
       endGame();
       setIsWaitingTurn(true);
     }
-  };
+  }, []);
 
-  const settingWords = (state: boolean) => {
+  const settingWords = useCallback((state: boolean) => {
     if (state) initRandomWord();
     else resetWords();
-  };
-
-  const handleCountDown = (state: boolean) => {
-    if (state) startCount();
-    else endCount();
-  };
+  }, []);
 
   return { setGameState, settingWords, handleCountDown };
 };
