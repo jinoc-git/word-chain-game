@@ -3,12 +3,12 @@
 import React from 'react';
 
 import { GAME_PLAYING_TEXT, GAME_WAITING_TEXT } from '@/constants/gameStateText';
-import { useCountState } from '@/providers/storeProvider/countStoreProvider';
+import useCountDown from '@/hooks/useCountDown';
 import { useGameState } from '@/providers/storeProvider/gameStoreProvider';
 
 const GameStateArea = () => {
   const isGameStarted = useGameState((state) => state.gameState);
-  const count = useCountState((state) => state.count);
+  const { count } = useCountDown();
 
   return (
     <div className="w-full flex-box py-6 flex-col gap-2">
