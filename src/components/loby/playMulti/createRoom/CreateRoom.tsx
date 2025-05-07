@@ -7,29 +7,21 @@ import { useRouter } from 'next/navigation';
 
 import { createRoomId } from '@/utils/createRoomId';
 
-import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
 import type { UserType } from '@/types/auth.type';
-import type { DebouncedFuncLeading } from 'lodash';
 
 interface Props {
   user: UserType | null;
-  createSocketRoom: DebouncedFuncLeading<(args: CreateOrJoinSocketRoomArgs) => Promise<boolean>>;
 }
 
-const CreateRoom = ({ user, createSocketRoom }: Props) => {
+const CreateRoom = ({ user }: Props) => {
   const router = useRouter();
 
   const handleCreateRoom = async () => {
     if (!user) return;
     const roomId = createRoomId();
 
-    const isValidRoomId = await createSocketRoom({
-      roomId,
-      userId: user.id,
-      nickname: user.nickname,
-    });
-
-    if (isValidRoomId) router.push(`/game/multi/${roomId}`);
+    router.push(`/game/multi/${roomId}`);
+    // if (isValidRoomId)
     // else handleCreateRoom();
   };
 
