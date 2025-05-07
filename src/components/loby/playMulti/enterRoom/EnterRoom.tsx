@@ -11,19 +11,16 @@ import { useRouter } from 'next/navigation';
 
 import { EnterRoomSchema } from '@/schema/enterRoomSchema';
 
-import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
 import type { UserType } from '@/types/auth.type';
-import type { DebouncedFuncLeading } from 'lodash';
 import type { z } from 'zod';
 
 type EnterRoomInput = z.infer<typeof EnterRoomSchema>;
 
 interface Props {
   user: UserType | null;
-  joinSocketRoom: DebouncedFuncLeading<(args: CreateOrJoinSocketRoomArgs) => Promise<boolean>>;
 }
 
-const EnterRoom = ({ user, joinSocketRoom }: Props) => {
+const EnterRoom = ({ user }: Props) => {
   const router = useRouter();
 
   const {
@@ -42,14 +39,8 @@ const EnterRoom = ({ user, joinSocketRoom }: Props) => {
       return;
     }
 
-    const isValidRoomId = await joinSocketRoom({
-      roomId,
-      userId: user.id,
-      nickname: user.nickname,
-    });
-
-    if (isValidRoomId) router.push(`/game/multi/${roomId}`);
-    else setFocus('roomId');
+    // if (isValidRoomId) router.push(`/game/multi/${roomId}`);
+    // else setFocus('roomId');
   };
 
   return (
