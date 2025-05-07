@@ -39,7 +39,8 @@ const EnterRoom = ({ user }: Props) => {
       return;
     }
 
-    // if (isValidRoomId) router.push(`/game/multi/${roomId}`);
+    router.push(`/game/multi/${roomId}`);
+    // if (isValidRoomId)
     // else setFocus('roomId');
   };
 

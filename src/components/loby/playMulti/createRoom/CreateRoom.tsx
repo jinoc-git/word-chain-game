@@ -20,7 +20,8 @@ const CreateRoom = ({ user }: Props) => {
     if (!user) return;
     const roomId = createRoomId();
 
-    // if (isValidRoomId) router.push(`/game/multi/${roomId}`);
+    router.push(`/game/multi/${roomId}`);
+    // if (isValidRoomId)
     // else handleCreateRoom();
   };
 
