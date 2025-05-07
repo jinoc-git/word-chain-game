@@ -1,9 +1,6 @@
 import { createStore } from 'zustand/vanilla';
 
-import { socket } from '@/socket/socket';
-
 import type { UserType } from '@/types/auth.type';
-import type { Room } from '@/types/server.type';
 
 export type PlayerType = {
   socketId: string;
@@ -43,14 +40,8 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
       initPlayer: (players) => {
         set({ curPlayers: players });
       },
-      playerObserver: () => {
-        socket.on('updateUser', (room: Room) => {
-          set({ curPlayers: room.players });
-        });
-      },
+      playerObserver: () => {},
       quitGameAndOffObserver: (args) => {
-        socket.emit('quitGame', args);
-        socket.off('updateUser');
         set({ curPlayers: [] });
       },
       isRoomChief: (player) => {
