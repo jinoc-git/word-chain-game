@@ -1,9 +1,11 @@
 import ky from 'ky';
 
+import { OPENAI_ROUTE } from '@/constants/apiRoute';
+
 export const postWordToAIAndGetNextWord = async (lastWord: string) => {
   try {
     const res = await ky
-      .post<string | undefined>(window?.location?.origin + `/api/openai`, {
+      .post<string | undefined>(OPENAI_ROUTE, {
         json: { word: lastWord },
       })
       .json();

@@ -10,6 +10,7 @@ import ky from 'ky';
 import { useRouter } from 'next/navigation';
 import { uuid } from 'short-uuid';
 
+import { LOGIN_ROUTE } from '@/constants/apiRoute';
 import { useAuthActions } from '@/providers/storeProvider/authStoreProvider';
 import { loginFormSchema } from '@/schema/loginFormSchema';
 
@@ -37,7 +38,7 @@ const LoginForm = () => {
       nickname,
       id: uuid(),
     };
-    const res = await ky.post(window.location.origin + '/api/login', { json: { nickname } }).json();
+    const res = await ky.post(LOGIN_ROUTE, { json: { nickname } }).json();
     console.log(res);
     return;
     login(user);

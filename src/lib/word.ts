@@ -1,11 +1,13 @@
 import ky from 'ky';
 
+import { DICTIONARY_ROUTE } from '@/constants/apiRoute';
+
 import type { DictionaryApiResponse } from '@/types/dictionary.type';
 
 export const checkDictionary = async (enterWord: string) => {
   try {
     const result = await ky
-      .get<DictionaryApiResponse>(window?.location?.origin + '/api/dictionary', {
+      .get<DictionaryApiResponse>(DICTIONARY_ROUTE, {
         searchParams: { q: enterWord },
       })
       .json();
