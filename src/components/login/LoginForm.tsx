@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react';
+import ky from 'ky';
 import { useRouter } from 'next/navigation';
 import { uuid } from 'short-uuid';
 
@@ -36,7 +37,9 @@ const LoginForm = () => {
       nickname,
       id: uuid(),
     };
-
+    const res = await ky.post(window.location.origin + '/api/login', { json: { nickname } }).json();
+    console.log(res);
+    return;
     login(user);
 
     router.push('/loby');
