@@ -372,3 +372,5 @@ export const Constants = {
     Enums: {},
   },
 } as const;
+
+export type Player = Database['public']['Tables']['players']['Row'];

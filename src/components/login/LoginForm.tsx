@@ -14,6 +14,7 @@ import { LOGIN_ROUTE } from '@/constants/apiRoute';
 import { useAuthActions } from '@/providers/storeProvider/authStoreProvider';
 import { loginFormSchema } from '@/schema/loginFormSchema';
 
+import type { LoginResponse } from '@/app/api/login/route';
 import type { UserType } from '@/types/auth.type';
 import type { z } from 'zod';
 
@@ -38,12 +39,13 @@ const LoginForm = () => {
       nickname,
       id: uuid(),
     };
-    const res = await ky.post(LOGIN_ROUTE, { json: { nickname } }).json();
-    console.log(res);
-    return;
-    login(user);
+    const res = await ky.post<LoginResponse>(LOGIN_ROUTE, { json: { nickname } }).json();
 
-    router.push('/loby');
+    if (res.success) {
+      login(user);
+
+      router.push('/loby');
+    }
   };
 
   return (
