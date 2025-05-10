@@ -6,15 +6,12 @@ import { useForm } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Card, CardBody, CardHeader, Input } from '@nextui-org/react';
-import ky from 'ky';
 import { useRouter } from 'next/navigation';
-import { uuid } from 'short-uuid';
 
-import { LOGIN_ROUTE } from '@/constants/apiRoute';
+import { loginWithSupabase } from '@/lib/login';
 import { useAuthActions } from '@/providers/storeProvider/authStoreProvider';
 import { loginFormSchema } from '@/schema/loginFormSchema';
 
-import type { LoginResponse } from '@/app/api/login/route';
 import type { UserType } from '@/types/auth.type';
 import type { z } from 'zod';
 
@@ -35,13 +32,14 @@ const LoginForm = () => {
   });
 
   const onSubmit: SubmitHandler<LoginFormInput> = async ({ nickname }) => {
-    const user: UserType = {
-      nickname,
-      id: uuid(),
-    };
-    const res = await ky.post<LoginResponse>(LOGIN_ROUTE, { json: { nickname } }).json();
+    const res = await loginWithSupabase(nickname);
 
     if (res.success) {
+      const user: UserType = {
+        nickname,
+        id: res.sessionId,
+      };
+
       login(user);
 
       router.push('/loby');
