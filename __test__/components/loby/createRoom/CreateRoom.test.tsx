@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/navigation';
 
 import CreateRoom from '@/components/loby/playMulti/createRoom/CreateRoom';
-import { createRoomId } from '@/utils/createRoomId';
+import { createRoomId } from '@/utils/room/createRoomId';
 
 import type { UserType } from '@/types/auth.type';
 

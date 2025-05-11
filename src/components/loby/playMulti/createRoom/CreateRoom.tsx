@@ -5,7 +5,7 @@ import React from 'react';
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
 
-import { createRoomId } from '@/utils/createRoomId';
+import { createRoomId } from '@/utils/room/createRoomId';
 
 import type { UserType } from '@/types/auth.type';
 
