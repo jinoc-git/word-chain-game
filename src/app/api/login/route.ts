@@ -24,7 +24,7 @@ export const POST = async (request: NextRequest) => {
     },
   });
 
-  const mock = { nickname, session_id: sessionId };
+  const user = { nickname, session_id: sessionId };
 
   const { data: player } = await supabase
     .from('players')
@@ -39,7 +39,7 @@ export const POST = async (request: NextRequest) => {
       player,
     });
   } else {
-    const { data: newPlayer } = await supabase.from('players').insert([mock]).select().single();
+    const { data: newPlayer } = await supabase.from('players').insert([user]).select().single();
 
     if (newPlayer) {
       return NextResponse.json({
@@ -51,7 +51,7 @@ export const POST = async (request: NextRequest) => {
       return NextResponse.json({
         success: false,
         sessionId,
-        player: null,
+        player: newPlayer,
       });
     }
   }

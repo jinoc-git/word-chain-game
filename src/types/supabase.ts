@@ -368,3 +368,5 @@ export const Constants = {
 } as const;
 
 export type Player = Database['public']['Tables']['players']['Row'];
+export type Room = Database['public']['Tables']['rooms']['Row'];
+export type InsertRoom = Database['public']['Tables']['rooms']['Insert'];
