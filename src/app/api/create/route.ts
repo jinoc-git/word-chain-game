@@ -28,18 +28,18 @@ export const POST = async (request: NextRequest) => {
     max_players: MAX_PLAYERS,
   };
 
-  const { data, error } = await insertRoom(newRoom);
+  const { data: room, error } = await insertRoom(newRoom);
 
   if (error) {
     return NextResponse.json({
       success: false,
-      room: data,
+      room,
     });
   }
 
   return NextResponse.json({
     success: true,
-    room: data,
+    room,
   });
 };
 
