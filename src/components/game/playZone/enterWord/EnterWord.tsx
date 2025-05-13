@@ -11,7 +11,7 @@ import useShakeAnimate from '@/hooks/useShakeAnimate';
 import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
 import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 import { enterWordSchema } from '@/schema/enterWordSchema';
-import { checkWordIsValid } from '@/utils/checkWordValid';
+import { checkWordIsValid } from '@/utils/word/checkWordValid';
 
 import type { z } from 'zod';
 

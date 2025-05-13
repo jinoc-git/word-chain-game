@@ -4,8 +4,12 @@ import { LOGIN_ROUTE } from '@/constants/apiRoute';
 
 import type { LoginResponse } from '@/app/api/login/route';
 
-export const loginWithSupabase = async (nickname: string) => {
-  const res = await ky.post<LoginResponse>(LOGIN_ROUTE, { json: { nickname } }).json();
+export type loginWithSupabaseArgs = {
+  nickname: string;
+};
+
+export const loginWithSupabase = async (args: loginWithSupabaseArgs) => {
+  const res = await ky.post<LoginResponse>(LOGIN_ROUTE, { json: args }).json();
 
   return res;
 };

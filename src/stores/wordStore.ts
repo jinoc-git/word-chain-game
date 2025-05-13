@@ -1,6 +1,6 @@
 import { createStore } from 'zustand/vanilla';
 
-import { getRandomFirstWord } from '@/utils/getRandomFirstWord';
+import { getRandomFirstWord } from '@/utils/word/getRandomFirstWord';
 
 export type WordStoreState = {
   totalWordCount: number;

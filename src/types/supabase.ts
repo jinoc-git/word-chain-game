@@ -101,7 +101,6 @@ export type Database = {
           joined_at: string;
           player_id: string;
           room_id: string;
-          score: number;
           turn_order: number;
           updated_at: string;
         };
@@ -111,7 +110,6 @@ export type Database = {
           joined_at?: string;
           player_id: string;
           room_id: string;
-          score?: number;
           turn_order: number;
           updated_at?: string;
         };
@@ -121,7 +119,6 @@ export type Database = {
           joined_at?: string;
           player_id?: string;
           room_id?: string;
-          score?: number;
           turn_order?: number;
           updated_at?: string;
         };
@@ -146,8 +143,7 @@ export type Database = {
         Row: {
           created_at: string;
           current_player_id: string | null;
-          current_round: number | null;
-          current_word: string | null;
+          current_word: string[] | null;
           host_player_id: string;
           id: string;
           max_players: number;
@@ -159,8 +155,7 @@ export type Database = {
         Insert: {
           created_at?: string;
           current_player_id?: string | null;
-          current_round?: number | null;
-          current_word?: string | null;
+          current_word?: string[] | null;
           host_player_id: string;
           id?: string;
           max_players?: number;
@@ -172,8 +167,7 @@ export type Database = {
         Update: {
           created_at?: string;
           current_player_id?: string | null;
-          current_round?: number | null;
-          current_word?: string | null;
+          current_word?: string[] | null;
           host_player_id?: string;
           id?: string;
           max_players?: number;
@@ -374,3 +368,5 @@ export const Constants = {
 } as const;
 
 export type Player = Database['public']['Tables']['players']['Row'];
+export type Room = Database['public']['Tables']['rooms']['Row'];
+export type InsertRoom = Database['public']['Tables']['rooms']['Insert'];
