@@ -11,7 +11,8 @@ export const setSessionId = (key: string) => {
       path: '/',
       maxAge: 60 * 60 * 24,
       sameSite: 'strict',
-      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      secure: true,
     });
   }
 

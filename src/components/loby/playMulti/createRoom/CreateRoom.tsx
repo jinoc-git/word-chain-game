@@ -30,7 +30,7 @@ const CreateRoom = ({ user }: Props) => {
     const res = await createRoom(newRoom);
 
     if (res.success) {
-      router.push(`/game/multi/${res.room?.room_code}`);
+      router.push(`/game/multi/${res.room.room_code}`);
     } else {
       toast.error('방 생성에 실패했습니다.');
     }
