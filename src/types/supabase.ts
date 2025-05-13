@@ -166,8 +166,8 @@ export type Database = {
         };
         Update: {
           created_at?: string;
-          current_player_id?: string[] | null;
-          current_word?: string | null;
+          current_player_id?: string | null;
+          current_word?: string[] | null;
           host_player_id?: string;
           id?: string;
           max_players?: number;

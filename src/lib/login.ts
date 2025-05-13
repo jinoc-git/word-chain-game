@@ -8,8 +8,8 @@ export type loginWithSupabaseArgs = {
   nickname: string;
 };
 
-export const loginWithSupabase = async (nickname: loginWithSupabaseArgs) => {
-  const res = await ky.post<LoginResponse>(LOGIN_ROUTE, { json: nickname }).json();
+export const loginWithSupabase = async (args: loginWithSupabaseArgs) => {
+  const res = await ky.post<LoginResponse>(LOGIN_ROUTE, { json: args }).json();
 
   return res;
 };
