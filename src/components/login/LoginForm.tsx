@@ -34,7 +34,7 @@ const LoginForm = () => {
   const onSubmit: SubmitHandler<LoginFormInput> = async ({ nickname }) => {
     const res = await loginWithSupabase({ nickname });
 
-    if (res.success && res.player) {
+    if (res.success) {
       const user: UserType = {
         nickname,
         id: res.player.id,

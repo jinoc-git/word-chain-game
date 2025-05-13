@@ -8,10 +8,15 @@ import type { NextRequest } from 'next/server';
 
 const MAX_PLAYERS = 6;
 
-export type CreateRoomResponse = {
-  success: boolean;
-  room: Room | null;
-};
+export type CreateRoomResponse =
+  | {
+      success: true;
+      room: Room;
+    }
+  | {
+      success: false;
+      room: null;
+    };
 
 export const POST = async (request: NextRequest) => {
   const { nickname, hostId, roomId }: CreateRoomArgs = await request.json();
