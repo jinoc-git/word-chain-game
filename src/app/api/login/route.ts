@@ -52,19 +52,18 @@ export const POST = async (request: NextRequest) => {
     });
   } else {
     const { data: newPlayer } = await supabase.from('players').insert([user]).select().single();
-
     if (newPlayer) {
       return NextResponse.json({
         success: true,
         sessionId,
         player: newPlayer,
       });
-    } else {
-      return NextResponse.json({
-        success: false,
-        sessionId,
-        player: newPlayer,
-      });
     }
   }
+
+  return NextResponse.json({
+    success: false,
+    sessionId,
+    player: null,
+  });
 };
