@@ -39,10 +39,16 @@ export const POST = async (request: NextRequest) => {
     .single();
 
   if (player) {
+    const { data: updatedPlayer } = await supabase
+      .from('players')
+      .update({ nickname })
+      .eq('session_id', sessionId)
+      .select()
+      .single();
     return NextResponse.json({
       success: true,
       sessionId,
-      player,
+      player: updatedPlayer,
     });
   } else {
     const { data: newPlayer } = await supabase.from('players').insert([user]).select().single();
@@ -62,3 +68,54 @@ export const POST = async (request: NextRequest) => {
     }
   }
 };
+
+// const supabase = createClient(
+//   process.env.NEXT_PUBLIC_SUPABASE_URL!,
+//   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+//   {
+//     global: {
+//       headers: {
+//         'X-Session-Id': sessionId,
+//       },
+//     },
+//   },
+// );
+
+// // 플레이어 찾기 또는 생성
+// let playerId: string;
+// const { data: existingPlayer } = await supabase
+//   .from('players')
+//   .select('id')
+//   .eq('session_id', sessionId)
+//   .maybeSingle();
+
+// if (existingPlayer) {
+//   playerId = existingPlayer.id;
+
+//   // 플레이어 정보 업데이트
+//   await supabase
+//     .from('players')
+//     .update({
+//       nickname,
+//       is_online: true,
+//       last_activity: new Date().toISOString(),
+//     })
+//     .eq('id', playerId);
+// } else {
+//   // 새 플레이어 생성
+//   const { data: newPlayer, error: playerError } = await supabase
+//     .from('players')
+//     .insert({
+//       nickname,
+//       session_id: sessionId,
+//       is_online: true,
+//     })
+//     .select('id')
+//     .single();
+
+//   if (playerError || !newPlayer) {
+//     return NextResponse.json({ error: '플레이어 생성 실패' }, { status: 500 });
+//   }
+
+//   playerId = newPlayer.id;
+// }
