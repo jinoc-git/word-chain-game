@@ -2,18 +2,34 @@ name: Vercel Build Check
 
 on:
   pull_request:
-    branches: -dev
+    branches:
+      - dev
 
 jobs:
-  vercel-build:
+  vercel-build-and-test:
     runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+      contents: read
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.7.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
       - name: Install dependencies (Production Only)
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Set environment variables
         run: |
@@ -24,23 +40,65 @@ jobs:
           echo "NEXT_PUBLIC_FB_MESSAGING=${{ secrets.NEXT_PUBLIC_FB_MESSAGING }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_FB_APP_ID=${{ secrets.NEXT_PUBLIC_FB_APP_ID }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_FB_MEASUREMENT=${{ secrets.NEXT_PUBLIC_FB_MEASUREMENT }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_NAVER_CLIENT_ID=${{ secrets.NEXT_PUBLIC_NAVER_CLIENT_ID }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_NAVER_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_NAVER_CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_DICTIONARY_API_KEY=${{ secrets.NEXT_PUBLIC_DICTIONARY_API_KEY }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_GAME_CHAIN_SERVER=${{ secrets.NEXT_PUBLIC_GAME_CHAIN_SERVER }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_OPENAI_KEY=${{ secrets.OPENAI_KEY }}" >> $GITHUB_ENV
+          echo "OPENAI_KEY=${{ secrets.OPENAI_KEY }}" >> $GITHUB_ENV
 
       - name: Debug Environment Variables
         run: env | grep NEXT_PUBLIC_
 
-      - name: Run Next.js Build (without Vercel)
-        run: npm run build
+      - name: Run tests
+        id: run-tests
+        run: pnpm run test
 
-      - name: Check Build Success
-        if: success()
-        run: echo "✅ Build successful!"
+      - name: Report Test Result
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const outcome = '${{ steps.run-tests.outcome }}';
+            const message = outcome === 'success' 
+              ? '✅ 테스트가 성공'
+              : '❌ 테스트가 실패!';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+
+      - name: Fail on Test Error
+        if: steps.run-tests.outcome != 'success'
+        run: |
+          echo "❌ 테스트가 실패했습니다!"
+          exit 1
+
+      - name: Run Next.js Build (without Vercel)
+        id: build
+        run: pnpm run build
+
+      - name: Report Build Result
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const outcome = '${{ steps.build.outcome }}';
+            const message = outcome === 'success' 
+              ? '✅ 빌드 성공!'
+              : '❌ 빌드 실패!';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
 
       - name: Fail on Build Error
-        if: failure()
+        if: steps.build.outcome != 'success'
         run: |
-          echo "❌ Build failed!"
+          echo "❌ 빌드 실패!"
           exit 1

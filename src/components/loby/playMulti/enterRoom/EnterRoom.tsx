@@ -11,19 +11,16 @@ import { useRouter } from 'next/navigation';
 
 import { EnterRoomSchema } from '@/schema/enterRoomSchema';
 
-import type { CreateOrJoinSocketRoomArgs } from '@/hooks/useSocket';
 import type { UserType } from '@/types/auth.type';
-import type { DebouncedFuncLeading } from 'lodash';
 import type { z } from 'zod';
 
 type EnterRoomInput = z.infer<typeof EnterRoomSchema>;
 
 interface Props {
   user: UserType | null;
-  joinSocketRoom: DebouncedFuncLeading<(args: CreateOrJoinSocketRoomArgs) => Promise<boolean>>;
 }
 
-const EnterRoom = ({ user, joinSocketRoom }: Props) => {
+const EnterRoom = ({ user }: Props) => {
   const router = useRouter();
 
   const {
@@ -42,14 +39,9 @@ const EnterRoom = ({ user, joinSocketRoom }: Props) => {
       return;
     }
 
-    const isValidRoomId = await joinSocketRoom({
-      roomId,
-      userId: user.id,
-      nickname: user.nickname,
-    });
-
-    if (isValidRoomId) router.push(`/game/multi/${roomId}`);
-    else setFocus('roomId');
+    router.push(`/game/multi/${roomId}`);
+    // if (isValidRoomId)
+    // else setFocus('roomId');
   };
 
   return (
@@ -59,6 +51,7 @@ const EnterRoom = ({ user, joinSocketRoom }: Props) => {
         type="text"
         placeholder="방 코드 입력하기"
         size="md"
+        autoComplete="off"
         className="w-1/2"
       />
       <Button

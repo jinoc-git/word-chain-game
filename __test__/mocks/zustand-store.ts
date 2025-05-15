@@ -60,4 +60,11 @@ export const mockStores = {
       _clearTimeout: vi.fn(),
     },
   },
+  fireworks: {
+    controller: null,
+    actions: {
+      onInitHandler: vi.fn(),
+      onShoot: vi.fn(),
+    },
+  },
 };

@@ -1,7 +1,7 @@
 import { AI_DEFEATED_FLAG } from '@/constants/aiDefeatedFlag';
 import { postWordToAIAndGetNextWord } from '@/lib/openai';
 
-import { checkWordIsValid } from './checkWordValid';
+import { checkWordIsValid } from './word/checkWordValid';
 
 const checkFlag = (aiWord: string) => {
   return aiWord === AI_DEFEATED_FLAG ? true : false;

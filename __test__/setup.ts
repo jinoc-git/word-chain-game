@@ -1,7 +1,13 @@
 import '@testing-library/jest-dom';
-import type { ReactNode } from 'react';
 
+import { type ReactNode } from 'react';
+
+import { server } from './mocks/server';
 import { mockStores } from './mocks/zustand-store';
+
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn().mockReturnValue({
@@ -15,15 +21,7 @@ vi.mock('next/navigation', () => ({
     isFallback: false,
   }),
   useParams: vi.fn(),
-}));
-
-vi.mock('@/utils/createRoomId', () => ({
-  createRoomId: vi.fn(() => 'ABCDEF'),
-}));
-
-vi.mock('@/hooks/useWord', () => ({
-  isValidWord: true,
-  enterWordAndCheck: vi.fn().mockReturnValue(true),
+  usePathname: vi.fn(),
 }));
 
 vi.mock('lodash', () => ({
@@ -34,6 +32,15 @@ vi.mock('lodash', () => ({
 }));
 
 vi.mock('zustand');
+
+vi.mock('@/utils/room/createRoomId', () => ({
+  createRoomId: vi.fn(() => 'ABCDEF'),
+}));
+
+vi.mock('@/hooks/useWord', () => ({
+  isValidWord: true,
+  enterWordAndCheck: vi.fn().mockReturnValue(true),
+}));
 
 vi.mock('@/providers/storeProvider/authStoreProvider', () => ({
   useAuthState: vi.fn((selector) => selector(mockStores.auth)),
@@ -63,4 +70,10 @@ vi.mock('@/providers/storeProvider/countStoreProvider', () => ({
   useCountState: vi.fn((selector) => selector(mockStores.count.state)),
   useCountActions: vi.fn((selector) => selector(mockStores.count.actions)),
   CountStoreProvider: ({ children }: { children: ReactNode }) => children,
+}));
+
+vi.mock('@/providers/storeProvider/fireworksStoreProvider', () => ({
+  useFireworksState: vi.fn((selector) => selector(mockStores.fireworks)),
+  useFireworksActions: vi.fn((selector) => selector(mockStores.fireworks.actions)),
+  FireworksStoreProvider: ({ children }: { children: ReactNode }) => children,
 }));

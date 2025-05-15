@@ -1,18 +1,25 @@
 import ky from 'ky';
 
-import type { ApiResponse } from '@/types/naver.type';
+import { DICTIONARY_ROUTE } from '@/constants/apiRoute';
 
-export const checkNaverDictionary = async (enterWord: string) => {
+import type { DictionaryApiResponse } from '@/types/dictionary.type';
+
+export const checkDictionary = async (enterWord: string) => {
   try {
-    const encodedWord = encodeURI(enterWord);
     const result = await ky
-      .get<ApiResponse>(window?.location?.origin + `/api/naver?query=${encodedWord}`)
+      .get<DictionaryApiResponse>(DICTIONARY_ROUTE, {
+        searchParams: { q: enterWord },
+      })
       .json();
 
-    if (Array.isArray(result.items) && result.items.length === 0) return false;
+    const item = result.channel?.item;
+
+    if (!item || (Array.isArray(item) && item.length === 0)) return false;
+    const onlyCharacter = item[0].word.replace(/\^|\-/g, '');
+    if (onlyCharacter !== enterWord) return false;
 
     return true;
   } catch (error) {
-    console.error(error);
+    if (error instanceof Error) console.log(error.message);
   }
 };
