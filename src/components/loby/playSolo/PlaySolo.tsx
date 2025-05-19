@@ -5,7 +5,7 @@ import React from 'react';
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
 
-import { createRoomId } from '@/utils/room/createRoomId';
+import { createRoomId } from '@/utils/room/room';
 
 const PlaySolo = () => {
   const router = useRouter();

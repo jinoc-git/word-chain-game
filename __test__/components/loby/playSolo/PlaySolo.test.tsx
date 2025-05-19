@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { useRouter } from 'next/navigation';
 
 import PlaySolo from '@/components/loby/playSolo/PlaySolo';
-import { createRoomId } from '@/utils/room/createRoomId';
+import { createRoomId } from '@/utils/room/room';
 
 describe('PlaySolo', () => {
   it('should change pathname when play solo button is clicked', async () => {
