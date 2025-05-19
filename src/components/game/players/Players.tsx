@@ -10,7 +10,7 @@ interface Props {
   gameId: string;
 }
 
-const Players = () => {
+const Players = ({ gameId }: Props) => {
   const curPlayers = usePlayerState((state) => state.curPlayers);
   const playerObserver = usePlayerActions((actions) => actions.playerObserver);
 
