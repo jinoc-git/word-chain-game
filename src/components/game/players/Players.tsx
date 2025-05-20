@@ -15,7 +15,7 @@ const Players = ({ gameId }: Props) => {
   const playerObserver = usePlayerActions((actions) => actions.playerObserver);
 
   React.useEffect(() => {
-    playerObserver();
+    playerObserver(gameId);
   }, []);
 
   return (
