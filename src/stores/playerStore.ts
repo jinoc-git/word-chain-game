@@ -1,6 +1,9 @@
 import { createStore } from 'zustand/vanilla';
 
+import { createClient } from '@/utils/supabase/client';
+
 import type { UserType } from '@/types/auth.type';
+import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
 export type PlayerType = {
   socketId: string;
@@ -8,6 +11,8 @@ export type PlayerType = {
   nickname: string;
   isRoomChief: boolean;
 };
+
+type ObserverCallbackArgs = RealtimePostgresChangesPayload<{}>;
 
 export type PlayerStoreState = {
   curPlayers: PlayerType[];
@@ -20,9 +25,10 @@ export type QuitGameArgs = {
 
 export type PlayerStoreActions = {
   initPlayer: (players: PlayerType[]) => void;
-  playerObserver: () => void;
+  playerObserver: (roomId: string) => void;
   quitGameAndOffObserver: (args: QuitGameArgs) => void;
   isRoomChief: (player: UserType) => boolean;
+  observerCallback: (payload: ObserverCallbackArgs) => void;
 };
 
 export type PlayerStore = PlayerStoreState & {
@@ -40,7 +46,25 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
       initPlayer: (players) => {
         set({ curPlayers: players });
       },
-      playerObserver: () => {},
+      observerCallback: (payload) => {
+        console.log(payload);
+      },
+      playerObserver: (roomId: string) => {
+        const supabase = createClient();
+        const channel = supabase
+          .channel('room_participants')
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'room_participants',
+              filter: `room_id=eq.${roomId}`,
+            },
+            get().actions.observerCallback,
+          )
+          .subscribe();
+      },
       quitGameAndOffObserver: (args) => {
         set({ curPlayers: [] });
       },

@@ -6,12 +6,16 @@ import { Chip } from '@nextui-org/react';
 
 import { usePlayerActions, usePlayerState } from '@/providers/storeProvider/playerStoreProvider';
 
-const Players = () => {
+interface Props {
+  gameId: string;
+}
+
+const Players = ({ gameId }: Props) => {
   const curPlayers = usePlayerState((state) => state.curPlayers);
   const playerObserver = usePlayerActions((actions) => actions.playerObserver);
 
   React.useEffect(() => {
-    playerObserver();
+    playerObserver(gameId);
   }, []);
 
   return (

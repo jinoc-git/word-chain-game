@@ -33,8 +33,9 @@ vi.mock('lodash', () => ({
 
 vi.mock('zustand');
 
-vi.mock('@/utils/room/createRoomId', () => ({
+vi.mock('@/utils/room/room', () => ({
   createRoomId: vi.fn(() => 'ABCDEF'),
+  checkRoomCode: vi.fn(() => true),
 }));
 
 vi.mock('@/hooks/useWord', () => ({

@@ -7,7 +7,7 @@ import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
 
 import { createRoom, type CreateRoomArgs } from '@/lib/createRoom';
-import { createRoomId } from '@/utils/room/createRoomId';
+import { createRoomId } from '@/utils/room/room';
 
 import type { UserType } from '@/types/auth.type';
 
