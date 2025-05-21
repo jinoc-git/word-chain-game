@@ -110,7 +110,7 @@ export type Database = {
           joined_at?: string;
           player_id: string;
           room_id: string;
-          turn_order: number;
+          turn_order?: number;
           updated_at?: string;
         };
         Update: {
