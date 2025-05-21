@@ -21,7 +21,7 @@ export type LoginResponse =
 export const POST = async (request: NextRequest) => {
   const { nickname } = await request.json();
 
-  const sessionId = setSessionId('session_id');
+  const sessionId = await setSessionId('session_id');
   const supabase = await createClient({
     global: {
       headers: {
