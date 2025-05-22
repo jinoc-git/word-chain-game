@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import short from 'short-uuid';
 
-export const setSessionId = (key: string) => {
+export const setSessionId = async (key: string) => {
   const cookieStore = cookies();
   let sessionId = cookieStore.get(key)?.value;
 
