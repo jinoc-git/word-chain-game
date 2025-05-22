@@ -27,6 +27,7 @@ const EnterRoom = ({ user }: Props) => {
     register,
     handleSubmit,
     setFocus,
+    setValue,
     formState: { errors, isValid },
   } = useForm<EnterRoomInput>({
     resolver: zodResolver(EnterRoomSchema),
@@ -52,7 +53,17 @@ const EnterRoom = ({ user }: Props) => {
         placeholder="방 코드 입력하기"
         size="md"
         autoComplete="off"
-        className="w-1/2"
+        className="w-1/2 uppercase-input"
+        minLength={6}
+        maxLength={6}
+        onValueChange={(val) => {
+          const en = /^[a-z]*$/i;
+          if (en.test(val)) {
+            setValue('roomId', val.toUpperCase(), {
+              shouldValidate: true,
+            });
+          }
+        }}
       />
       <Button
         type="submit"
