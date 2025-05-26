@@ -1,5 +1,6 @@
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+
+import { getCurrentPlayerId } from '@/utils/auth/aboutCookies';
 
 import type { JoinRoomArgs } from '@/lib/joinRoom';
 import type { NextRequest } from 'next/server';
@@ -7,27 +8,20 @@ import type { NextRequest } from 'next/server';
 export type JoinRoomResponse =
   | {
       success: true;
-      userId: string;
+      playerId: string;
     }
   | {
       success: false;
-      userId: undefined;
+      playerId: undefined;
     };
 
 export const POST = async (request: NextRequest) => {
   const { roomCode }: JoinRoomArgs = await request.json();
 
-  const userId = await getCurrentUserId();
-
+  const playerId = await getCurrentPlayerId();
+  console.log(playerId);
   return NextResponse.json({
     success: true,
-    userId: userId,
+    playerId,
   });
-};
-
-const getCurrentUserId = async () => {
-  const cookieStore = cookies();
-  const userId = cookieStore.get('wcg-user')?.value;
-
-  return userId;
 };

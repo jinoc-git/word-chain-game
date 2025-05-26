@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { setSessionId } from '@/utils/auth/setSessionId';
+import { setCurrentPlayer, setSessionId } from '@/utils/auth/aboutCookies';
 import { createClient } from '@/utils/supabase/server';
 
 import type { Player } from '@/types/supabase';
@@ -39,31 +39,45 @@ export const POST = async (request: NextRequest) => {
     .single();
 
   if (player) {
-    const { data: updatedPlayer } = await supabase
+    const { data: updatedPlayer, error } = await supabase
       .from('players')
       .update({ nickname })
       .eq('session_id', sessionId)
       .select()
       .single();
+    if (error) {
+      return NextResponse.json({
+        success: false,
+        sessionId,
+        player: null,
+      });
+    }
+
+    await setCurrentPlayer({ id: updatedPlayer.id, nickname: updatedPlayer.nickname });
     return NextResponse.json({
       success: true,
       sessionId,
       player: updatedPlayer,
     });
   } else {
-    const { data: newPlayer } = await supabase.from('players').insert([user]).select().single();
-    if (newPlayer) {
+    const { data: newPlayer, error } = await supabase
+      .from('players')
+      .insert([user])
+      .select()
+      .single();
+    if (error) {
       return NextResponse.json({
-        success: true,
+        success: false,
         sessionId,
-        player: newPlayer,
+        player: null,
       });
     }
-  }
 
-  return NextResponse.json({
-    success: false,
-    sessionId,
-    player: null,
-  });
+    await setCurrentPlayer({ id: newPlayer.id, nickname: newPlayer.nickname });
+    return NextResponse.json({
+      success: true,
+      sessionId,
+      player: newPlayer,
+    });
+  }
 };
