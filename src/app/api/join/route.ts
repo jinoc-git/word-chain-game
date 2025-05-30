@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 
-import { getCurrentPlayerId } from '@/utils/auth/aboutCookies';
-
 import type { JoinRoomArgs } from '@/lib/joinRoom';
 import type { NextRequest } from 'next/server';
 
@@ -16,9 +14,7 @@ export type JoinRoomResponse =
     };
 
 export const POST = async (request: NextRequest) => {
-  const { roomCode }: JoinRoomArgs = await request.json();
-
-  const playerId = await getCurrentPlayerId();
+  const { roomCode, playerId }: JoinRoomArgs = await request.json();
 
   if (playerId) {
     return NextResponse.json({

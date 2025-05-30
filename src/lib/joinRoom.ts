@@ -6,6 +6,7 @@ import type { JoinRoomResponse } from '@/app/api/join/route';
 
 export type JoinRoomArgs = {
   roomCode: string;
+  playerId: string;
 };
 
 export const joinRoom = async (args: JoinRoomArgs) => {
