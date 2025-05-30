@@ -11,7 +11,5 @@ export type loginWithSupabaseArgs = {
 export const loginWithSupabase = async (args: loginWithSupabaseArgs) => {
   const res = await ky.post<LoginResponse>(LOGIN_ROUTE, { json: args }).json();
 
-  // if (res.success) setCookie('wcg_user', res.player.id);
-
   return res;
 };

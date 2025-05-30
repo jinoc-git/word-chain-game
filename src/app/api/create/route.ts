@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { type CreateRoomArgs } from '@/lib/createRoom';
+import { type CreateRoomArgs } from '@/lib/apiRoute/createRoom';
 import { createClient } from '@/utils/supabase/server';
 
 import type { InsertRoom, Room } from '@/types/supabase';

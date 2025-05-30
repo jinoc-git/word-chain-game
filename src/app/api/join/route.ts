@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import type { JoinRoomArgs } from '@/lib/joinRoom';
+import type { JoinRoomArgs } from '@/lib/apiRoute/joinRoom';
 import type { NextRequest } from 'next/server';
 
 export type JoinRoomResponse =
