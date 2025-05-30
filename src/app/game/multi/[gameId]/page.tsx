@@ -20,7 +20,7 @@ const MultiGame = async ({ params }: Props) => {
 
   return (
     <>
-      <Players gameId={gameId} />
+      <Players gameId={gameId} res={res} />
       <PlayZone />
     </>
   );

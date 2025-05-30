@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { setCurrentPlayer, setSessionId } from '@/utils/auth/aboutCookies';
+import { setCurrentPlayerId, setSessionId } from '@/utils/auth/aboutCookies';
 import { createClient } from '@/utils/supabase/server';
 
 import type { Player } from '@/types/supabase';
@@ -53,7 +53,7 @@ export const POST = async (request: NextRequest) => {
       });
     }
 
-    await setCurrentPlayer({ id: updatedPlayer.id, nickname: updatedPlayer.nickname });
+    await setCurrentPlayerId(updatedPlayer.id);
     return NextResponse.json({
       success: true,
       sessionId,
@@ -73,7 +73,7 @@ export const POST = async (request: NextRequest) => {
       });
     }
 
-    await setCurrentPlayer({ id: newPlayer.id, nickname: newPlayer.nickname });
+    await setCurrentPlayerId(newPlayer.id);
     return NextResponse.json({
       success: true,
       sessionId,

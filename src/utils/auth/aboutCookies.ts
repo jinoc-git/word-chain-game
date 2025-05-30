@@ -3,8 +3,6 @@
 import { cookies } from 'next/headers';
 import short from 'short-uuid';
 
-import type { UserType } from '@/types/auth.type';
-
 export const setSessionId = async (key: string) => {
   const cookieStore = cookies();
   let sessionId = cookieStore.get(key)?.value;
@@ -25,15 +23,15 @@ export const setSessionId = async (key: string) => {
 
 export const getCurrentPlayerId = async () => {
   const cookieStore = cookies();
-  const userId = cookieStore.get('wcg-player')?.value;
+  const playerId = cookieStore.get('wcg-player')?.value;
+  if (!playerId) return null;
 
-  return userId;
+  return playerId;
 };
 
-export const setCurrentPlayer = async (player: UserType) => {
+export const setCurrentPlayerId = async (playerId: string) => {
   const cookieStore = cookies();
-  const val = `id=${player.id}&nickname=${player.nickname}`;
-  cookieStore.set('wcg-player', val, {
+  cookieStore.set('wcg-player', playerId, {
     path: '/',
     maxAge: 60 * 60 * 24,
     sameSite: 'strict',

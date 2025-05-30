@@ -6,11 +6,15 @@ import { Chip } from '@nextui-org/react';
 
 import { usePlayerActions, usePlayerState } from '@/providers/storeProvider/playerStoreProvider';
 
+import type { JoinRoomResponse } from '@/app/api/join/route';
+
 interface Props {
   gameId: string;
+  res: JoinRoomResponse;
 }
 
-const Players = ({ gameId }: Props) => {
+const Players = ({ gameId, res }: Props) => {
+  console.log(res);
   const curPlayers = usePlayerState((state) => state.curPlayers);
   const playerObserver = usePlayerActions((actions) => actions.playerObserver);
 

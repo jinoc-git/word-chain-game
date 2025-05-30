@@ -19,9 +19,15 @@ export const POST = async (request: NextRequest) => {
   const { roomCode }: JoinRoomArgs = await request.json();
 
   const playerId = await getCurrentPlayerId();
-  console.log(playerId);
+
+  if (playerId) {
+    return NextResponse.json({
+      success: true,
+      playerId,
+    });
+  }
   return NextResponse.json({
-    success: true,
+    success: false,
     playerId,
   });
 };

@@ -27,6 +27,7 @@ const EnterRoom = ({ user }: Props) => {
     register,
     handleSubmit,
     setFocus,
+    getValues,
     setValue,
     formState: { errors, isValid },
   } = useForm<EnterRoomInput>({
