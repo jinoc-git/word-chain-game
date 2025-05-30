@@ -6,7 +6,7 @@ describe('MultiGame', () => {
     vi.mocked(usePathname).mockReturnValue('/game/multi/ABCDEF');
     vi.mocked(useParams).mockReturnValue({ gameId: 'ABCDEF' });
     const params = Promise.resolve({ gameId: 'ABCDEF' });
-    const { default: MultiGamePage } = await import('@/app/game/multi/[gameId]/page');
+    const { default: MultiGamePage } = await import('@/app/game/multi/[roomId]/page');
     const page = await MultiGamePage({ params });
     render(page);
   };

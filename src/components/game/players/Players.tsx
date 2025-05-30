@@ -9,17 +9,17 @@ import { usePlayerActions, usePlayerState } from '@/providers/storeProvider/play
 import type { JoinRoomResponse } from '@/app/api/join/route';
 
 interface Props {
-  gameId: string;
+  roomId: string;
   res: JoinRoomResponse;
 }
 
-const Players = ({ gameId, res }: Props) => {
+const Players = ({ roomId, res }: Props) => {
   console.log(res);
   const curPlayers = usePlayerState((state) => state.curPlayers);
   const playerObserver = usePlayerActions((actions) => actions.playerObserver);
 
   React.useEffect(() => {
-    playerObserver(gameId);
+    playerObserver(roomId);
   }, []);
 
   return (

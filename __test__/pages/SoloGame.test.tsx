@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { useParams, usePathname } from 'next/navigation';
 
-import SoloGame from '@/app/game/solo/[gameId]/page';
+import SoloGame from '@/app/game/solo/[roomId]/page';
 
 describe('SoloGame', () => {
   it('should render', () => {

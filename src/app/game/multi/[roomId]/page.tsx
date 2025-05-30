@@ -9,21 +9,21 @@ import { getCurrentPlayerId } from '@/utils/auth/aboutCookies';
 import { checkRoomCode } from '@/utils/room/room';
 
 interface Props {
-  params: Promise<{ gameId: string }>;
+  params: Promise<{ roomId: string }>;
 }
 
 const MultiGame = async ({ params }: Props) => {
-  const { gameId } = await params;
-  if (!checkRoomCode(gameId)) redirect('/loby');
+  const { roomId } = await params;
+  if (!checkRoomCode(roomId)) redirect('/loby');
 
   const playerId = await getCurrentPlayerId();
   if (!playerId) redirect('/');
 
-  const res = await joinRoom({ roomCode: gameId, playerId });
+  const res = await joinRoom({ roomId, playerId });
 
   return (
     <>
-      <Players gameId={gameId} res={res} />
+      <Players roomId={roomId} res={res} />
       <PlayZone />
     </>
   );
