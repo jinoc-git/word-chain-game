@@ -26,8 +26,6 @@ const EnterRoom = ({ user }: Props) => {
   const {
     register,
     handleSubmit,
-    setFocus,
-    getValues,
     setValue,
     formState: { errors, isValid },
   } = useForm<EnterRoomInput>({
@@ -41,9 +39,8 @@ const EnterRoom = ({ user }: Props) => {
       return;
     }
 
-    router.push(`/game/multi/${roomId}`);
-    // if (isValidRoomId)
-    // else setFocus('roomId');
+    const upperCaseRoomId = roomId.toUpperCase();
+    router.push(`/game/multi/${upperCaseRoomId}`);
   };
 
   return (
@@ -57,14 +54,6 @@ const EnterRoom = ({ user }: Props) => {
         className="w-1/2 uppercase-input"
         minLength={6}
         maxLength={6}
-        onValueChange={(val) => {
-          const en = /^[a-z]*$/i;
-          if (en.test(val)) {
-            setValue('roomId', val.toUpperCase(), {
-              shouldValidate: true,
-            });
-          }
-        }}
       />
       <Button
         type="submit"
