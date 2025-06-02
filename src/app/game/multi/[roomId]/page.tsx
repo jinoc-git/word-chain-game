@@ -6,7 +6,7 @@ import Players from '@/components/game/players/Players';
 import PlayZone from '@/components/game/playZone/PlayZone';
 import { joinRoom } from '@/lib/apiRoute/joinRoom';
 import { getCurrentPlayerId } from '@/utils/auth/aboutCookies';
-import { checkRoomCode } from '@/utils/room/room';
+import { checkValidRoomIdChar } from '@/utils/room/room';
 
 interface Props {
   params: Promise<{ roomId: string }>;
@@ -14,7 +14,7 @@ interface Props {
 
 const MultiGame = async ({ params }: Props) => {
   const { roomId } = await params;
-  if (!checkRoomCode(roomId)) redirect('/loby');
+  if (!checkValidRoomIdChar(roomId)) redirect('/loby');
 
   const playerId = await getCurrentPlayerId();
   if (!playerId) redirect('/');

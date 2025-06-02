@@ -149,7 +149,7 @@ export type Database = {
           max_players: number;
           room_code: string;
           room_name: string;
-          status: string;
+          status: 'playing' | 'waiting' | 'full';
           updated_at: string;
         };
         Insert: {
@@ -161,7 +161,7 @@ export type Database = {
           max_players?: number;
           room_code: string;
           room_name: string;
-          status?: string;
+          status?: 'playing' | 'waiting' | 'full';
           updated_at?: string;
         };
         Update: {
@@ -173,7 +173,7 @@ export type Database = {
           max_players?: number;
           room_code?: string;
           room_name?: string;
-          status?: string;
+          status?: 'playing' | 'waiting' | 'full';
           updated_at?: string;
         };
         Relationships: [
