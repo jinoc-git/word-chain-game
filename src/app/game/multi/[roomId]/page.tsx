@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 
 import Players from '@/components/game/players/Players';
 import PlayZone from '@/components/game/playZone/PlayZone';
-import { joinRoom } from '@/lib/apiRoute/joinRoom';
 import { getCurrentPlayerId } from '@/utils/auth/aboutCookies';
 import { checkValidRoomIdChar } from '@/utils/room/room';
 
@@ -19,11 +18,9 @@ const MultiGame = async ({ params }: Props) => {
   const playerId = await getCurrentPlayerId();
   if (!playerId) redirect('/');
 
-  const res = await joinRoom({ roomId, playerId });
-
   return (
     <>
-      <Players roomId={roomId} res={res} />
+      <Players roomId={roomId} />
       <PlayZone />
     </>
   );

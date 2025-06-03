@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 
+import { joinRoom } from '@/lib/apiRoute/joinRoom';
 import { EnterRoomSchema } from '@/schema/enterRoomSchema';
 
 import type { UserType } from '@/types/auth.type';
@@ -40,6 +41,13 @@ const EnterRoom = ({ user }: Props) => {
     }
 
     const upperCaseRoomId = roomId.toUpperCase();
+
+    const { success, message } = await joinRoom({ roomId: upperCaseRoomId, playerId: user.id });
+    if (!success) {
+      toast.error(message);
+      return;
+    }
+
     router.push(`/game/multi/${upperCaseRoomId}`);
   };
 
