@@ -15,14 +15,23 @@ const Players = ({ roomId }: Props) => {
   const playerObserver = usePlayerActions((actions) => actions.playerObserver);
 
   React.useEffect(() => {
-    playerObserver(roomId);
+    const channel = playerObserver(roomId);
+    return () => {
+      channel.unsubscribe();
+    };
   }, []);
 
   return (
     <section className="w-full flex flex-wrap gap-2">
-      {curPlayers.map(({ nickname, userId }, idx) => {
+      {curPlayers.map(({ nickname, player_id }, idx) => {
         return (
-          <Chip key={`${idx + 1}player`} size="sm" radius="sm" color="primary" data-testid={userId}>
+          <Chip
+            key={`${idx + 1}player`}
+            size="sm"
+            radius="sm"
+            color="primary"
+            data-testid={player_id}
+          >
             {nickname}
           </Chip>
         );

@@ -11,7 +11,9 @@ export const addRoomParticipants = async (args: AddRoomParticipantsArgs) => {
 
   const { data, error } = await supabase
     .from('room_participants')
-    .insert({ player_id: playerId, room_id: roomId });
+    .insert({ player_id: playerId, room_code: roomId })
+    .select();
 
-  console.log(data);
+  console.log(error);
+  return data;
 };

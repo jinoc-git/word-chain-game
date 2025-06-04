@@ -3,6 +3,12 @@ import { render } from '@testing-library/react';
 import { mockingCookies, mockingParams, mockingPathname } from '__test__/utils';
 
 describe('MultiGame', () => {
+  beforeAll(() => {
+    vi.mock('@/lib/serverActions/addRoomParticipants', () => ({
+      addRoomParticipants: vi.fn(() => true),
+    }));
+  });
+
   const renderComponent = async () => {
     const mockRoomId = 'ABCDEF';
     mockingPathname(`/game/multi/${mockRoomId}`);

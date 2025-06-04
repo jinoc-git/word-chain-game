@@ -97,29 +97,32 @@ export type Database = {
       room_participants: {
         Row: {
           id: string;
-          is_active: boolean;
+          is_room_chief: boolean;
           joined_at: string;
           player_id: string;
-          room_id: string;
+          room_code: string;
           turn_order: number;
+          nickname: string;
           updated_at: string;
         };
         Insert: {
           id?: string;
-          is_active?: boolean;
+          is_room_chief?: boolean;
           joined_at?: string;
           player_id: string;
-          room_id: string;
+          room_code: string;
           turn_order?: number;
+          nickname?: string;
           updated_at?: string;
         };
         Update: {
           id?: string;
-          is_active?: boolean;
+          is_room_chief?: boolean;
           joined_at?: string;
           player_id?: string;
-          room_id?: string;
+          room_code?: string;
           turn_order?: number;
+          nickname?: string;
           updated_at?: string;
         };
         Relationships: [
@@ -370,3 +373,4 @@ export const Constants = {
 export type Player = Database['public']['Tables']['players']['Row'];
 export type Room = Database['public']['Tables']['rooms']['Row'];
 export type InsertRoom = Database['public']['Tables']['rooms']['Insert'];
+export type RoomParticipant = Database['public']['Tables']['room_participants']['Row'];
