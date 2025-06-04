@@ -36,8 +36,8 @@ export type QuitGameArgs = {
 };
 
 export type PlayerStoreActions = {
-  initPlayer: (players: RoomParticipant[]) => void;
-  playerObserver: (roomId: string) => RealtimeChannel;
+  initPlayer: (roomId: string) => Promise<void>;
+  playerObserver: (roomId: string) => Promise<RealtimeChannel>;
   quitGameAndOffObserver: (args: QuitGameArgs) => void;
   isRoomChief: (player: UserType) => boolean;
   observerCallback: (payload: ObserverCallbackArgs) => void;
@@ -55,15 +55,28 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
   return createStore<PlayerStore>()((set, get) => ({
     ...initState,
     actions: {
-      initPlayer: (players) => {
-        set({ curPlayers: players });
+      initPlayer: async (roomId: string) => {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from('room_participants')
+          .select('*')
+          .eq('room_code', roomId);
+
+        if (error) {
+          set({ curPlayers: [] });
+        } else {
+          set({ curPlayers: data });
+        }
       },
       observerCallback: (payload) => {
         // 변경사항 감지하여 추가해야함, 게임 나갔을 때 연결 끊고 row 삭제해야함
         console.log(payload);
         const newPlayer = payload.new;
       },
-      playerObserver: (roomId: string) => {
+      playerObserver: async (roomId: string) => {
+        const initPlayer = get().actions.initPlayer;
+        await initPlayer(roomId);
+
         const supabase = createClient();
         const channel = supabase
           .channel('room_participants')

@@ -6,6 +6,8 @@ import { Chip } from '@nextui-org/react';
 
 import { usePlayerActions, usePlayerState } from '@/providers/storeProvider/playerStoreProvider';
 
+import type { RealtimeChannel } from '@supabase/supabase-js';
+
 interface Props {
   roomId: string;
 }
@@ -15,9 +17,11 @@ const Players = ({ roomId }: Props) => {
   const playerObserver = usePlayerActions((actions) => actions.playerObserver);
 
   React.useEffect(() => {
-    const channel = playerObserver(roomId);
+    let channel: RealtimeChannel | null = null;
+    playerObserver(roomId).then((newChannel) => (channel = newChannel));
+
     return () => {
-      channel.unsubscribe();
+      if (channel) channel.unsubscribe();
     };
   }, []);
 

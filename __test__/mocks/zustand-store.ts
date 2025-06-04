@@ -17,7 +17,7 @@ export const mockStores = {
     curPlayers: mockPlayers,
     actions: {
       initPlayer: vi.fn(),
-      playerObserver: vi.fn(() => ({ unsubscribe: vi.fn() })),
+      playerObserver: vi.fn(() => Promise.resolve({ unsubscribe: vi.fn() })),
       quitGameAndOffObserver: vi.fn(),
       isRoomChief: vi.fn(() => true),
     },
