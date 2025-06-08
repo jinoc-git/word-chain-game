@@ -10,7 +10,15 @@ export type JoinRoomArgs = {
 };
 
 export const joinRoom = async (args: JoinRoomArgs) => {
-  const res = await ky.post<JoinRoomResponse>(JOIN_ROOM_ROUTE, { json: args }).json();
+  const res = await ky
+    .post<JoinRoomResponse>(JOIN_ROOM_ROUTE, {
+      json: args,
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-store',
+      },
+    })
+    .json();
 
   return res;
 };

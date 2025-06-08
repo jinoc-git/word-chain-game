@@ -14,15 +14,15 @@ const Logout = () => {
 
   const user = useAuthState((state) => state.user);
   const logout = useAuthActions((actions) => actions.logout);
-  const quitGameAndOffObserver = usePlayerActions((actions) => actions.quitGameAndOffObserver);
+  const quitRoom = usePlayerActions((actions) => actions.quitRoom);
 
   const router = useRouter();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     logout();
 
     if ('gameId' in params && typeof params.gameId === 'string' && user !== null) {
-      quitGameAndOffObserver({ roomId: params.gameId, userId: user.id });
+      await quitRoom({ userId: user.id });
     }
 
     router.push('/');

@@ -14,11 +14,14 @@ export const mockStores = {
     },
   },
   player: {
-    curPlayers: mockPlayers,
+    state: {
+      channel: { unsubscribe: vi.fn() },
+      curPlayers: mockPlayers,
+    },
     actions: {
       initPlayer: vi.fn(),
       playerObserver: vi.fn(() => Promise.resolve({ unsubscribe: vi.fn() })),
-      quitGameAndOffObserver: vi.fn(),
+      quitRoom: vi.fn(),
       isRoomChief: vi.fn(() => true),
     },
   },

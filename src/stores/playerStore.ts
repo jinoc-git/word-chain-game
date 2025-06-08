@@ -27,33 +27,35 @@ type ObserverCallbackArgs = RealtimePostgresChangesPayload<RoomParticipant>;
 // };
 
 export type PlayerStoreState = {
+  channel: null | RealtimeChannel;
   curPlayers: RoomParticipant[];
 };
 
-export type QuitGameArgs = {
-  roomId: string;
+export type QuitRoomArgs = {
   userId: string;
 };
 
 export type PlayerStoreActions = {
   initPlayer: (roomId: string) => Promise<void>;
-  playerObserver: (roomId: string) => Promise<RealtimeChannel>;
-  quitGameAndOffObserver: (args: QuitGameArgs) => void;
+  playerObserver: (roomId: string) => Promise<void>;
+  quitRoom: (args: QuitRoomArgs) => Promise<void>;
   isRoomChief: (player: UserType) => boolean;
   observerCallback: (payload: ObserverCallbackArgs) => void;
 };
 
-export type PlayerStore = PlayerStoreState & {
+export type PlayerStore = {
+  state: PlayerStoreState;
   actions: PlayerStoreActions;
 };
 
 const defaultInitState: PlayerStoreState = {
+  channel: null,
   curPlayers: [],
 };
 
 export const createPlayerStore = (initState: PlayerStoreState = defaultInitState) => {
   return createStore<PlayerStore>()((set, get) => ({
-    ...initState,
+    state: initState,
     actions: {
       initPlayer: async (roomId: string) => {
         const supabase = createClient();
@@ -61,17 +63,22 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
           .from('room_participants')
           .select('*')
           .eq('room_code', roomId);
-
+        console.log(error);
         if (error) {
-          set({ curPlayers: [] });
+          set(({ state }) => ({ state: { ...state, curPlayers: [] } }));
         } else {
-          set({ curPlayers: data });
+          console.log('result', data);
+          set(({ state }) => ({ state: { ...state, curPlayers: data } }));
         }
       },
       observerCallback: (payload) => {
-        // 변경사항 감지하여 추가해야함, 게임 나갔을 때 연결 끊고 row 삭제해야함
         console.log(payload);
-        const newPlayer = payload.new;
+        // 게임 나갔을 때 연결 끊고 row 삭제해야함
+        const players = get().state.curPlayers;
+        const newPlayer = payload?.new;
+        if (newPlayer && 'id' in newPlayer) players.push(newPlayer);
+
+        set(({ state }) => ({ state: { ...state, curPlayers: players } }));
       },
       playerObserver: async (roomId: string) => {
         const initPlayer = get().actions.initPlayer;
@@ -92,13 +99,16 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
           )
           .subscribe();
 
-        return channel;
+        set(({ state }) => ({ state: { ...state, channel } }));
       },
-      quitGameAndOffObserver: (args) => {
-        set({ curPlayers: [] });
+      quitRoom: async ({ userId }) => {
+        const supabase = createClient();
+        const { error } = await supabase.from('room_participants').delete().eq('player_id', userId);
+
+        set({ state: { channel: null, curPlayers: [] } });
       },
       isRoomChief: (player) => {
-        const curPlayers = get().curPlayers;
+        const curPlayers = get().state.curPlayers;
         const roomChief = curPlayers.find(({ is_room_chief }) => is_room_chief === true);
 
         return roomChief?.player_id === player.id;

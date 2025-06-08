@@ -23,14 +23,28 @@ export const POST = async (request: NextRequest) => {
   const room = await getRoomInfo({ roomId });
   const { success, message } = checkEnterRoom(room);
   if (success) {
-    return NextResponse.json({
-      success: true,
-      message,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        message,
+      },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        },
+      },
+    );
   }
 
-  return NextResponse.json({
-    success: false,
-    message,
-  });
+  return NextResponse.json(
+    {
+      success: false,
+      message,
+    },
+    {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      },
+    },
+  );
 };

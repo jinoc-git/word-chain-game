@@ -17,7 +17,7 @@ export const handlers = [
   http.post('https://localhost:3000/api/join', () => {
     const mockRes: JoinRoomResponse = {
       success: true,
-      playerId: '',
+      message: '',
     };
 
     return HttpResponse.json(mockRes);

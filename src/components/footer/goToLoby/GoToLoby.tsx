@@ -15,13 +15,13 @@ const GoToLoby = () => {
 
   const user = useAuthState((state) => state.user);
   const checkLogin = useAuthActions((actions) => actions.checkLogin);
-  const quitGameAndOffObserver = usePlayerActions((actions) => actions.quitGameAndOffObserver);
+  const quitRoom = usePlayerActions((actions) => actions.quitRoom);
 
-  const handleGoToLoby = () => {
+  const handleGoToLoby = async () => {
     if (checkLogin()) router.push('/loby');
 
     if ('gameId' in params && typeof params.gameId === 'string' && user !== null) {
-      quitGameAndOffObserver({ roomId: params.gameId, userId: user.id });
+      await quitRoom({ userId: user.id });
     }
   };
 
