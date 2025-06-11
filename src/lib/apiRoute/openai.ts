@@ -5,10 +5,10 @@ import { OPENAI_ROUTE } from '@/constants/apiRoute';
 export const postWordToAIAndGetNextWord = async (lastWord: string) => {
   try {
     const res = await ky
-      .post<string | undefined>(OPENAI_ROUTE, {
+      .post(OPENAI_ROUTE, {
         json: { word: lastWord },
       })
-      .json();
+      .json<string | undefined>();
 
     return res;
   } catch (error) {

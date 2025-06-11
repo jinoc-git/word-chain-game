@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
 
-import { createRoom, type CreateRoomArgs } from '@/lib/createRoom';
-import { createRoomId } from '@/utils/room/createRoomId';
+import { createRoom, type CreateRoomArgs } from '@/lib/apiRoute/createRoom';
+import { createRoomId } from '@/utils/room/room';
 
 import type { UserType } from '@/types/auth.type';
 

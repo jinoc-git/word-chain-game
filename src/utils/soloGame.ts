@@ -1,5 +1,5 @@
 import { AI_DEFEATED_FLAG } from '@/constants/aiDefeatedFlag';
-import { postWordToAIAndGetNextWord } from '@/lib/openai';
+import { postWordToAIAndGetNextWord } from '@/lib/apiRoute/openai';
 
 import { checkWordIsValid } from './word/checkWordValid';
 

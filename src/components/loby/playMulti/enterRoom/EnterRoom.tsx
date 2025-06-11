@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 
+import { joinRoom } from '@/lib/apiRoute/joinRoom';
 import { EnterRoomSchema } from '@/schema/enterRoomSchema';
 
 import type { UserType } from '@/types/auth.type';
@@ -26,7 +27,7 @@ const EnterRoom = ({ user }: Props) => {
   const {
     register,
     handleSubmit,
-    setFocus,
+    setValue,
     formState: { errors, isValid },
   } = useForm<EnterRoomInput>({
     resolver: zodResolver(EnterRoomSchema),
@@ -39,9 +40,15 @@ const EnterRoom = ({ user }: Props) => {
       return;
     }
 
-    router.push(`/game/multi/${roomId}`);
-    // if (isValidRoomId)
-    // else setFocus('roomId');
+    const upperCaseRoomId = roomId.toUpperCase();
+
+    const { success, message } = await joinRoom({ roomId: upperCaseRoomId, playerId: user.id });
+    if (!success) {
+      toast.error(message);
+      return;
+    }
+
+    router.push(`/game/multi/${upperCaseRoomId}`);
   };
 
   return (
@@ -52,7 +59,9 @@ const EnterRoom = ({ user }: Props) => {
         placeholder="방 코드 입력하기"
         size="md"
         autoComplete="off"
-        className="w-1/2"
+        className="w-1/2 uppercase-input"
+        minLength={6}
+        maxLength={6}
       />
       <Button
         type="submit"

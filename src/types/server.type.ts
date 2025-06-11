@@ -1,4 +1,4 @@
-import type { PlayerType } from '@/stores/playerStore';
+import type { RoomParticipant } from './supabase';
 
 export type HandleGameStateSocketArgs = {
   userId: string;
@@ -8,7 +8,7 @@ export type HandleGameStateSocketArgs = {
 
 export type Room = {
   state: boolean;
-  players: PlayerType[];
+  players: RoomParticipant[];
 };
 
 export type Rooms = Record<string, Room>;

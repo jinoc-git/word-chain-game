@@ -4,7 +4,7 @@ import Players from '@/components/game/players/Players';
 
 describe('Players', () => {
   beforeEach(async () => {
-    render(<Players />);
+    render(<Players roomId="ABCDEF" />);
   });
 
   afterAll(() => {

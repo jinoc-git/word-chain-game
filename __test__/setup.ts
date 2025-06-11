@@ -33,8 +33,13 @@ vi.mock('lodash', () => ({
 
 vi.mock('zustand');
 
-vi.mock('@/utils/room/createRoomId', () => ({
+vi.mock('next/headers', () => ({
+  cookies: vi.fn(),
+}));
+
+vi.mock('@/utils/room/room', () => ({
   createRoomId: vi.fn(() => 'ABCDEF'),
+  checkValidRoomIdChar: vi.fn(() => true),
 }));
 
 vi.mock('@/hooks/useWord', () => ({

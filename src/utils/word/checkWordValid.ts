@@ -5,7 +5,7 @@ import {
   DUEUM_MOEUM_RIEUL_TO_IEUNG,
   DUEUM_MOEUM_RIEUL_TO_NIEUN,
 } from '@/constants/dueum';
-import { checkDictionary } from '@/lib/word';
+import { checkDictionary } from '@/lib/apiRoute/word';
 
 type ConversionRule = { moeums: string[]; targetChoseong: 'ㅇ' | 'ㄴ' };
 const conversionRules: Record<string, Array<ConversionRule>> = {
