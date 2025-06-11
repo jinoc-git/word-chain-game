@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import short from 'short-uuid';
 
 export const setSessionId = async (key: string) => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   let sessionId = cookieStore.get(key)?.value;
 
   if (!sessionId) {
@@ -22,7 +22,7 @@ export const setSessionId = async (key: string) => {
 };
 
 export const getCurrentPlayerId = async () => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const playerId = cookieStore.get('wcg-player')?.value;
   if (!playerId) return null;
 
@@ -30,7 +30,7 @@ export const getCurrentPlayerId = async () => {
 };
 
 export const setCurrentPlayerId = async (playerId: string) => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   cookieStore.set('wcg-player', playerId, {
     path: '/',
     maxAge: 60 * 60 * 24,
