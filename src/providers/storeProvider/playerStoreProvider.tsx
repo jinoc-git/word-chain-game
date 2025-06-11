@@ -23,7 +23,7 @@ export const PlayerStoreProvider = ({ children }: StoreProps) => {
   );
 };
 
-export const usePlayerStore = <T,>(selector: (state: PlayerStore) => T): T => {
+const usePlayerStore = <T,>(selector: (state: PlayerStore) => T): T => {
   const playerStoreContext = useContext(PlayerStoreContext);
   if (!playerStoreContext)
     throw new Error('usePlayerStore must be used within PlayerStoreProvider');

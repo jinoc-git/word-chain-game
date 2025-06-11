@@ -63,7 +63,7 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
           .from('room_participants')
           .select('*')
           .eq('room_code', roomId);
-        console.log(error);
+
         if (error) {
           set(({ state }) => ({ state: { ...state, curPlayers: [] } }));
         } else {

@@ -25,7 +25,6 @@ const MultiGame = async ({ params }: Props) => {
   const success = await addRoomParticipants({ playerId, roomId });
   if (!success) redirect('/loby');
   // home 버튼으로 방을 나간 후 같은 방 들어왔을 때 정상적으로 players 정보를 불러오지 못함
-  // nextjs 15를 사용해야하나?
   console.log(success);
   return (
     <>
