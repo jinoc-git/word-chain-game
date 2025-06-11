@@ -7,10 +7,10 @@ import type { DictionaryApiResponse } from '@/types/dictionary.type';
 export const checkDictionary = async (enterWord: string) => {
   try {
     const result = await ky
-      .get<DictionaryApiResponse>(DICTIONARY_ROUTE, {
+      .get(DICTIONARY_ROUTE, {
         searchParams: { q: enterWord },
       })
-      .json();
+      .json<DictionaryApiResponse>();
 
     const item = result.channel?.item;
 

@@ -22,6 +22,7 @@ const Players = ({ roomId }: Props) => {
     playerObserver(roomId);
   }, []);
 
+  // 개선 필요
   const [flag, setFlag] = React.useState(false);
   React.useEffect(() => {
     return () => {
