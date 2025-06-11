@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { type CreateRoomArgs } from '@/lib/createRoom';
+import { type CreateRoomArgs } from '@/lib/apiRoute/createRoom';
 import { createClient } from '@/utils/supabase/server';
 
 import type { InsertRoom, Room } from '@/types/supabase';
@@ -29,7 +29,7 @@ export const POST = async (request: NextRequest) => {
   };
 
   const { data: room, error } = await insertRoom(newRoom);
-
+  // 방 생성 시 room_participants 추가 해야함
   if (error) {
     return NextResponse.json({
       success: false,

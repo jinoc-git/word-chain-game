@@ -7,3 +7,4 @@ export const LOGIN_ROUTE = '/api/login';
 export const OPENAI_ROUTE = '/api/openai';
 export const DICTIONARY_ROUTE = '/api/dictionary';
 export const CREATE_ROOM_ROUTE = prefix + '/api/create';
+export const JOIN_ROOM_ROUTE = prefix + '/api/join';

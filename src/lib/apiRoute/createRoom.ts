@@ -11,7 +11,7 @@ export type CreateRoomArgs = {
 };
 
 export const createRoom = async (args: CreateRoomArgs) => {
-  const res = await ky.post<CreateRoomResponse>(CREATE_ROOM_ROUTE, { json: args }).json();
+  const res = await ky.post(CREATE_ROOM_ROUTE, { json: args }).json<CreateRoomResponse>();
 
   return res;
 };

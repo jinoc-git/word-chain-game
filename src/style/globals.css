@@ -12,4 +12,7 @@
   .main-layout {
     @apply sm:w-2/3 md:w-1/2 lg:w-[400px];
   }
+  .uppercase-input input {
+    @apply uppercase;
+  }
 }

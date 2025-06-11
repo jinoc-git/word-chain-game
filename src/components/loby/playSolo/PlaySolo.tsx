@@ -9,7 +9,6 @@ import { createRoomId } from '@/utils/room/room';
 
 const PlaySolo = () => {
   const router = useRouter();
-  // const initPlayer = usePlayerActions((actions) => actions.initPlayer);
 
   const handlePlaySolo = async () => {
     const roomId = createRoomId();

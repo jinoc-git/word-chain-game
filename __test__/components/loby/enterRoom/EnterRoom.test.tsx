@@ -35,7 +35,8 @@ describe('EnterRoom', () => {
     await user.type(roomCodeInput, 'ABCDE');
     expect(enterRoomButton).toBeDisabled();
 
-    await user.type(roomCodeInput, 'ABCDEFG');
+    await user.clear(roomCodeInput);
+    await user.type(roomCodeInput, 'ㄱㄴㄷㄹㅁㅂ');
     expect(enterRoomButton).toBeDisabled();
   });
 });

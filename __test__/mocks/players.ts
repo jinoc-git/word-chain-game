@@ -1,22 +1,30 @@
 import { faker } from '@faker-js/faker';
 
-import type { PlayerType } from '@/stores/playerStore';
+import type { RoomParticipant } from '@/types/supabase';
 
-export const mockRoomChief: PlayerType = {
-  socketId: faker.string.nanoid(),
-  userId: faker.string.nanoid(),
+export const mockRoomChief: RoomParticipant = {
+  id: faker.string.nanoid(),
+  player_id: faker.string.nanoid(),
+  room_code: faker.string.nanoid(),
   nickname: faker.person.fullName(),
-  isRoomChief: true,
+  is_room_chief: true,
+  turn_order: 1,
+  joined_at: '',
+  updated_at: '',
 };
 
-export const mockPlayers: PlayerType[] = [
+export const mockPlayers: RoomParticipant[] = [
   mockRoomChief,
-  ...Array.from(Array(6), () => {
+  ...Array.from(Array(6), (_, idx) => {
     return {
-      socketId: faker.string.nanoid(),
-      userId: faker.string.nanoid(),
+      id: faker.string.nanoid(),
+      player_id: faker.string.nanoid(),
+      room_code: faker.string.nanoid(),
       nickname: faker.person.fullName(),
-      isRoomChief: false,
+      is_room_chief: false,
+      turn_order: idx + 1,
+      joined_at: '',
+      updated_at: '',
     };
   }),
 ];

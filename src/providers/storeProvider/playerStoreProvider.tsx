@@ -32,7 +32,7 @@ const usePlayerStore = <T,>(selector: (state: PlayerStore) => T): T => {
 };
 
 export const usePlayerState = <T,>(selector: (state: PlayerStoreState) => T): T => {
-  return usePlayerStore(selector);
+  return usePlayerStore(({ state }) => selector(state));
 };
 
 export const usePlayerActions = <T,>(selector: (state: PlayerStoreActions) => T): T => {

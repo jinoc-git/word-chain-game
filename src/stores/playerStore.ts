@@ -3,53 +3,87 @@ import { createStore } from 'zustand/vanilla';
 import { createClient } from '@/utils/supabase/client';
 
 import type { UserType } from '@/types/auth.type';
-import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+import type { RoomParticipant } from '@/types/supabase';
+import type { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
-export type PlayerType = {
-  socketId: string;
-  userId: string;
-  nickname: string;
-  isRoomChief: boolean;
-};
-
-type ObserverCallbackArgs = RealtimePostgresChangesPayload<{}>;
+type ObserverCallbackArgs = RealtimePostgresChangesPayload<RoomParticipant>;
+//  {
+//   commit_timestamp: '2025-06-04T10:41:09.434Z',
+//   errors: null,
+//   eventType: 'UPDATE',
+//   new: {
+//     id: '4de4b4c2-1607-415c-a9df-f7fbe8d91ae7',
+//     is_room_chief: false,
+//     joined_at: '2025-06-03T16:34:41.207248+00:00',
+//     nickname: '몰랑',
+//     player_id: '961aef8c-cd55-42db-92d3-4880ae4f1606',
+//     room_id: 'NVTUJY',
+//     turn_order: 1,
+//     updated_at: '2025-06-03T16:34:41.207248+00:00',
+//   },
+//   old: { id: '4de4b4c2-1607-415c-a9df-f7fbe8d91ae7' },
+//   schema: 'public',
+//   table: 'room_participants',
+// };
 
 export type PlayerStoreState = {
-  curPlayers: PlayerType[];
+  channel: null | RealtimeChannel;
+  curPlayers: RoomParticipant[];
 };
 
-export type QuitGameArgs = {
-  roomId: string;
+export type QuitRoomArgs = {
   userId: string;
 };
 
 export type PlayerStoreActions = {
-  initPlayer: (players: PlayerType[]) => void;
-  playerObserver: (roomId: string) => void;
-  quitGameAndOffObserver: (args: QuitGameArgs) => void;
+  initPlayer: (roomId: string) => Promise<void>;
+  playerObserver: (roomId: string) => Promise<void>;
+  quitRoom: (args: QuitRoomArgs) => Promise<void>;
   isRoomChief: (player: UserType) => boolean;
   observerCallback: (payload: ObserverCallbackArgs) => void;
 };
 
-export type PlayerStore = PlayerStoreState & {
+export type PlayerStore = {
+  state: PlayerStoreState;
   actions: PlayerStoreActions;
 };
 
 const defaultInitState: PlayerStoreState = {
+  channel: null,
   curPlayers: [],
 };
 
 export const createPlayerStore = (initState: PlayerStoreState = defaultInitState) => {
   return createStore<PlayerStore>()((set, get) => ({
-    ...initState,
+    state: initState,
     actions: {
-      initPlayer: (players) => {
-        set({ curPlayers: players });
+      initPlayer: async (roomId: string) => {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from('room_participants')
+          .select('*')
+          .eq('room_code', roomId);
+
+        if (error) {
+          set(({ state }) => ({ state: { ...state, curPlayers: [] } }));
+        } else {
+          console.log('result', data);
+          set(({ state }) => ({ state: { ...state, curPlayers: data } }));
+        }
       },
       observerCallback: (payload) => {
         console.log(payload);
+        // 게임 나갔을 때 연결 끊고 row 삭제해야함
+        const players = get().state.curPlayers;
+        const newPlayer = payload?.new;
+        if (newPlayer && 'id' in newPlayer) players.push(newPlayer);
+
+        set(({ state }) => ({ state: { ...state, curPlayers: players } }));
       },
-      playerObserver: (roomId: string) => {
+      playerObserver: async (roomId: string) => {
+        const initPlayer = get().actions.initPlayer;
+        await initPlayer(roomId);
+
         const supabase = createClient();
         const channel = supabase
           .channel('room_participants')
@@ -64,15 +98,20 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
             get().actions.observerCallback,
           )
           .subscribe();
+
+        set(({ state }) => ({ state: { ...state, channel } }));
       },
-      quitGameAndOffObserver: (args) => {
-        set({ curPlayers: [] });
+      quitRoom: async ({ userId }) => {
+        const supabase = createClient();
+        const { error } = await supabase.from('room_participants').delete().eq('player_id', userId);
+
+        set({ state: { channel: null, curPlayers: [] } });
       },
       isRoomChief: (player) => {
-        const curPlayers = get().curPlayers;
-        const roomChief = curPlayers.find(({ isRoomChief }) => isRoomChief === true);
+        const curPlayers = get().state.curPlayers;
+        const roomChief = curPlayers.find(({ is_room_chief }) => is_room_chief === true);
 
-        return roomChief?.userId === player.id;
+        return roomChief?.player_id === player.id;
       },
     },
   }));
