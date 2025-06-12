@@ -91,7 +91,7 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
               event: '*',
               schema: 'public',
               table: 'room_participants',
-              filter: `room_id=eq.${roomCode}`,
+              filter: `room_code=eq.${roomCode}`,
             },
             get().actions.observerCallback,
           )
