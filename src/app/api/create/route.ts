@@ -28,11 +28,11 @@ const errorResponse: CreateRoomResponse = {
 };
 
 export const POST = async (request: NextRequest) => {
-  const { nickname, hostId, roomId }: CreateRoomArgs = await request.json();
+  const { nickname, hostId, roomCode }: CreateRoomArgs = await request.json();
 
   const newRoom: InsertRoom = {
     host_player_id: hostId,
-    room_code: roomId,
+    room_code: roomCode,
     room_name: nickname,
     max_players: MAX_PLAYERS,
   };
@@ -42,11 +42,11 @@ export const POST = async (request: NextRequest) => {
 
   const { data: player, error: RoomParticipantError } = await addRoomParticipants({
     playerId: hostId,
-    roomId,
+    roomCode,
   });
 
   if (RoomParticipantError) {
-    const deleteRoomError = await deleteRoom(roomId);
+    const deleteRoomError = await deleteRoom(roomCode);
     if (deleteRoomError) console.error('방 삭제 실패');
     return NextResponse.json(errorResponse);
   }

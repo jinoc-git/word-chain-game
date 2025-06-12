@@ -7,7 +7,7 @@ import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
 
 import { createRoom, type CreateRoomArgs } from '@/lib/apiRoute/createRoom';
-import { createRoomId } from '@/utils/room/room';
+import { createRoomCode } from '@/utils/room/room';
 
 import type { UserType } from '@/types/auth.type';
 
@@ -24,7 +24,7 @@ const CreateRoom = ({ user }: Props) => {
     const newRoom: CreateRoomArgs = {
       nickname: user.nickname,
       hostId: user.id,
-      roomId: createRoomId(),
+      roomCode: createRoomCode(),
     };
 
     const res = await createRoom(newRoom);

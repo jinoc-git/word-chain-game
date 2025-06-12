@@ -38,8 +38,8 @@ vi.mock('next/headers', () => ({
 }));
 
 vi.mock('@/utils/room/room', () => ({
-  createRoomId: vi.fn(() => 'ABCDEF'),
-  checkValidRoomIdChar: vi.fn(() => true),
+  createRoomCode: vi.fn(() => 'ABCDEF'),
+  checkValidRoomCodeChar: vi.fn(() => true),
 }));
 
 vi.mock('@/hooks/useWord', () => ({

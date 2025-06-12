@@ -2,13 +2,13 @@ import short from 'short-uuid';
 
 import type { Room } from '@/types/supabase';
 
-export const createRoomId = () => {
+export const createRoomCode = () => {
   const originCode = short.generate();
   const shortCode = originCode.slice(0, 6).toUpperCase();
   return shortCode;
 };
 
-export const checkValidRoomIdChar = (code: string) => {
+export const checkValidRoomCodeChar = (code: string) => {
   const regex = /^[A-Z]{6}$/;
   return regex.test(code);
 };

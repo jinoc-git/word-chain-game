@@ -5,7 +5,7 @@ import { JOIN_ROOM_ROUTE } from '@/constants/apiRoute';
 import type { JoinRoomResponse } from '@/app/api/join/route';
 
 export type JoinRoomArgs = {
-  roomId: string;
+  roomCode: string;
   playerId: string;
 };
 

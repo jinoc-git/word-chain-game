@@ -2,16 +2,16 @@ import { createClient } from '@/utils/supabase/server';
 
 export type AddRoomParticipantsArgs = {
   playerId: string;
-  roomId: string;
+  roomCode: string;
 };
 
 export const addRoomParticipants = async (args: AddRoomParticipantsArgs) => {
-  const { playerId, roomId } = args;
+  const { playerId, roomCode } = args;
   const supabase = await createClient();
 
   const res = await supabase
     .from('room_participants')
-    .insert({ player_id: playerId, room_code: roomId })
+    .insert({ player_id: playerId, room_code: roomCode })
     .select()
     .single();
 

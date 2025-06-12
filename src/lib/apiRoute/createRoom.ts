@@ -7,7 +7,7 @@ import type { CreateRoomResponse } from '@/app/api/create/route';
 export type CreateRoomArgs = {
   nickname: string;
   hostId: string;
-  roomId: string;
+  roomCode: string;
 };
 
 export const createRoom = async (args: CreateRoomArgs) => {

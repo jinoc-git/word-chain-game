@@ -5,15 +5,15 @@ import React from 'react';
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
 
-import { createRoomId } from '@/utils/room/room';
+import { createRoomCode } from '@/utils/room/room';
 
 const PlaySolo = () => {
   const router = useRouter();
 
   const handlePlaySolo = async () => {
-    const roomId = createRoomId();
+    const roomCode = createRoomCode();
 
-    router.push(`/game/solo/${roomId}`);
+    router.push(`/game/solo/${roomCode}`);
   };
 
   return (

@@ -2,13 +2,13 @@ import { createClient } from '@/utils/supabase/server';
 
 import type { InsertRoom } from '@/types/supabase';
 
-export type CheckRoomIdArg = {
-  roomId: string;
+export type CheckRoomCodeArg = {
+  roomCode: string;
 };
 
-export const getRoomInfo = async ({ roomId }: CheckRoomIdArg) => {
+export const getRoomInfo = async ({ roomCode }: CheckRoomCodeArg) => {
   const supabase = await createClient();
-  const { data } = await supabase.from('rooms').select('*').eq('room_code', roomId).single();
+  const { data } = await supabase.from('rooms').select('*').eq('room_code', roomCode).single();
 
   return data;
 };
