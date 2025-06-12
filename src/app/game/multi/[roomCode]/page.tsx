@@ -24,8 +24,7 @@ const MultiGame = async ({ params }: Props) => {
 
   const { data, error } = await addRoomParticipants({ playerId, roomCode });
   if (error) redirect('/loby');
-  // home 버튼으로 방을 나간 후 같은 방 들어왔을 때 정상적으로 players 정보를 불러오지 못함
-  console.log(data);
+
   return (
     <>
       <Players roomCode={roomCode} />

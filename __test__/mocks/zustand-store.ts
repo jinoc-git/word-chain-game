@@ -15,7 +15,6 @@ export const mockStores = {
   },
   player: {
     state: {
-      channel: { unsubscribe: vi.fn() },
       curPlayers: mockPlayers,
     },
     actions: {

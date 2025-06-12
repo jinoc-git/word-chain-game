@@ -27,7 +27,6 @@ type ObserverCallbackArgs = RealtimePostgresChangesPayload<RoomParticipant>;
 // };
 
 export type PlayerStoreState = {
-  channel: null | RealtimeChannel;
   curPlayers: RoomParticipant[];
 };
 
@@ -37,7 +36,7 @@ export type QuitRoomArgs = {
 
 export type PlayerStoreActions = {
   initPlayer: (roomCode: string) => Promise<void>;
-  playerObserver: (roomCode: string) => Promise<void>;
+  playerObserver: (roomCode: string) => Promise<RealtimeChannel>;
   quitRoom: (args: QuitRoomArgs) => Promise<void>;
   isRoomChief: (player: UserType) => boolean;
   observerCallback: (payload: ObserverCallbackArgs) => void;
@@ -49,7 +48,6 @@ export type PlayerStore = {
 };
 
 const defaultInitState: PlayerStoreState = {
-  channel: null,
   curPlayers: [],
 };
 
@@ -99,13 +97,13 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
           )
           .subscribe();
 
-        set(({ state }) => ({ state: { ...state, channel } }));
+        return channel;
       },
       quitRoom: async ({ userId }) => {
         const supabase = createClient();
         const { error } = await supabase.from('room_participants').delete().eq('player_id', userId);
 
-        set({ state: { channel: null, curPlayers: [] } });
+        set({ state: { curPlayers: [] } });
       },
       isRoomChief: (player) => {
         const curPlayers = get().state.curPlayers;
