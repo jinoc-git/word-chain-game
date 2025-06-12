@@ -21,7 +21,7 @@ const Logout = () => {
   const handleLogout = async () => {
     logout();
 
-    if ('roomId' in params && typeof params.roomId === 'string' && user !== null) {
+    if ('roomCode' in params && typeof params.roomCode === 'string' && user !== null) {
       await quitRoom({ userId: user.id });
     }
 

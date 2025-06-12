@@ -10,13 +10,13 @@ describe('MultiGame', () => {
   });
 
   const renderComponent = async () => {
-    const mockRoomId = 'ABCDEF';
-    mockingPathname(`/game/multi/${mockRoomId}`);
-    mockingParams({ roomId: mockRoomId });
+    const mockRoomCode = 'ABCDEF';
+    mockingPathname(`/game/multi/${mockRoomCode}`);
+    mockingParams({ roomCode: mockRoomCode });
     mockingCookies('player123');
 
-    const params = Promise.resolve({ roomId: mockRoomId });
-    const { default: MultiGamePage } = await import('@/app/game/multi/[roomId]/page');
+    const params = Promise.resolve({ roomCode: mockRoomCode });
+    const { default: MultiGamePage } = await import('@/app/game/multi/[roomCode]/page');
     const page = await MultiGamePage({ params });
     render(page);
   };
