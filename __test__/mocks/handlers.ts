@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
+import { mockRoomChief } from './players';
 import { mockRoom } from './room';
 
 import type { CreateRoomResponse } from '@/app/api/create/route';
@@ -10,6 +11,7 @@ export const handlers = [
     const mockRes: CreateRoomResponse = {
       success: true,
       room: mockRoom,
+      player: mockRoomChief,
     };
 
     return HttpResponse.json(mockRes);

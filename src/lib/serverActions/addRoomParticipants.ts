@@ -9,11 +9,11 @@ export const addRoomParticipants = async (args: AddRoomParticipantsArgs) => {
   const { playerId, roomId } = args;
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const res = await supabase
     .from('room_participants')
     .insert({ player_id: playerId, room_code: roomId })
-    .select();
+    .select()
+    .single();
 
-  console.log(error);
-  return data;
+  return res;
 };
