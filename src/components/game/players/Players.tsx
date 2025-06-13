@@ -7,42 +7,36 @@ import { Chip } from '@nextui-org/react';
 import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
 import { usePlayerActions, usePlayerState } from '@/providers/storeProvider/playerStoreProvider';
 
+import type { RealtimeChannel } from '@supabase/supabase-js';
+
 interface Props {
-  roomId: string;
+  roomCode: string;
 }
 // NVTUJY
-const Players = ({ roomId }: Props) => {
+const Players = ({ roomCode }: Props) => {
   const user = useAuthState((state) => state.user);
   const curPlayers = usePlayerState((state) => state.curPlayers);
-  const channel = usePlayerState((state) => state.channel);
   const playerObserver = usePlayerActions((actions) => actions.playerObserver);
   const quitRoom = usePlayerActions((actions) => actions.quitRoom);
 
+  const channelRef = React.useRef<null | RealtimeChannel>(null);
+
   React.useEffect(() => {
-    playerObserver(roomId);
+    playerObserver(roomCode).then((channel) => (channelRef.current = channel));
   }, []);
 
-  // 개선 필요
-  const [flag, setFlag] = React.useState(false);
   React.useEffect(() => {
     return () => {
-      if (!user) return;
-      if (!flag) {
-        if (channel) setFlag(true);
-        return;
-      }
-      if (channel) {
-        console.log('un');
-        channel.unsubscribe();
-        quitRoom({ userId: user.id });
-      }
+      if (!user || !channelRef.current) return;
+
+      channelRef.current.unsubscribe();
+      quitRoom({ userId: user.id });
     };
-  }, [flag, channel]);
-  console.log('all', curPlayers, flag, channel);
+  }, []);
 
   return (
     <section className="w-full flex flex-wrap gap-2">
-      {curPlayers?.map(({ nickname, player_id }, idx) => {
+      {curPlayers.map(({ nickname, player_id }, idx) => {
         return (
           <Chip
             key={`${idx + 1}player`}

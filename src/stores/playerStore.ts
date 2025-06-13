@@ -27,7 +27,6 @@ type ObserverCallbackArgs = RealtimePostgresChangesPayload<RoomParticipant>;
 // };
 
 export type PlayerStoreState = {
-  channel: null | RealtimeChannel;
   curPlayers: RoomParticipant[];
 };
 
@@ -36,8 +35,8 @@ export type QuitRoomArgs = {
 };
 
 export type PlayerStoreActions = {
-  initPlayer: (roomId: string) => Promise<void>;
-  playerObserver: (roomId: string) => Promise<void>;
+  initPlayer: (roomCode: string) => Promise<void>;
+  playerObserver: (roomCode: string) => Promise<RealtimeChannel>;
   quitRoom: (args: QuitRoomArgs) => Promise<void>;
   isRoomChief: (player: UserType) => boolean;
   observerCallback: (payload: ObserverCallbackArgs) => void;
@@ -49,7 +48,6 @@ export type PlayerStore = {
 };
 
 const defaultInitState: PlayerStoreState = {
-  channel: null,
   curPlayers: [],
 };
 
@@ -57,12 +55,12 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
   return createStore<PlayerStore>()((set, get) => ({
     state: initState,
     actions: {
-      initPlayer: async (roomId: string) => {
+      initPlayer: async (roomCode: string) => {
         const supabase = createClient();
         const { data, error } = await supabase
           .from('room_participants')
           .select('*')
-          .eq('room_code', roomId);
+          .eq('room_code', roomCode);
 
         if (error) {
           set(({ state }) => ({ state: { ...state, curPlayers: [] } }));
@@ -80,9 +78,9 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
 
         set(({ state }) => ({ state: { ...state, curPlayers: players } }));
       },
-      playerObserver: async (roomId: string) => {
+      playerObserver: async (roomCode: string) => {
         const initPlayer = get().actions.initPlayer;
-        await initPlayer(roomId);
+        await initPlayer(roomCode);
 
         const supabase = createClient();
         const channel = supabase
@@ -93,19 +91,19 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
               event: '*',
               schema: 'public',
               table: 'room_participants',
-              filter: `room_id=eq.${roomId}`,
+              filter: `room_code=eq.${roomCode}`,
             },
             get().actions.observerCallback,
           )
           .subscribe();
 
-        set(({ state }) => ({ state: { ...state, channel } }));
+        return channel;
       },
       quitRoom: async ({ userId }) => {
         const supabase = createClient();
         const { error } = await supabase.from('room_participants').delete().eq('player_id', userId);
 
-        set({ state: { channel: null, curPlayers: [] } });
+        set({ state: { curPlayers: [] } });
       },
       isRoomChief: (player) => {
         const curPlayers = get().state.curPlayers;

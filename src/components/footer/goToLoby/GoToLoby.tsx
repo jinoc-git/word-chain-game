@@ -18,11 +18,11 @@ const GoToLoby = () => {
   const quitRoom = usePlayerActions((actions) => actions.quitRoom);
 
   const handleGoToLoby = async () => {
-    if (checkLogin()) router.push('/loby');
-
-    if ('roomId' in params && typeof params.roomId === 'string' && user !== null) {
+    if ('roomCode' in params && typeof params.roomCode === 'string' && user !== null) {
       await quitRoom({ userId: user.id });
     }
+
+    if (checkLogin()) router.push('/loby');
   };
 
   return (

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getRoomInfo } from '@/lib/serverActions/getRoomInfo';
+import { getRoomInfo } from '@/lib/serverActions/rooms';
 import { checkEnterRoom } from '@/utils/room/room';
 
 import type { JoinRoomArgs } from '@/lib/apiRoute/joinRoom';
@@ -17,10 +17,10 @@ export type JoinRoomResponse =
     };
 
 export const POST = async (request: NextRequest) => {
-  const { roomId, playerId }: JoinRoomArgs = await request.json();
+  const { roomCode, playerId }: JoinRoomArgs = await request.json();
 
   // 방 코드 확인
-  const room = await getRoomInfo({ roomId });
+  const room = await getRoomInfo({ roomCode });
   const { success, message } = checkEnterRoom(room);
   if (success) {
     return NextResponse.json(

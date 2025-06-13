@@ -4,14 +4,14 @@ import { useAuthState } from '@/providers/storeProvider/authStoreProvider';
 
 import useGame from './useGame';
 
-const useMultiGame = (roomId: string) => {
+const useMultiGame = (roomCode: string) => {
   const user = useAuthState((state) => state.user);
 
   const handleMultiGame = async (state: boolean) => {
     if (user === null) return;
 
     // await new Promise((resolve, reject) => {
-    //   socket.emit('handleGameState', { userId: user.id, roomId, state });
+    //   socket.emit('handleGameState', { userId: user.id, roomCode, state });
 
     //   const gameStateSuccessHandler = (message: string) => {
     //     console.log(message);

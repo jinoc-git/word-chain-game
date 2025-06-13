@@ -34,27 +34,27 @@ const EnterRoom = ({ user }: Props) => {
     mode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<EnterRoomInput> = async ({ roomId }) => {
+  const onSubmit: SubmitHandler<EnterRoomInput> = async ({ roomCode }) => {
     if (!user) {
       toast.error('로그인이 필요합니다.');
       return;
     }
 
-    const upperCaseRoomId = roomId.toUpperCase();
+    const upperCaseRoomCode = roomCode.toUpperCase();
 
-    const { success, message } = await joinRoom({ roomId: upperCaseRoomId, playerId: user.id });
+    const { success, message } = await joinRoom({ roomCode: upperCaseRoomCode, playerId: user.id });
     if (!success) {
       toast.error(message);
       return;
     }
 
-    router.push(`/game/multi/${upperCaseRoomId}`);
+    router.push(`/game/multi/${upperCaseRoomCode}`);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full flex gap-2">
       <Input
-        {...register('roomId')}
+        {...register('roomCode')}
         type="text"
         placeholder="방 코드 입력하기"
         size="md"
