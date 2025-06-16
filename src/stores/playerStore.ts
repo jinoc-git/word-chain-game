@@ -70,13 +70,11 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
         }
       },
       observerCallback: (payload) => {
-        console.log(payload);
-        // 게임 나갔을 때 연결 끊고 row 삭제해야함
         const players = get().state.curPlayers;
         const newPlayer = payload?.new;
         if (newPlayer && 'id' in newPlayer) players.push(newPlayer);
 
-        set(({ state }) => ({ state: { ...state, curPlayers: players } }));
+        set({ state: { curPlayers: [...players] } });
       },
       playerObserver: async (roomCode: string) => {
         const initPlayer = get().actions.initPlayer;
