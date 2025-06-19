@@ -1,25 +1,15 @@
 import ky from 'ky';
 
-import { DICTIONARY_ROUTE } from '@/constants/apiRoute';
+import { POST_WORD_ROUTE } from '@/constants/apiRoute';
 
-import type { DictionaryApiResponse } from '@/types/dictionary.type';
+import type { PostWordResponse } from '@/app/api/word/route';
 
-export const checkDictionary = async (enterWord: string) => {
-  try {
-    const result = await ky
-      .get(DICTIONARY_ROUTE, {
-        searchParams: { q: enterWord },
-      })
-      .json<DictionaryApiResponse>();
+export type PostWordArgs = {};
 
-    const item = result.channel?.item;
-
-    if (!item || (Array.isArray(item) && item.length === 0)) return false;
-    const onlyCharacter = item[0].word.replace(/\^|\-/g, '');
-    if (onlyCharacter !== enterWord) return false;
-
-    return true;
-  } catch (error) {
-    if (error instanceof Error) console.log(error.message);
-  }
+export const postWord = async (args: PostWordArgs) => {
+  const res = await ky
+    .post(POST_WORD_ROUTE, {
+      json: args,
+    })
+    .json<PostWordResponse>();
 };
