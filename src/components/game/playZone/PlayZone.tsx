@@ -16,7 +16,7 @@ const PlayZone = () => {
   return (
     <section>
       <WordList />
-      <EnterWord />
+      <EnterWord isSoloGame={isSoloGame} />
       {isSoloGame ? <ControlSoloGame /> : <ControlMultiGame />}
     </section>
   );

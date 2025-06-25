@@ -4,7 +4,11 @@ import { POST_WORD_ROUTE } from '@/constants/apiRoute';
 
 import type { PostWordResponse } from '@/app/api/word/route';
 
-export type PostWordArgs = {};
+export type PostWordArgs = {
+  roomCode: string;
+  playerId: string;
+  word: string[];
+};
 
 export const postWord = async (args: PostWordArgs) => {
   const res = await ky

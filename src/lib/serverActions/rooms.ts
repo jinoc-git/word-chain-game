@@ -26,3 +26,8 @@ export const deleteRoom = async (roomCode: string) => {
 
   return error;
 };
+
+export const addWord = async () => {
+  const supabase = await createClient();
+  const {} = await supabase.from('rooms').update({ current_word: [] });
+};

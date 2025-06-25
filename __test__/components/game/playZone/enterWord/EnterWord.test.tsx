@@ -3,20 +3,40 @@ import { render, screen } from '@testing-library/react';
 import EnterWord from '@/components/game/playZone/enterWord/EnterWord';
 
 describe('EnterWord', () => {
-  it('should render input', () => {
-    render(<EnterWord />);
+  describe('solo game', () => {
+    it('should render input', () => {
+      render(<EnterWord isSoloGame={true} />);
 
-    const input = screen.getByPlaceholderText(/상대를 기다리는 중.../i);
+      const input = screen.getByPlaceholderText(/상대를 기다리는 중.../i);
 
-    expect(input).toBeInTheDocument();
+      expect(input).toBeInTheDocument();
+    });
+
+    it('should disabled when waiting turn', () => {
+      render(<EnterWord isSoloGame={true} />);
+
+      const input = screen.getByPlaceholderText(/상대를 기다리는 중.../i);
+
+      expect(input).toBeDisabled();
+    });
   });
 
-  it('should disabled when waiting turn', () => {
-    render(<EnterWord />);
+  describe('multi game', () => {
+    it('should render input', () => {
+      render(<EnterWord isSoloGame={false} />);
 
-    const input = screen.getByPlaceholderText(/상대를 기다리는 중.../i);
+      const input = screen.getByPlaceholderText(/상대를 기다리는 중.../i);
 
-    expect(input).toBeDisabled();
+      expect(input).toBeInTheDocument();
+    });
+
+    it('should disabled when waiting turn', () => {
+      render(<EnterWord isSoloGame={false} />);
+
+      const input = screen.getByPlaceholderText(/상대를 기다리는 중.../i);
+
+      expect(input).toBeDisabled();
+    });
   });
 
   // it('should not disabled when isWaitingTurn is false', async () => {

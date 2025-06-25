@@ -17,7 +17,11 @@ import type { z } from 'zod';
 
 type EnterWordInput = z.infer<typeof enterWordSchema>;
 
-const EnterWord = () => {
+interface Props {
+  isSoloGame: boolean;
+}
+
+const EnterWord = ({ isSoloGame }: Props) => {
   const { isShake, handleShake } = useShakeAnimate();
 
   const isWaitingTurn = useGameState((state) => state.isWaitingTurn);
@@ -43,9 +47,15 @@ const EnterWord = () => {
       return;
     }
 
-    pushNewWord(enterWord);
-    reset();
-    setIsWaitingTurn(true);
+    if (isSoloGame) {
+      pushNewWord(enterWord);
+      reset();
+      setIsWaitingTurn(true);
+    } else {
+    }
+    // pushNewWord(enterWord);
+    // reset();
+    // setIsWaitingTurn(true);
   };
 
   React.useEffect(() => {
