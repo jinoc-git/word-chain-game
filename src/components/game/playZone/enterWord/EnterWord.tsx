@@ -46,7 +46,7 @@ const EnterWord = ({ isSoloGame }: Props) => {
       reset();
       return;
     }
-
+    // 솔로, 멀티 구분해야함.
     if (isSoloGame) {
       pushNewWord(enterWord);
       reset();
