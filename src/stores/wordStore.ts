@@ -1,6 +1,10 @@
 import { createStore } from 'zustand/vanilla';
 
+import { createClient } from '@/utils/supabase/client';
 import { getRandomFirstWord } from '@/utils/word/getRandomFirstWord';
+
+import type { Room } from '@/types/supabase';
+import type { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
 export type WordStoreState = {
   totalWordCount: number;
@@ -13,6 +17,9 @@ export type WordStoreActions = {
   initRandomWord: () => void;
   pushNewWord: (newWord: string) => void;
   resetWords: () => void;
+  // 여기서 단어 구독?
+  streamWord: (roomCode: string) => RealtimeChannel;
+  streamWordCallback: (payload: RealtimePostgresChangesPayload<Room>) => void;
 };
 
 export type WordStore = {
@@ -49,6 +56,38 @@ export const createWordStore = (initState: WordStoreState = defaultInitState) =>
         }));
       },
       resetWords: () => set({ state: { words: [], totalWordCount: 1 } }),
+      streamWord: (roomCode) => {
+        const supabase = createClient();
+        const channel = supabase
+          .channel('room_participants')
+          .on(
+            'postgres_changes',
+            {
+              event: '*',
+              schema: 'public',
+              table: 'rooms',
+              filter: `room_code=eq.${roomCode}`,
+            },
+            get().actions.streamWordCallback,
+          )
+          .subscribe();
+
+        return channel;
+      },
+      streamWordCallback: (payload) => {
+        if (payload.errors.length === 0) {
+          const row = payload?.new;
+          if (row && 'current_word' in row) {
+            set({
+              state: {
+                totalWordCount: row.current_word?.length || 0,
+                words: row.current_word || [],
+              },
+            });
+            row.current_word;
+          }
+        }
+      },
     },
   }));
 };

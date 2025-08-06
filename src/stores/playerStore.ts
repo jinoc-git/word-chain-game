@@ -66,7 +66,6 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
         if (error) {
           set(({ state }) => ({ state: { ...state, curPlayers: [] } }));
         } else {
-          console.log('result', data);
           set(({ state }) => ({ state: { ...state, curPlayers: data } }));
         }
       },

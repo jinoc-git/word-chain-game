@@ -22,7 +22,9 @@ const Players = ({ roomCode }: Props) => {
   const channelRef = React.useRef<null | RealtimeChannel>(null);
 
   React.useEffect(() => {
-    playerObserver(roomCode).then((channel) => (channelRef.current = channel));
+    playerObserver(roomCode).then((channel) => {
+      channelRef.current = channel;
+    });
   }, []);
 
   React.useEffect(() => {

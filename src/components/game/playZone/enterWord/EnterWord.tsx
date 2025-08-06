@@ -13,20 +13,22 @@ import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 import { enterWordSchema } from '@/schema/enterWordSchema';
 import { checkWordIsValid } from '@/utils/word/checkWordValid';
 
+import type { RealtimeChannel } from '@supabase/supabase-js';
 import type { z } from 'zod';
 
 type EnterWordInput = z.infer<typeof enterWordSchema>;
 
 interface Props {
   isSoloGame: boolean;
+  roomCode: string;
 }
 
-const EnterWord = ({ isSoloGame }: Props) => {
+const EnterWord = ({ isSoloGame, roomCode }: Props) => {
   const { isShake, handleShake } = useShakeAnimate();
 
   const isWaitingTurn = useGameState((state) => state.isWaitingTurn);
   const setIsWaitingTurn = useGameActions((actions) => actions.setIsWaitingTurn);
-  const { pushNewWord, getLastWord } = useWordActions((actions) => actions);
+  const { pushNewWord, getLastWord, streamWord } = useWordActions((actions) => actions);
 
   const {
     register,
@@ -57,6 +59,16 @@ const EnterWord = ({ isSoloGame }: Props) => {
     // reset();
     // setIsWaitingTurn(true);
   };
+
+  const channelRef = React.useRef<null | RealtimeChannel>(null);
+
+  React.useEffect(() => {
+    const channel = streamWord(roomCode);
+    channelRef.current = channel;
+    return () => {
+      channel.unsubscribe();
+    };
+  }, []);
 
   React.useEffect(() => {
     if (!isWaitingTurn) setFocus('enterWord');

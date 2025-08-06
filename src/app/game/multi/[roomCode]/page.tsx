@@ -30,7 +30,7 @@ const MultiGame = async ({ params }: Props) => {
   return (
     <>
       <Players roomCode={roomCode} />
-      <PlayZone />
+      <PlayZone roomCode={roomCode} />
     </>
   );
 };
