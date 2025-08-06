@@ -5,7 +5,7 @@ import EnterWord from '@/components/game/playZone/enterWord/EnterWord';
 describe('EnterWord', () => {
   describe('solo game', () => {
     it('should render input', () => {
-      render(<EnterWord isSoloGame={true} />);
+      render(<EnterWord isSoloGame={true} roomCode="ABCDEF" />);
 
       const input = screen.getByPlaceholderText(/상대를 기다리는 중.../i);
 
@@ -13,7 +13,7 @@ describe('EnterWord', () => {
     });
 
     it('should disabled when waiting turn', () => {
-      render(<EnterWord isSoloGame={true} />);
+      render(<EnterWord isSoloGame={true} roomCode="ABCDEF" />);
 
       const input = screen.getByPlaceholderText(/상대를 기다리는 중.../i);
 
@@ -23,7 +23,7 @@ describe('EnterWord', () => {
 
   describe('multi game', () => {
     it('should render input', () => {
-      render(<EnterWord isSoloGame={false} />);
+      render(<EnterWord isSoloGame={false} roomCode="ABCDEF" />);
 
       const input = screen.getByPlaceholderText(/상대를 기다리는 중.../i);
 
@@ -31,7 +31,7 @@ describe('EnterWord', () => {
     });
 
     it('should disabled when waiting turn', () => {
-      render(<EnterWord isSoloGame={false} />);
+      render(<EnterWord isSoloGame={false} roomCode="ABCDEF" />);
 
       const input = screen.getByPlaceholderText(/상대를 기다리는 중.../i);
 
