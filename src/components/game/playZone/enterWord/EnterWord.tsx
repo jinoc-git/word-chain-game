@@ -63,10 +63,12 @@ const EnterWord = ({ isSoloGame, roomCode }: Props) => {
   const channelRef = React.useRef<null | RealtimeChannel>(null);
 
   React.useEffect(() => {
-    const channel = streamWord(roomCode);
-    channelRef.current = channel;
+    if (!isSoloGame) {
+      const channel = streamWord(roomCode);
+      channelRef.current = channel;
+    }
     return () => {
-      channel.unsubscribe();
+      channelRef.current?.unsubscribe();
     };
   }, []);
 
