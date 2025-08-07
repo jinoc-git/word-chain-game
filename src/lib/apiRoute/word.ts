@@ -6,7 +6,6 @@ import type { PostWordResponse } from '@/app/api/word/route';
 
 export type PostWordArgs = {
   roomCode: string;
-  playerId: string;
   words: string[];
 };
 

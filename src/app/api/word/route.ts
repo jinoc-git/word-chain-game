@@ -17,7 +17,7 @@ export type PostWordResponse =
     };
 
 export const POST = async (request: NextRequest) => {
-  const { roomCode, playerId, words }: PostWordArgs = await request.json();
+  const { roomCode, words }: PostWordArgs = await request.json();
 
   const { data, error } = await addWord(roomCode, words);
 
