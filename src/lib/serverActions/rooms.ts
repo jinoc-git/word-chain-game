@@ -27,7 +27,14 @@ export const deleteRoom = async (roomCode: string) => {
   return error;
 };
 
-export const addWord = async () => {
+export const addWord = async (roomCode: string, words: string[]) => {
   const supabase = await createClient();
-  const {} = await supabase.from('rooms').update({ current_word: [] });
+  const res = await supabase
+    .from('rooms')
+    .update({ current_word: words })
+    .eq('room_code', roomCode)
+    .select()
+    .single();
+
+  return res;
 };

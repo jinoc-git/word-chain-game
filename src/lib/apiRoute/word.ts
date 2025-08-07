@@ -7,7 +7,7 @@ import type { PostWordResponse } from '@/app/api/word/route';
 export type PostWordArgs = {
   roomCode: string;
   playerId: string;
-  word: string[];
+  words: string[];
 };
 
 export const postWord = async (args: PostWordArgs) => {
@@ -16,4 +16,6 @@ export const postWord = async (args: PostWordArgs) => {
       json: args,
     })
     .json<PostWordResponse>();
+
+  return res;
 };

@@ -17,7 +17,7 @@ export type WordStoreActions = {
   initRandomWord: () => void;
   pushNewWord: (newWord: string) => void;
   resetWords: () => void;
-  // 여기서 단어 구독?
+  getCurrentWords: () => string[];
   streamWord: (roomCode: string) => RealtimeChannel;
   streamWordCallback: (payload: RealtimePostgresChangesPayload<Room>) => void;
 };
@@ -56,10 +56,11 @@ export const createWordStore = (initState: WordStoreState = defaultInitState) =>
         }));
       },
       resetWords: () => set({ state: { words: [], totalWordCount: 1 } }),
+      getCurrentWords: () => get().state.words,
       streamWord: (roomCode) => {
         const supabase = createClient();
         const channel = supabase
-          .channel('room_participants')
+          .channel('room')
           .on(
             'postgres_changes',
             {

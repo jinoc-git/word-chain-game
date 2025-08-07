@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@nextui-org/react';
 
 import useShakeAnimate from '@/hooks/useShakeAnimate';
+import { postWord } from '@/lib/apiRoute/word';
 import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
 import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 import { enterWordSchema } from '@/schema/enterWordSchema';
@@ -28,7 +29,9 @@ const EnterWord = ({ isSoloGame, roomCode }: Props) => {
 
   const isWaitingTurn = useGameState((state) => state.isWaitingTurn);
   const setIsWaitingTurn = useGameActions((actions) => actions.setIsWaitingTurn);
-  const { pushNewWord, getLastWord, streamWord } = useWordActions((actions) => actions);
+  const { pushNewWord, getLastWord, streamWord, getCurrentWords } = useWordActions(
+    (actions) => actions,
+  );
 
   const {
     register,
@@ -49,11 +52,14 @@ const EnterWord = ({ isSoloGame, roomCode }: Props) => {
       return;
     }
     // 솔로, 멀티 구분해야함.
+    pushNewWord(enterWord);
     if (isSoloGame) {
-      pushNewWord(enterWord);
       reset();
       setIsWaitingTurn(true);
     } else {
+      console.log('post words', getCurrentWords());
+      const res = await postWord({ roomCode, words: getCurrentWords() });
+      console.log('onSubmit', res);
     }
     // pushNewWord(enterWord);
     // reset();
