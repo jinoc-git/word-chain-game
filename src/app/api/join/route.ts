@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { addRoomParticipants } from '@/lib/serverActions/addRoomParticipants';
-import { getRoomInfo } from '@/lib/serverActions/rooms';
-import { checkEnterRoom } from '@/utils/room/room';
+import { createClient } from '@/utils/supabase/server';
 
 import type { JoinRoomArgs } from '@/lib/apiRoute/joinRoom';
 import type { NextRequest } from 'next/server';
@@ -20,47 +18,51 @@ export type JoinRoomResponse =
 export const POST = async (request: NextRequest) => {
   const { roomCode, playerId }: JoinRoomArgs = await request.json();
 
-  // 방 코드 확인
-  const room = await getRoomInfo({ roomCode });
-  const { success, message } = checkEnterRoom(room);
-  if (success) {
-    const { data: participantInfo } = await addRoomParticipants({ playerId, roomCode });
-    if (participantInfo) {
-      return NextResponse.json(
-        {
-          success: true,
-          message,
-        },
-        {
-          headers: {
-            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-          },
-        },
-      );
-    } else {
-      return NextResponse.json(
-        {
-          success: false,
-          message: '방 입장에 실패했습니다.',
-        },
-        {
-          headers: {
-            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-          },
-        },
-      );
-    }
-  }
+  try {
+    const supabase = await createClient();
 
-  return NextResponse.json(
-    {
-      success: false,
-      message,
-    },
-    {
+    const { data, error } = await supabase.rpc<
+      'join_room_atomic',
+      {
+        Args: {
+          room_code: string;
+          player_id: string;
+        };
+        Returns: {
+          success: boolean;
+          message: string;
+        };
+      }
+    >('join_room_atomic', {
+      room_code: roomCode,
+      player_id: playerId,
+    });
+
+    if (error) {
+      console.error('Supabase RPC 에러:', error);
+      throw new Error(error.message);
+    }
+
+    return NextResponse.json(data, {
+      status: data.success ? 200 : 400,
       headers: {
         'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
       },
-    },
-  );
+    });
+  } catch (error) {
+    console.error('방 입장 실패:', error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: error instanceof Error ? error.message : '방 입장에 실패했습니다.',
+      },
+      {
+        // status: 500,
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        },
+      },
+    );
+  }
 };
