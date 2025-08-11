@@ -47,20 +47,21 @@ const EnterWord = ({ isSoloGame, roomCode }: Props) => {
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
     const isValid = await checkWordIsValid(getLastWord(), enterWord);
     if (!isValid) {
-      handleShake();
       reset();
+      handleShake();
       return;
     }
     // 솔로, 멀티 구분해야함.
     pushNewWord(enterWord);
     if (isSoloGame) {
-      reset();
       setIsWaitingTurn(true);
     } else {
       console.log('post words', getCurrentWords());
       const res = await postWord({ roomCode, words: getCurrentWords() });
       console.log('onSubmit', res);
     }
+    reset();
+
     // pushNewWord(enterWord);
     // reset();
     // setIsWaitingTurn(true);

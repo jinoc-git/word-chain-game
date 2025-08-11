@@ -60,7 +60,7 @@ export const createWordStore = (initState: WordStoreState = defaultInitState) =>
       streamWord: (roomCode) => {
         const supabase = createClient();
         const channel = supabase
-          .channel('room')
+          .channel(`room-${roomCode}`)
           .on(
             'postgres_changes',
             {
