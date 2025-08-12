@@ -19,10 +19,9 @@ const GoToLoby = () => {
 
   const handleGoToLoby = async () => {
     if ('roomCode' in params && typeof params.roomCode === 'string' && user !== null) {
-      await quitRoom({ userId: user.id });
+      const { success, message } = await quitRoom({ userId: user.id });
+      if (success && checkLogin()) router.push('/loby');
     }
-
-    if (checkLogin()) router.push('/loby');
   };
 
   return (

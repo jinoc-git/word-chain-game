@@ -1,5 +1,6 @@
 import { createStore } from 'zustand/vanilla';
 
+import { quitRoomWithPlayerId } from '@/lib/clientActions/roomParticipants';
 import { createClient } from '@/utils/supabase/client';
 
 import type { UserType } from '@/types/auth.type';
@@ -37,7 +38,7 @@ export type QuitRoomArgs = {
 export type PlayerStoreActions = {
   initPlayer: (roomCode: string) => Promise<void>;
   playerObserver: (roomCode: string) => Promise<RealtimeChannel>;
-  quitRoom: (args: QuitRoomArgs) => Promise<void>;
+  quitRoom: (args: QuitRoomArgs) => ReturnType<typeof quitRoomWithPlayerId>;
   isRoomChief: (player: UserType) => boolean;
   observerCallback: (payload: ObserverCallbackArgs) => void;
 };
@@ -65,7 +66,6 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
         if (error) {
           set(({ state }) => ({ state: { ...state, curPlayers: [] } }));
         } else {
-          console.log('result', data);
           set(({ state }) => ({ state: { ...state, curPlayers: data } }));
         }
       },
@@ -98,10 +98,13 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
         return channel;
       },
       quitRoom: async ({ userId }) => {
-        const supabase = createClient();
-        const { error } = await supabase.from('room_participants').delete().eq('player_id', userId);
-
-        set({ state: { curPlayers: [] } });
+        const res = await quitRoomWithPlayerId(userId);
+        if (res.success) {
+          set({ state: { curPlayers: [] } });
+        } else {
+          //
+        }
+        return res;
       },
       isRoomChief: (player) => {
         const curPlayers = get().state.curPlayers;

@@ -8,3 +8,4 @@ export const OPENAI_ROUTE = '/api/openai';
 export const DICTIONARY_ROUTE = '/api/dictionary';
 export const CREATE_ROOM_ROUTE = prefix + '/api/create';
 export const JOIN_ROOM_ROUTE = prefix + '/api/join';
+export const POST_WORD_ROUTE = prefix + '/api/word';

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { getRoomInfo } from '@/lib/serverActions/rooms';
-import { checkEnterRoom } from '@/utils/room/room';
+import { createClient } from '@/utils/supabase/server';
 
 import type { JoinRoomArgs } from '@/lib/apiRoute/joinRoom';
 import type { NextRequest } from 'next/server';
@@ -19,32 +18,39 @@ export type JoinRoomResponse =
 export const POST = async (request: NextRequest) => {
   const { roomCode, playerId }: JoinRoomArgs = await request.json();
 
-  // 방 코드 확인
-  const room = await getRoomInfo({ roomCode });
-  const { success, message } = checkEnterRoom(room);
-  if (success) {
+  try {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.rpc('join_room_atomic', {
+      room_code: roomCode,
+      player_id: playerId,
+    });
+
+    if (error) {
+      console.error('Supabase RPC 에러:', error);
+      throw new Error(error.message);
+    }
+
+    return NextResponse.json(data, {
+      status: data.success ? 200 : 400,
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+      },
+    });
+  } catch (error) {
+    console.error('방 입장 실패:', error);
+
     return NextResponse.json(
       {
-        success: true,
-        message,
+        success: false,
+        message: error instanceof Error ? error.message : '방 입장에 실패했습니다.',
       },
       {
+        // status: 500,
         headers: {
           'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
         },
       },
     );
   }
-
-  return NextResponse.json(
-    {
-      success: false,
-      message,
-    },
-    {
-      headers: {
-        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-      },
-    },
-  );
 };

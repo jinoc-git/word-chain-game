@@ -5,7 +5,7 @@ import PlayZone from '@/components/game/playZone/PlayZone';
 const SoloGame = () => {
   return (
     <>
-      <PlayZone />
+      <PlayZone roomCode="" />
     </>
   );
 };

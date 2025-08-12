@@ -8,21 +8,30 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@nextui-org/react';
 
 import useShakeAnimate from '@/hooks/useShakeAnimate';
+import { postWord } from '@/lib/apiRoute/word';
 import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
 import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 import { enterWordSchema } from '@/schema/enterWordSchema';
 import { checkWordIsValid } from '@/utils/word/checkWordValid';
 
+import type { RealtimeChannel } from '@supabase/supabase-js';
 import type { z } from 'zod';
 
 type EnterWordInput = z.infer<typeof enterWordSchema>;
 
-const EnterWord = () => {
+interface Props {
+  isSoloGame: boolean;
+  roomCode: string;
+}
+
+const EnterWord = ({ isSoloGame, roomCode }: Props) => {
   const { isShake, handleShake } = useShakeAnimate();
 
   const isWaitingTurn = useGameState((state) => state.isWaitingTurn);
   const setIsWaitingTurn = useGameActions((actions) => actions.setIsWaitingTurn);
-  const { pushNewWord, getLastWord } = useWordActions((actions) => actions);
+  const { pushNewWord, getLastWord, streamWord, getCurrentWords } = useWordActions(
+    (actions) => actions,
+  );
 
   const {
     register,
@@ -38,15 +47,37 @@ const EnterWord = () => {
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
     const isValid = await checkWordIsValid(getLastWord(), enterWord);
     if (!isValid) {
-      handleShake();
       reset();
+      handleShake();
       return;
     }
-
+    // 솔로, 멀티 구분해야함.
     pushNewWord(enterWord);
+    if (isSoloGame) {
+      setIsWaitingTurn(true);
+    } else {
+      console.log('post words', getCurrentWords());
+      const res = await postWord({ roomCode, words: getCurrentWords() });
+      console.log('onSubmit', res);
+    }
     reset();
-    setIsWaitingTurn(true);
+
+    // pushNewWord(enterWord);
+    // reset();
+    // setIsWaitingTurn(true);
   };
+
+  const channelRef = React.useRef<null | RealtimeChannel>(null);
+
+  React.useEffect(() => {
+    if (!isSoloGame) {
+      const channel = streamWord(roomCode);
+      channelRef.current = channel;
+    }
+    return () => {
+      channelRef.current?.unsubscribe();
+    };
+  }, []);
 
   React.useEffect(() => {
     if (!isWaitingTurn) setFocus('enterWord');

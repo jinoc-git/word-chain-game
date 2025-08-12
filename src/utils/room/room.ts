@@ -9,7 +9,7 @@ export const createRoomCode = () => {
 };
 
 export const checkValidRoomCodeChar = (code: string) => {
-  const regex = /^[A-Z]{6}$/;
+  const regex = /^[A-Z0-9]{6}$/;
   return regex.test(code);
 };
 

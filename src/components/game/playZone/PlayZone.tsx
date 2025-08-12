@@ -9,14 +9,18 @@ import ControlSoloGame from './controlGame/ControlSoloGame';
 import EnterWord from './enterWord/EnterWord';
 import WordList from './wordList/WordList';
 
-const PlayZone = () => {
+interface Props {
+  roomCode: string;
+}
+
+const PlayZone = ({ roomCode }: Props) => {
   const pathname = usePathname();
   const isSoloGame = pathname.split('/')[2] === 'solo';
 
   return (
     <section>
       <WordList />
-      <EnterWord />
+      <EnterWord isSoloGame={isSoloGame} roomCode={roomCode} />
       {isSoloGame ? <ControlSoloGame /> : <ControlMultiGame />}
     </section>
   );
