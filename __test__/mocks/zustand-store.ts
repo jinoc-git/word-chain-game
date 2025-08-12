@@ -34,6 +34,8 @@ export const mockStores = {
       getLastWord: vi.fn(),
       pushNewWord: vi.fn(),
       resetWords: vi.fn(),
+      streamWord: vi.fn(() => ({ unsubscribe: vi.fn() })),
+      streamWordCallback: vi.fn(),
     },
   },
   game: {

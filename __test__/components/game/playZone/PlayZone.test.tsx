@@ -4,7 +4,7 @@ import PlayZone from '@/components/game/playZone/PlayZone';
 
 describe('PlayZone', () => {
   const renderComponent = () => {
-    render(<PlayZone />);
+    render(<PlayZone roomCode="ABCDEF" />);
   };
 
   it('should', () => {
