@@ -257,8 +257,8 @@ export type Database = {
       };
       join_room_atomic: {
         Args: {
-          room_code: string;
-          player_id: string;
+          p_room_code: string;
+          p_player_id: string;
         };
         Returns: {
           success: boolean;

@@ -22,8 +22,8 @@ export const POST = async (request: NextRequest) => {
     const supabase = await createClient();
 
     const { data, error } = await supabase.rpc('join_room_atomic', {
-      room_code: roomCode,
-      player_id: playerId,
+      p_room_code: roomCode,
+      p_player_id: playerId,
     });
 
     if (error) {
