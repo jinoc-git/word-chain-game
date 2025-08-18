@@ -76,7 +76,7 @@ export const createWordStore = (initState: WordStoreState = defaultInitState) =>
         return channel;
       },
       streamWordCallback: (payload) => {
-        if (payload.errors.length === 0) {
+        if (payload.errors === null) {
           const row = payload?.new;
           if (row && 'current_word' in row) {
             set({

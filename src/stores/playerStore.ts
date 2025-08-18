@@ -72,6 +72,8 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
       observerCallback: (payload) => {
         const players = get().state.curPlayers;
         const newPlayer = payload?.new;
+        console.log('befire', players);
+        console.log('new', newPlayer);
         if (newPlayer && 'id' in newPlayer) players.push(newPlayer);
 
         set({ state: { curPlayers: [...players] } });
