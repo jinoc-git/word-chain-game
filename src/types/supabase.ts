@@ -157,6 +157,7 @@ export type Database = {
           max_players: number;
           room_code: string;
           room_name: string;
+          participants: Participants[];
           status: 'playing' | 'waiting' | 'full';
           updated_at: string;
         };
@@ -169,6 +170,7 @@ export type Database = {
           max_players?: number;
           room_code: string;
           room_name: string;
+          participants: Participants[];
           status?: 'playing' | 'waiting' | 'full';
           updated_at?: string;
         };
@@ -181,6 +183,7 @@ export type Database = {
           max_players?: number;
           room_code?: string;
           room_name?: string;
+          participants?: Participants[];
           status?: 'playing' | 'waiting' | 'full';
           updated_at?: string;
         };
@@ -394,3 +397,4 @@ export type Player = Database['public']['Tables']['players']['Row'];
 export type Room = Database['public']['Tables']['rooms']['Row'];
 export type InsertRoom = Database['public']['Tables']['rooms']['Insert'];
 export type RoomParticipant = Database['public']['Tables']['room_participants']['Row'];
+export type Participants = { nickname: string; id: string };

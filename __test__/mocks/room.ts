@@ -1,3 +1,5 @@
+import { mockRoomChief } from './players';
+
 import type { Room } from '@/types/supabase';
 
 export const mockRoom: Room = {
@@ -7,6 +9,7 @@ export const mockRoom: Room = {
   host_player_id: '123456789',
   id: '1111111111',
   max_players: 6,
+  participants: [{ nickname: mockRoomChief.nickname, id: mockRoomChief.id }],
   room_code: 'ABCDEF',
   room_name: 'test',
   status: 'waiting',

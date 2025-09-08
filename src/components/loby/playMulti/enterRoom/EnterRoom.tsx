@@ -42,7 +42,11 @@ const EnterRoom = ({ user }: Props) => {
 
     const upperCaseRoomCode = roomCode.toUpperCase();
 
-    const { success, message } = await joinRoom({ roomCode: upperCaseRoomCode, playerId: user.id });
+    const { success, message } = await joinRoom({
+      roomCode: upperCaseRoomCode,
+      playerId: user.id,
+      nickname: user.nickname,
+    });
     if (!success) {
       toast.error(message);
       return;

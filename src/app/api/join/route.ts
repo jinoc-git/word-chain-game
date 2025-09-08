@@ -16,41 +16,32 @@ export type JoinRoomResponse =
     };
 
 export const POST = async (request: NextRequest) => {
-  const { roomCode, playerId }: JoinRoomArgs = await request.json();
+  const { roomCode, playerId, nickname }: JoinRoomArgs = await request.json();
 
-  try {
-    const supabase = await createClient();
+  const supabase = await createClient();
 
-    const { data, error } = await supabase.rpc('join_room_atomic', {
-      p_room_code: roomCode,
-      p_player_id: playerId,
-    });
+  const { data: room, error: roomError } = await supabase
+    .from('rooms')
+    .select('*')
+    .eq('room_code', roomCode)
+    .single();
 
-    if (error) {
-      console.error('Supabase RPC 에러:', error);
-      throw new Error(error.message);
-    }
-
-    return NextResponse.json(data, {
-      status: data.success ? 200 : 400,
-      headers: {
-        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-      },
-    });
-  } catch (error) {
-    console.error('방 입장 실패:', error);
-
-    return NextResponse.json(
-      {
-        success: false,
-        message: error instanceof Error ? error.message : '방 입장에 실패했습니다.',
-      },
-      {
-        // status: 500,
-        headers: {
-          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-        },
-      },
-    );
+  if (roomError) {
+    return NextResponse.json({ success: false, message: '존재하지 않는 방입니다.' });
   }
+  if (room.participants.length >= room.max_players) {
+    return NextResponse.json({ success: false, message: '방 인원 초과입니다.' });
+  }
+
+  const newParticipants = [...room.participants, { nickname, id: playerId }];
+  const { data, error } = await supabase
+    .from('rooms')
+    .update({ participants: newParticipants })
+    .eq('room_code', roomCode);
+
+  if (error) {
+    return NextResponse.json({ success: false, message: '방 입장 실패' });
+  }
+
+  return NextResponse.json({ success: true, message: '입장에 성공했습니다' });
 };

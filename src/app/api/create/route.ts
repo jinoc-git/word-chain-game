@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
 
 import { type CreateRoomArgs } from '@/lib/apiRoute/createRoom';
-import { addRoomParticipants } from '@/lib/serverActions/addRoomParticipants';
-import { deleteRoom, insertRoom } from '@/lib/serverActions/rooms';
+import { insertRoom } from '@/lib/serverActions/rooms';
 
-import type { InsertRoom, Room, RoomParticipant } from '@/types/supabase';
+import type { InsertRoom, Room } from '@/types/supabase';
 import type { NextRequest } from 'next/server';
 
 const MAX_PLAYERS = 6;
@@ -13,19 +12,11 @@ export type CreateRoomResponse =
   | {
       success: true;
       room: Room;
-      player: RoomParticipant;
     }
   | {
       success: false;
       room: null;
-      player: null;
     };
-
-const errorResponse: CreateRoomResponse = {
-  success: false,
-  room: null,
-  player: null,
-};
 
 export const POST = async (request: NextRequest) => {
   const { nickname, hostId, roomCode }: CreateRoomArgs = await request.json();
@@ -34,27 +25,12 @@ export const POST = async (request: NextRequest) => {
     host_player_id: hostId,
     room_code: roomCode,
     room_name: nickname,
+    participants: [{ nickname, id: hostId }],
     max_players: MAX_PLAYERS,
   };
 
   const { data: room, error: RoomError } = await insertRoom(newRoom);
-  if (RoomError) return NextResponse.json(errorResponse);
+  if (RoomError) return NextResponse.json({ success: false, room: null });
 
-  const { data: player, error: RoomParticipantError } = await addRoomParticipants({
-    playerId: hostId,
-    roomCode,
-  });
-
-  if (RoomParticipantError) {
-    const deleteRoomError = await deleteRoom(roomCode);
-    if (deleteRoomError) console.error('방 삭제 실패');
-    return NextResponse.json(errorResponse);
-  }
-
-  // 성공
-  return NextResponse.json({
-    success: true,
-    room,
-    player,
-  });
+  return NextResponse.json({ success: true, room });
 };
