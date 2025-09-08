@@ -16,7 +16,7 @@ export type JoinRoomResponse =
     };
 
 export const POST = async (request: NextRequest) => {
-  const { roomCode, playerId }: JoinRoomArgs = await request.json();
+  const { roomCode, playerId, nickname }: JoinRoomArgs = await request.json();
 
   const supabase = await createClient();
 
@@ -33,7 +33,7 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json({ success: false, message: '방 인원 초과입니다.' });
   }
 
-  const newParticipants = [...room.participants, playerId];
+  const newParticipants = [...room.participants, { nickname, id: playerId }];
   const { data, error } = await supabase
     .from('rooms')
     .update({ participants: newParticipants })
