@@ -70,6 +70,7 @@ export const createPlayerStore = (initState: PlayerStoreState = defaultInitState
         }
       },
       observerCallback: (payload) => {
+        console.log('callback');
         const players = get().state.curPlayers;
         const newPlayer = payload?.new;
         console.log('befire', players);

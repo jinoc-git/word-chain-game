@@ -157,6 +157,7 @@ export type Database = {
           max_players: number;
           room_code: string;
           room_name: string;
+          participants: string[];
           status: 'playing' | 'waiting' | 'full';
           updated_at: string;
         };
@@ -169,6 +170,7 @@ export type Database = {
           max_players?: number;
           room_code: string;
           room_name: string;
+          participants: string[];
           status?: 'playing' | 'waiting' | 'full';
           updated_at?: string;
         };
@@ -181,6 +183,7 @@ export type Database = {
           max_players?: number;
           room_code?: string;
           room_name?: string;
+          participants: string[];
           status?: 'playing' | 'waiting' | 'full';
           updated_at?: string;
         };
