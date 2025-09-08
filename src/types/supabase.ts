@@ -183,7 +183,7 @@ export type Database = {
           max_players?: number;
           room_code?: string;
           room_name?: string;
-          participants: Participants[];
+          participants?: Participants[];
           status?: 'playing' | 'waiting' | 'full';
           updated_at?: string;
         };
