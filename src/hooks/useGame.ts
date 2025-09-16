@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { toast } from 'react-toastify';
 
 import { useCountActions } from '@/providers/storeProvider/countStoreProvider';
 import { useGameActions } from '@/providers/storeProvider/gameStoreProvider';
@@ -44,7 +45,19 @@ const useGame = () => {
     else endCount();
   }, []);
 
-  return { setGameState, settingWords, handleCountDown };
+  const handleGameState = (state: boolean) => {
+    try {
+      settingWords(state);
+      setGameState(state);
+      handleCountDown(state);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+    }
+  };
+
+  return { setGameState, settingWords, handleCountDown, handleGameState };
 };
 
 export default useGame;
