@@ -12,6 +12,7 @@ export type CountStoreActions = {
   resetCount: () => void;
   pauseCount: () => void;
   resumeCount: () => void;
+  reStartCount: () => void;
   _clearTimeout: () => void;
   _tick: () => void;
 };
@@ -70,6 +71,19 @@ export const createCountStore = (initState: CountStoreState = defaultInitState) 
         });
 
         get().actions._tick();
+      },
+
+      reStartCount: () => {
+        const wasActive = get().state.isActiveCount;
+        get().actions._clearTimeout();
+        set(({ state }) => ({ state: { ...state, count: initState.count } }));
+
+        if (wasActive) {
+          const timeoutId = setTimeout(() => {
+            get().actions._tick();
+          }, 1000);
+          set(({ state }) => ({ state: { ...state, _timeoutId: timeoutId } }));
+        }
       },
 
       pauseCount: () => {
