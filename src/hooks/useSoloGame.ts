@@ -25,9 +25,11 @@ const useSoloGame = () => {
       setIsWaitingTurn(true);
       resetWords();
       onShoot();
+      return false;
     } else {
       setIsWaitingTurn(false);
       pushNewWord(res);
+      return true;
     }
   };
 

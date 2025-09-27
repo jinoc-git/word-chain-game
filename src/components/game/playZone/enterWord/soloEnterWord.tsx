@@ -9,6 +9,7 @@ import { Input } from '@nextui-org/react';
 
 import useShakeAnimate from '@/hooks/useShakeAnimate';
 import useSoloGame from '@/hooks/useSoloGame';
+import { useCountActions } from '@/providers/storeProvider/countStoreProvider';
 import { useGameActions, useGameState } from '@/providers/storeProvider/gameStoreProvider';
 import { useWordActions } from '@/providers/storeProvider/wordStoreProvider';
 import { enterWordSchema } from '@/schema/enterWordSchema';
@@ -27,6 +28,7 @@ const SoloEnterWord = ({}: Props) => {
   const setIsWaitingTurn = useGameActions((actions) => actions.setIsWaitingTurn);
   const { pushNewWord, getLastWord } = useWordActions((actions) => actions);
   const { playWithAI } = useSoloGame();
+  const { pauseCount, reStartCount, endCount } = useCountActions((actions) => actions);
 
   const {
     register,
@@ -40,6 +42,8 @@ const SoloEnterWord = ({}: Props) => {
   });
 
   const onSubmit: SubmitHandler<EnterWordInput> = async ({ enterWord }) => {
+    pauseCount();
+
     const isValid = await checkWordIsValid(getLastWord(), enterWord);
     if (!isValid) {
       reset();
@@ -47,8 +51,14 @@ const SoloEnterWord = ({}: Props) => {
       return;
     }
 
-    pushNewWord(enterWord);
-    setIsWaitingTurn(true);
+    const shouldKeepPlaying = await playWithAI(enterWord);
+    if (shouldKeepPlaying) {
+      pushNewWord(enterWord);
+      reStartCount();
+    } else {
+      endCount();
+    }
+
     reset();
   };
 

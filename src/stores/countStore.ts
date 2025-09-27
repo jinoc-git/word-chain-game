@@ -9,7 +9,6 @@ export type CountStoreState = {
 export type CountStoreActions = {
   startCount: () => void;
   endCount: () => void;
-  resetCount: () => void;
   pauseCount: () => void;
   resumeCount: () => void;
   reStartCount: () => void;
@@ -29,7 +28,7 @@ const defaultInitState: CountStoreState = {
 };
 
 export const createCountStore = (initState: CountStoreState = defaultInitState) => {
-  const cloneInit = () => ({ ...initState, _timeoutId: undefined, isActiveCount: false });
+  const cloneInit = () => ({ ...initState });
 
   return createStore<CountStore>()((set, get) => ({
     state: cloneInit(),
@@ -96,13 +95,6 @@ export const createCountStore = (initState: CountStoreState = defaultInitState) 
         if (isActiveCount) return;
         set(({ state }) => ({ state: { ...state, isActiveCount: true } }));
         get().actions._tick();
-      },
-
-      resetCount: () => {
-        get().actions._clearTimeout();
-        set(({ state }) => ({
-          state: { ...state, count: initState.count, isActiveCount: false },
-        }));
       },
 
       endCount: () => {
