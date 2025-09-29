@@ -27,7 +27,7 @@ const SoloEnterWord = ({}: Props) => {
   const isWaitingTurn = useGameState((state) => state.isWaitingTurn);
   const setIsWaitingTurn = useGameActions((actions) => actions.setIsWaitingTurn);
   const { pushNewWord, getLastWord } = useWordActions((actions) => actions);
-  const { playWithAI } = useSoloGame();
+  const { getAIWord } = useSoloGame();
   const { pauseCount, reStartCount, endCount } = useCountActions((actions) => actions);
 
   const {
@@ -45,21 +45,24 @@ const SoloEnterWord = ({}: Props) => {
     pauseCount();
 
     const isValid = await checkWordIsValid(getLastWord(), enterWord);
+    reset();
     if (!isValid) {
-      reset();
       handleShake();
       return;
     }
 
-    const shouldKeepPlaying = await playWithAI(enterWord);
+    setIsWaitingTurn(true);
+    pushNewWord(enterWord);
+    reStartCount();
+
+    const shouldKeepPlaying = await getAIWord(enterWord);
+
     if (shouldKeepPlaying) {
-      pushNewWord(enterWord);
+      setIsWaitingTurn(false);
       reStartCount();
     } else {
       endCount();
     }
-
-    reset();
   };
 
   React.useEffect(() => {

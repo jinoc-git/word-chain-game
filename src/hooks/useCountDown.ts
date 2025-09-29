@@ -11,19 +11,19 @@ const useCountDown = () => {
   const { endCount, reStartCount } = useCountActions((actions) => actions);
 
   useEffect(() => {
-    if (count <= 0) {
-      endGame();
-      setIsWaitingTurn(true);
-      endCount();
-    }
+    // if (count <= 0) {
+    //   endGame();
+    //   setIsWaitingTurn(true);
+    //   endCount();
+    // }
   }, [count]);
 
   useEffect(() => {
-    if (gameState) {
-      reStartCount();
-    } else {
-      endCount();
-    }
+    // if (gameState) {
+    //   reStartCount();
+    // } else {
+    //   endCount();
+    // }
   }, [gameState, isWaitingTurn]);
 
   return { count };

@@ -73,16 +73,18 @@ export const createCountStore = (initState: CountStoreState = defaultInitState) 
       },
 
       reStartCount: () => {
-        const wasActive = get().state.isActiveCount;
-        get().actions._clearTimeout();
-        set(({ state }) => ({ state: { ...state, count: initState.count } }));
+        const _clearTimeout = get().actions._clearTimeout;
 
-        if (wasActive) {
-          const timeoutId = setTimeout(() => {
-            get().actions._tick();
-          }, 1000);
-          set(({ state }) => ({ state: { ...state, _timeoutId: timeoutId } }));
-        }
+        _clearTimeout();
+        set(({ state }) => ({
+          state: { ...state, count: initState.count, isActiveCount: true },
+        }));
+
+        const timeoutId = setTimeout(() => {
+          get().actions._tick();
+        }, 1000);
+
+        set(({ state }) => ({ state: { ...state, _timeoutId: timeoutId } }));
       },
 
       pauseCount: () => {

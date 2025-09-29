@@ -13,27 +13,25 @@ const useSoloGame = () => {
   //   }
   // }, [totalWordCount]);
 
-  const { endGame, setIsWaitingTurn } = useGameActions((actions) => actions);
-  const { pushNewWord, getLastWord, resetWords } = useWordActions((actions) => actions);
+  const { endGame } = useGameActions((actions) => actions);
+  const { pushNewWord, resetWords } = useWordActions((actions) => actions);
   const onShoot = useFireworksActions((actions) => actions.onShoot);
 
-  const playWithAI = async (lastWord: string) => {
+  const getAIWord = async (lastWord: string) => {
     const res = await handleOpenAIResponse(lastWord);
 
     if (res === AI_DEFEATED_FLAG) {
       endGame();
-      setIsWaitingTurn(true);
       resetWords();
       onShoot();
       return false;
     } else {
-      setIsWaitingTurn(false);
-      pushNewWord(res);
+      pushNewWord(res.word);
       return true;
     }
   };
 
-  return { playWithAI };
+  return { getAIWord };
 };
 
 export default useSoloGame;
