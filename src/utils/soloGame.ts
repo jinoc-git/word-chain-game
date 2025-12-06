@@ -18,12 +18,12 @@ const checkAIDefeated = async (lastWord: string, aiWord: string) => {
 };
 
 export const handleOpenAIResponse = async (lastWord: string) => {
-  const nextWord = await postWordToAIAndGetNextWord(lastWord);
+  const { success, word } = await postWordToAIAndGetNextWord(lastWord);
 
-  if (!nextWord) return AI_DEFEATED_FLAG;
+  if (!success) return AI_DEFEATED_FLAG;
 
-  const isAIDefeated = await checkAIDefeated(lastWord, nextWord);
+  const isAIDefeated = await checkAIDefeated(lastWord, word);
   if (isAIDefeated) return AI_DEFEATED_FLAG;
 
-  return nextWord;
+  return { success, word };
 };
